@@ -17,15 +17,17 @@ deferred class
 
 	VALUE_SETTER
 
-feature {FACTORY} -- Basic operations
+feature -- Basic operations
 
 	set (stream: INPUT_SEQUENCE; tuple: ANY) is
 			-- Set the appropriate field of tuple using `stream' as input.
+			-- If `unrecoverable_error' occurs, no action is taken.
 		require
 			args_not_void: stream /= Void and tuple /= Void
 			stream_readable: stream.readable
 		do
 			error_occurred := false
+			unrecoverable_error := false
 			read_value (stream)
 			if
 				not is_dummy and not error_occurred
@@ -34,7 +36,7 @@ feature {FACTORY} -- Basic operations
 			end
 		end
 
-feature {FACTORY} -- Access
+feature -- Access
 
 	last_error: STRING
 			-- Last error that occured
@@ -42,11 +44,14 @@ feature {FACTORY} -- Access
 	error_occurred: BOOLEAN
 			-- Did an error occur on the last scan?
 
+	unrecoverable_error: BOOLEAN
+			-- If `error_occurred', was it unrecoverable?
+
 	is_dummy: BOOLEAN
 			-- Is the field associated with this value setter to be
 			-- treated as a dummy field - not set in the actual tuple?
 
-feature {FACTORY} -- Element change
+feature -- Element change
 
 	set_dummyness (b: BOOLEAN) is
 			-- Set whether the associated field is to be regarded as a dummy.
@@ -90,5 +95,9 @@ feature {NONE} -- Utility
 			msg_appended:
 				last_error /= Void and last_error.count >= main_msg.count
 		end
+
+invariant
+
+	error_relationship: unrecoverable_error implies error_occurred
 
 end -- class VALUE_SETTER
