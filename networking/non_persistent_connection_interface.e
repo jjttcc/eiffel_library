@@ -115,7 +115,7 @@ feature {NONE} -- Hook routines implementations
 			-- and `message_body'.
 		local
 			s, number: STRING
-			i, j, loop_count: INTEGER
+			i, loop_count: INTEGER
 		do
 			create s.make (0)
 			from
@@ -155,43 +155,52 @@ feature {NONE} -- Hook routines implementations
 					report_error ("Invalid request ID: " + number, Void, Void)
 					request_id := Error
 				else
-					request_id := number.to_integer
-					if s.count < i + Message_field_separator.count then
-						j := 0
-					else
-						j := s.substring_index (Message_field_separator,
-								i + Message_field_separator.count)
-					end
-					if j = 0 then
-						report_error ("Invalid message format: " + s,
-							Void, Void)
-						request_id := Error
-					else
-						-- Extract the session key.
-						number := s.substring (
-							i + Message_field_separator.count, j - 1)
-						if not number.is_integer then
-							report_error ("Session key is not a valid " +
-								"integer: " + number, Void, Void)
-							request_id := Error
-						else
-							session_key := number.to_integer
-							if not session_valid then
-								report_error ("Non-existent session key (" +
-									session_key.out + "(for request ID: " +
-									request_id.out + ".%N(May be a stale " +
-									"session", Void, " (Session may be stale.)")
-								request_id := Error
-							else
-								set_message_body (
-									s, j + Message_field_separator.count)
-							end
-						end
-					end
+					set_request_id_session_key (s, number.to_integer, i)
 				end
 			end
 			check
 				message_body_set: message_body /= Void
+			end
+		end
+
+	set_request_id_session_key (s: STRING; n, i: INTEGER) is
+			-- Set `request_id' and `session_key'.
+		local
+			j: INTEGER
+			number: STRING
+		do
+			request_id := n
+			if s.count < i + Message_field_separator.count then
+				j := 0
+			else
+				j := s.substring_index (Message_field_separator,
+						i + Message_field_separator.count)
+			end
+			if j = 0 then
+				report_error ("Invalid message format: " + s,
+					Void, Void)
+				request_id := Error
+			else
+				-- Extract the session key.
+				number := s.substring (
+					i + Message_field_separator.count, j - 1)
+				if not number.is_integer then
+					report_error ("Session key is not a valid " +
+						"integer: " + number, Void, Void)
+					request_id := Error
+				else
+					session_key := number.to_integer
+					if not session_valid then
+						report_error ("Non-existent session key (" +
+							session_key.out + "(for request ID: " +
+							request_id.out + ".%N(May be a stale " +
+							"session", Void, " (Session may be stale.)")
+						request_id := Error
+					else
+						set_message_body (
+							s, j + Message_field_separator.count)
+					end
+				end
 			end
 		end
 
