@@ -1,10 +1,16 @@
-INCLUDES = -I. -I${EIFFEL4}/bench/spec/${PLATFORM}/include
+INCLUDES = -I.  -I$(EIFFEL_INCLUDE)
+
+CC = gcc
+
+CCOPTIONS = -Wall -ansi -pedantic -DNDEBUG -DUNIX
 
 SRCS = utilities.c
 
 OBJS = utilities.o
 
-LIBDIR = ../../lib/
+LIBDIR = ../spec/${ISE_PLATFORM}/lib/
+
+EIFFEL_INCLUDE = ${ISE_EIFFEL}/studio/spec/${ISE_PLATFORM}/include
 
 LIB = $(LIBDIR)/utilities.o
 
@@ -13,5 +19,5 @@ AllTarget ($(LIB))
 $(LIB): $(OBJS)
 
 all:: $(LIB)
+	./mkdirs
 	mkdir -p $(LIBDIR); cp $(OBJS) $(LIB)
-
