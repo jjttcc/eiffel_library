@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <zlib.h>
 
 /* Simple and completely innaccurate sleep function implemented with loops */
 void loop_sleep (int seconds, int microseconds) {
@@ -86,4 +87,40 @@ int remove_file (char* s) {
 /* Description of last error that occurred. */
 char* last_c_error() {
 	return strerror(errno);
+}
+
+/* Wrapper around zlib compress routine to provide Eiffel-compatible
+ * memory management - Interface is the same as that of `compress'. */
+int zlib_compress(char* eiffel_buffer, unsigned long* ebuf_length,
+		char* source, unsigned long source_length) {
+	int result;
+	char* tmpbuffer = malloc (*ebuf_length);
+	result = compress (tmpbuffer, ebuf_length, source, source_length);
+	memcpy (eiffel_buffer, tmpbuffer, *ebuf_length);
+	free (tmpbuffer);
+	return result;
+}
+
+/* Wrapper around zlib compress2 routine to provide Eiffel-compatible
+ * memory management - Interface is the same as that of `compress2'. */
+int zlib_compress2(char* eiffel_buffer, unsigned long* ebuf_length,
+		char* source, unsigned long source_length, int level) {
+	int result;
+	char* tmpbuffer = malloc (*ebuf_length);
+	result = compress2 (tmpbuffer, ebuf_length, source, source_length, level);
+	memcpy (eiffel_buffer, tmpbuffer, *ebuf_length);
+	free (tmpbuffer);
+	return result;
+}
+
+/* Wrapper around zlib uncompress routine to provide Eiffel-compatible
+ * memory management - Interface is the same as that of `uncompress'. */
+int zlib_uncompress(char* eiffel_buffer, unsigned long* ebuf_length,
+		char* source, unsigned long source_length) {
+	int result;
+	char* tmpbuffer = malloc (*ebuf_length);
+	result = uncompress (tmpbuffer, ebuf_length, source, source_length);
+	memcpy (eiffel_buffer, tmpbuffer, *ebuf_length);
+	free (tmpbuffer);
+	return result;
 }
