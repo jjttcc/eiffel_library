@@ -7,11 +7,17 @@
 		%Released under the Eiffel Forum License; see file forum.txt"
 **/
 
+#include <stdlib.h>
 #include <fcntl.h>
 #include <time.h>
 #include <string.h>
 #include <errno.h>
+#include <stdio.h>
 #include <zlib.h>
+#ifdef BCC
+#include <io.h>
+#define	NO_NANOSLEEP
+#endif
 
 /* Simple and completely innaccurate sleep function implemented with loops */
 void loop_sleep (int seconds, int microseconds) {
