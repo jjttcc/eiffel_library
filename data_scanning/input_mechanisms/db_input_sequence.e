@@ -30,6 +30,23 @@ feature -- Status report
 
 	last_error_fatal: BOOLEAN
 
+	is_open: BOOLEAN is
+			-- Is the input sequence open for use?
+		deferred
+		end
+
+feature -- Status setting
+
+	close is
+			-- Perform any needed cleanup operations.  Should be called
+			-- after input facilities have finished being used.
+		require
+			open: is_open
+		deferred
+		ensure
+			closed: not is_open
+		end
+
 feature -- Cursor movement
 
 	advance_to_next_field is
