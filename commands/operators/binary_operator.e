@@ -29,6 +29,22 @@ feature -- Access
 	operand2: NUMERIC_COMMAND
 			-- the second operand to be operated on
 
+feature -- Status report
+
+	arg_used: BOOLEAN is
+		do
+			Result := operand1.arg_used or operand2.arg_used
+		ensure then
+			ops_arg_used: Result = operand1.arg_used or operand2.arg_used
+		end
+
+	execute_precondition: BOOLEAN is
+		do
+			Result := operand1 /= Void and operand2 /= Void
+		ensure then
+			operands_set: Result = (operand1 /= Void and operand2 /= Void)
+		end
+
 feature {TEST_FUNCTION_FACTORY, MARKET_FUNCTION} -- !!!Check export clause
 
 	set_operands (op1: NUMERIC_COMMAND; op2: NUMERIC_COMMAND) is

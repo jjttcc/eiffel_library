@@ -17,15 +17,14 @@ feature
 			operand1.execute (arg)
 			operand2.execute (arg)
 			value := operand1.value / operand2.value
-			debug
-				io.put_string ("division: operand values: ")
-				io.put_real (operand1.value)
-				io.put_string (", ")
-				io.put_real (operand2.value)
-				io.put_string ("%Ndivision: value in percent: ")
-				io.put_real (value * 100)
-				io.put_string ("%N")
-			end
+		end
+
+feature -- Status report
+
+	execute_postcondition: BOOLEAN is
+		do
+			Result :=
+				rabs (value - (operand1.value / operand2.value)) < epsilon
 		ensure then
 			division_result_correct:
 				rabs (value - (operand1.value / operand2.value)) < epsilon
