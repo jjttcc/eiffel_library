@@ -99,6 +99,14 @@ feature -- Basic operations
 			end
 		end
 
+	log_information (msg: STRING) is
+			-- Log `msg' as (non-error) information.
+		require
+			not_void: msg /= Void
+		do
+			io.print (msg)
+		end
+
 	check_objects (a: ARRAY [ANY]; descriptions: ARRAY [STRING];
 		ok: FUNCTION [ANY, TUPLE [ANY], BOOLEAN]; handler:
 		PROCEDURE [ANY, TUPLE [LIST [STRING]]];
