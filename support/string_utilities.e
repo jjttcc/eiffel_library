@@ -47,7 +47,7 @@ feature -- Access
 			target_not_void: target /= Void
 			target_not_empty: not target.is_empty
 		local
-			i, last_index: INTEGER
+			i, last_index, s_count: INTEGER
 		do
 			create Result.make (0)
 			last_index := target.substring_index (s, 1)
@@ -56,8 +56,9 @@ feature -- Access
 			else
 				from
 					check last_index > 0 end
+					s_count := s.count
 					Result.extend (target.substring (1, last_index - 1))
-					i := last_index + 1
+					i := last_index + s_count
 				until
 					last_index = 0
 				loop
@@ -70,7 +71,7 @@ feature -- Access
 						last_index := target.substring_index (s, i)
 						if last_index > 0 then
 							Result.extend (target.substring (i, last_index - 1))
-							i := last_index + 1
+							i := last_index + s_count
 						else
 							Result.extend (target.substring (i, target.count))
 						end
