@@ -102,6 +102,7 @@ feature -- Basic operations
 			end
 		ensure then
 			-- product.count = number of records in input_file
+			errlist_not_void: error_list /= Void
 		end
 
 feature -- Access
