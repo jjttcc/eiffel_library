@@ -50,7 +50,9 @@ feature -- Initialization
 				until
 					finished
 				loop
+					pre_listen
 					listen
+					post_listen
 				end
 				exit (0)
 			end
@@ -74,6 +76,19 @@ feature {NONE}
 		deferred
 		end
 
+	pre_listen is
+			-- Perform any needed preparation before the next call to `listen'.
+		do
+			-- Null procedure - redefine if needed.
+		end
+
+	post_listen is
+			-- Perform any needed post-processing after the last call
+			-- to `listen'.
+		do
+			-- Null procedure - redefine if needed.
+		end
+
 	version: PRODUCT_INFO is
 			-- Version information
 		deferred
@@ -81,11 +96,6 @@ feature {NONE}
 
 	command_line_options: COMMAND_LINE is
 			-- Command-line argument services
-		deferred
-		end
-
-	cleanup is
-			-- Do any needed cleanup before exiting.
 		deferred
 		end
 
