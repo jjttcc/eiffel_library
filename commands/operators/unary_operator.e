@@ -7,7 +7,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class UNARY_OPERATOR [G, H] inherit
+class UNARY_OPERATOR [G, H] inherit
 
 	RESULT_COMMAND [G]
 		redefine
@@ -48,16 +48,17 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 		do
-			operand.execute
+			operand.execute (arg)
 			operate (operand.value)
 		end
 
 feature {NONE} -- Hook routines
 
 	operate (v: H) is
+			-- Null action by default
 		require
 			not_void: v /= Void
-		deferred
+		do
 		ensure
 			value_not_void: value /= Void
 		end
