@@ -63,6 +63,14 @@ feature -- Access
 			Result := last_real
 		end
 
+	string_selection (msg: STRING): STRING is
+			-- User-selected real value
+		do
+			print_list (<<"Enter a real value for ", msg, ": ", eot>>)
+			read_line
+			Result := clone (last_string)
+		end
+
 	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
 				general_msg: STRING): INTEGER is
 			-- User's selection of one element from one of the `lists'.
