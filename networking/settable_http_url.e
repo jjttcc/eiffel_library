@@ -26,7 +26,7 @@ feature -- Initialization
 		do
 			host := h
 			path := p
-			make_address
+			make ("http://" + host + "/" + path)
 		ensure
 			host_set: host /= Void and host = h
 			path_set: path /= Void and path = p
@@ -61,7 +61,7 @@ feature {NONE} -- Implementation
 
 	make_address is
 		do
-			make ("http://" + host + "/" + path)
+			address := "http://" + host + "/" + path
 		end
 
 end
