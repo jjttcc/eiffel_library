@@ -13,7 +13,7 @@ deferred class EVENT_REGISTRANT_WITH_HISTORY inherit
 			end_notification
 		end
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make is
 		do
@@ -21,6 +21,7 @@ feature -- Initialization
 			event_history.compare_objects
 			!LINKED_SET [EVENT_TYPE]!event_types.make
 			!!event_cache.make
+			load_history
 		end
 
 feature -- Status report
@@ -77,6 +78,12 @@ feature -- Basic operations
 feature {NONE} -- Hook routines
 
 	perform_notify (elist: LIST [TYPED_EVENT]) is
+			-- Notify the registrant of all events in `elist'.
+		deferred
+		end
+
+	load_history is
+			-- Load the `event_history' from persistent store.
 		deferred
 		end
 

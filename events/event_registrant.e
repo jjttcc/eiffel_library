@@ -21,6 +21,8 @@ feature -- Basic operations
 
 	notify (e: EVENT) is
 			-- Notify this registrant of event `e'.
+		require
+			is_interested_in (e)
 		deferred
 		end
 
