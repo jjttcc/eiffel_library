@@ -139,7 +139,7 @@ feature -- Basic operations
 				-- product.count = number_of_records_in (
 				--	input_file @ 1 .. input_file @ (input_file.index - 1))
 			variant
-				input_file.count - input_file.index
+				input_file.count - input_file.index + 1
 			until
 				input_file.after or last_error_fatal
 			loop
