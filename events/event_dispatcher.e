@@ -61,6 +61,8 @@ feature -- Basic operations
 			-- Dispatch all events in the `event_queue' to all registrants.
 		require
 			queue_set: event_queue /= Void
+		local
+			e: EVENT
 		do
 			from
 			until
@@ -83,7 +85,7 @@ feature {NONE} -- Hook methods
 			-- Answer: true if event_queue is empty - redefine in
 			-- descendants for specialized behavior.
 		do
-			event_queue.empty
+			Result := event_queue.empty
 		end
 
 	dispatch (e: EVENT) is

@@ -9,6 +9,22 @@ class
 
 	EVENT_TYPE
 
+creation
+
+	make
+
+feature -- Initialization
+
+	make (nm: STRING; type_ID: INTEGER) is
+		require
+			not_void: nm /= Void
+		do
+			name := nm
+			ID := type_ID
+		ensure
+			name = nm and ID = type_ID
+		end
+
 feature -- Access
 
 	ID: INTEGER
@@ -16,5 +32,9 @@ feature -- Access
 
 	name: STRING
 			-- Name of the event type
+
+invariant
+
+	name_not_void: name /= Void
 
 end -- class EVENT_TYPE
