@@ -72,6 +72,17 @@ feature {NONE}
 			put (eom)
 		end
 
+	put_ok is
+			-- Append ok_string to `output_buffer'.
+		require
+			buffer_not_void: output_buffer /= Void
+		do
+			put (ok_string)
+		ensure
+			new_count: output_buffer.count = old output_buffer.count +
+				ok_string.count
+		end
+
 feature {NONE} -- Hook routines
 
 	warning: INTEGER is
@@ -81,6 +92,11 @@ feature {NONE} -- Hook routines
 
 	eom: STRING is
 			-- End of message indicator
+		deferred
+		end
+
+	ok_string: STRING is
+			-- String indicating "OK" status to the client
 		deferred
 		end
 
