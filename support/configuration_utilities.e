@@ -77,6 +77,24 @@ feature {NONE} -- Implementation - Hook routines
 		deferred
 		end
 
+	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
+			-- Should the customized configuration setting procedure
+			-- `do_customized_setting' be used, rather than the default one
+			-- [settings.replace (`value_token', `key_token')]?
+		require
+			key_exists: key_token /= Void
+		once
+			-- Default to always true - redefine if needed.
+			Result := True
+		end
+
+	do_customized_setting (key_token, value_token: STRING) is
+			-- Customized configuration setting procedure, to be used
+			-- when `default_setting' evaluates to true
+		do
+			-- Default to null procedure - redefine if needed.
+		end
+
 feature {NONE} -- Implementation
 
 	field_separator: STRING is
@@ -129,6 +147,7 @@ feature {NONE} -- Implementation
 		local
 			tokens: LIST [STRING]
 			file_reader: FILE_READER
+			key_token, value_token: STRING
 		do
 			create file_reader.make (configuration_file_name)
 			file_reader.tokenize (Record_separator)
@@ -143,14 +162,21 @@ feature {NONE} -- Implementation
 							file_reader.item @ 1 = comment_character)
 					then
 						tokens := current_tokens (file_reader)
+						key_token := tokens @ key_index
+						value_token := tokens @ value_index
 						if tokens.count >= 2 then
-							settings.replace (tokens @ value_index,
-								tokens @ key_index)
+							if
+								use_customized_setting (key_token, value_token)
+							then
+								do_customized_setting (key_token, value_token)
+							else
+								settings.replace (value_token, key_token)
+							end
 							if settings.not_found then
 								log_errors (<<"Invalid identifier in ",
 									configuration_type, " configuration file",
 									" at line ", current_line, ": ",
-									tokens @ key_index, ".%N">>)
+									key_token, ".%N">>)
 							end
 						else
 							log_errors (<<"Wrong number of fields in ",
