@@ -256,6 +256,9 @@ feature {NONE}
 				error_list.extend (input.error_string)
 				discard_current_tuple := true
 				error_in_current_tuple := true
+				if input.last_error_fatal then
+					last_error_fatal := true
+				end
 			end
 		end
 
@@ -276,6 +279,9 @@ feature {NONE}
 			end
 			if input.error_occurred then
 				error_list.extend (input.error_string)
+				if input.last_error_fatal then
+					last_error_fatal := true
+				end
 			end
 		end
 
