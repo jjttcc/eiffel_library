@@ -65,7 +65,7 @@ feature {NONE} -- Initialization
 				fields := splitter.tokens (field_separator)
 				if fields.count /= field_count then
 					make_error ("Wrong field count at record " +
-						records.index.out + " - skipping current record")
+						records.index.out + " - skipping current record", True)
 				else
 					contents.extend (fields)
 				end
@@ -199,7 +199,7 @@ feature -- Input
 				last_integer := s.to_integer
 			else
 				make_error ("Invalid field value - integer expected, %
-					%got: " + s + "%N")
+					%got: " + s + "%N", False)
 			end
 		end
 
@@ -213,7 +213,7 @@ feature -- Input
 				last_real := s.to_real
 			else
 				make_error ("Invalid field value - real expected, %
-					%got: " + s + "%N")
+					%got: " + s + "%N", False)
 			end
 		end
 
@@ -227,7 +227,7 @@ feature -- Input
 				last_double := s.to_double
 			else
 				make_error ("Invalid field value - double expected, %
-					%got: " + s + "%N")
+					%got: " + s + "%N", False)
 			end
 		end
 
@@ -248,7 +248,7 @@ feature -- Input
 					make_error ("Wrong number of sub-fields in date %
 						%field (" + contents.item.item +
 						"): " + ymd.count.out + "%NUsing default %
-						%date setting%N")
+						%date setting%N", False)
 					create last_date.make_by_days (0)
 				else
 					if
@@ -264,10 +264,11 @@ feature -- Input
 						then
 							create last_date.make (y, m, d)
 						else
-							make_error ("Incorrect date field")
+							make_error ("Incorrect date field", False)
 						end
 					else
-						make_error ("Date field has illegal non-integer value")
+						make_error ("Date field has illegal non-integer value",
+							False)
 					end
 				end
 			end
@@ -280,10 +281,14 @@ feature {NONE} -- Implementation
 			create Result.make_now
 		end
 
-	make_error (s: STRING) is
-			-- Append `s' to end of `error_string'.
+	make_error (s: STRING; append: BOOLEAN) is
+			-- Set `error_string' to `s' - if append, append `s' to end
+			-- of `error_string'.
 		do
+			if not append then error_string := Void end
+			if error_string = Void then
 				create error_string.make (0)
+			end
 			error_string.append (s +  index_info + "%N")
 			error_occurred := True
 		ensure
