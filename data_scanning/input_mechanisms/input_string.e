@@ -186,8 +186,6 @@ feature -- Input
 			last_character := '%U'
 			if not contents.item.item.is_empty then
 				last_character := contents.item.item @ 1
-			else
-				make_error ("Empty character field value%N")
 			end
 		end
 
@@ -244,32 +242,32 @@ feature -- Input
 				splitter.set_target (contents.item.item)
 				ymd := splitter.tokens (date_field_separator)
 			end
-			if ymd = Void then
-				make_error ("Empty date field%N")
-			elseif ymd.count /= 3 then
-				make_error ("Wrong number of sub-fields in date %
-					%field (" + contents.item.item +
-					"): " + ymd.count.out + "%NUsing default %
-					%date setting%N")
-				create last_date.make_by_days (0)
-			else
-				if
-					ymd.item (1).is_integer and
-					ymd.item (2).is_integer and
-					ymd.item (3).is_integer
-				then
-					y := ymd.item (1).to_integer
-					m := ymd.item (2).to_integer
-					d := ymd.item (3).to_integer
-					if
-						work_date.is_correct_date (y, m, d)
-					then
-						create last_date.make (y, m, d)
-					else
-						make_error ("Incorrect date field")
-					end
+			if ymd /= Void then
+				if ymd.count /= 3 then
+					make_error ("Wrong number of sub-fields in date %
+						%field (" + contents.item.item +
+						"): " + ymd.count.out + "%NUsing default %
+						%date setting%N")
+					create last_date.make_by_days (0)
 				else
-					make_error ("Date field has illegal non-integer value")
+					if
+						ymd.item (1).is_integer and
+						ymd.item (2).is_integer and
+						ymd.item (3).is_integer
+					then
+						y := ymd.item (1).to_integer
+						m := ymd.item (2).to_integer
+						d := ymd.item (3).to_integer
+						if
+							work_date.is_correct_date (y, m, d)
+						then
+							create last_date.make (y, m, d)
+						else
+							make_error ("Incorrect date field")
+						end
+					else
+						make_error ("Date field has illegal non-integer value")
+					end
 				end
 			end
 		end
@@ -287,7 +285,6 @@ feature {NONE} -- Implementation
 				create error_string.make (0)
 			error_string.append (s +  index_info + "%N")
 			error_occurred := True
---print ("make_error called - es: <" + error_string + ">%N")
 		ensure
 			error_occurred: error_occurred
 			error_string_exists: error_string /= Void
