@@ -35,10 +35,12 @@ feature -- Status report
 		end
 
 	execute_precondition: BOOLEAN is
+			-- Precondition for execute function
 		deferred
 		end
 
 	execute_postcondition: BOOLEAN is
+			-- Postcondition for execute function
 		deferred
 		end
 
