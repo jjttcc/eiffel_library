@@ -76,7 +76,6 @@ feature -- Basic operations
 			error_msg: STRING
 			fatal: BOOLEAN
 		do
-log_error ("HANDLE_EXCEPTION was called.%N")
 			-- An exception may have caused a lock to have been left open -
 			-- ensure that clean-up occurs to remove the lock:
 			no_cleanup := false
@@ -117,7 +116,6 @@ log_error ("HANDLE_EXCEPTION was called.%N")
 			else
 				last_exception_status.set_description ("")
 			end
-log_error ("HANDLE_EXCEPTION is returning.%N")
 		end
 
 	exit (status: INTEGER) is
