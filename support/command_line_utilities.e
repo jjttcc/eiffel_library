@@ -114,7 +114,7 @@ feature -- Access
 					"%N     Set date (d) Set time (t) %
 					%Set date relative to current date (r)%N%
 					%     Set market analysis date %
-					%to currently selected date (s)%N", eom>>)
+					%to currently selected date (s) ", eom>>)
 				inspect
 					character_selection (Void)
 				when 'd', 'D' then
