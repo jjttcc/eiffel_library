@@ -60,7 +60,10 @@ print ("Executing '" + stmt.sql + "'%N")
 			execute_commands (cmdlist.linear_representation)
 		end
 
-	strings_from_query (q: STRING): LIST [STRING] is
+	string_list_from_query (q: STRING): LIST [STRING] is
+			-- A list of STRING resulting from SQL query `q'
+		require
+			q_exists: q /= Void and then not q.is_empty
 		local
 			stmt: ECLI_STATEMENT
 			ecli_string: ECLI_VARCHAR
