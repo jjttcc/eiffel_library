@@ -36,16 +36,19 @@ feature -- Basic operations
 			args_not_void: stream /= Void and tuple /= Void
 			stream_readable: stream.readable
 		do
-			error_occurred := false
-			unrecoverable_error := false
+			unrecoverable_error := False
 			read_value (stream)
+			error_occurred := stream.error_occurred
+			if error_occurred then
+				last_error := stream.error_string
+			end
 			if
 				not is_dummy and not error_occurred
 			then
 				do_set (stream, tuple)
 			end
 		rescue
-			unrecoverable_error := true
+			unrecoverable_error := True
 			handle_input_error (concatenation(<<"Error occurred while ",
 				"reading ", stream.name, ": ", meaning (exception)>>), Void)
 			log_error (last_error)
