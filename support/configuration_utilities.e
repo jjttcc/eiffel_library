@@ -59,6 +59,13 @@ feature {NONE} -- Implementation - Hook routines
 		deferred
 		end
 
+	post_process_settings is
+			-- Do any needed post-processing of the settings after
+			-- the configuration file has been read and processed.
+		do
+			-- Null procedure - redefine if needed
+		end
+
 	check_results is
 			-- Check if all needed fields were set and make any needed
 			-- settings adjustments.
@@ -193,6 +200,7 @@ feature {NONE} -- Implementation
 					" configuration file: ", file_reader.error_string, "%N">>)
 				handle_file_read_error
 			end
+			post_process_settings
 			check_results
 		end
 
