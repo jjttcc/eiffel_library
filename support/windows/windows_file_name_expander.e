@@ -52,9 +52,11 @@ feature -- Initialization
 		do
 			!!e
 			b := clone(e.get("ComSpec"))
-			b.append(dir_cmd)
-			b.append(clone(s)); b.append(pipe); b.append(markets_file)
-			e.system(b)
+			if b /= Void then
+				b.append(dir_cmd)
+				b.append(clone(s)); b.append(pipe); b.append(markets_file)
+				e.system(b)
+			end
 		end
 
 		read_file_names is
