@@ -17,6 +17,7 @@ creation
 feature
 
 	make is
+			-- Initialize and start the timer.
 		do
 			create start_time.make_now
 		end
