@@ -74,6 +74,12 @@ feature {NONE} -- Implementation - Hook routines
 		deferred
 		end
 
+	cleanup is
+			-- Perform any needed cleanup after processing is complete.
+		do
+			-- Null routine - redefined if needed.
+		end
+
 	handle_file_read_error (msg: STRING) is
 			-- Handle failure to read the configuration file - defaults
 			-- to outputting `msg' and aborting - redefine if needed.
@@ -216,6 +222,7 @@ feature {NONE} -- Implementation
 			end
 			post_process_settings
 			check_results
+			cleanup
 		end
 
 	check_for_missing_specs (ftbl: ARRAY[ANY]; ignore_if_all_true: BOOLEAN) is
