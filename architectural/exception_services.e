@@ -92,13 +92,13 @@ feature -- Basic operations
 		end
 
 	exit (status: INTEGER) is
-			-- Exit the server with the specified status.  If `no_cleanup'
+			-- Exit the application with the specified status.  If `no_cleanup'
 			-- is false, call `termination_cleanup'.
 		do
 			if status /= 0 then
-				log_information ("Aborting the server.%N")
+				log_information ("Aborting the " + application_name + ".%N")
 			else
-				log_information ("Terminating the server.%N")
+				log_information ("Terminating the " + application_name + ".%N")
 			end
 			if not no_cleanup then
 				debug ("persist")
@@ -130,6 +130,14 @@ feature -- Basic operations
 		do
 			Result := exception_list.has (e) and not (e = External_exception
 				or e = Floating_point_exception or e = Routine_failure)
+		end
+
+feature {NONE} -- Implementation - Hook routines
+
+	application_name: STRING is
+			-- The name of the application to be used for error reporting
+		once
+			Result := "server"
 		end
 
 feature {NONE} -- Implementation
