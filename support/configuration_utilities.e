@@ -26,6 +26,40 @@ feature -- Initialization
 			process_configuration_file
 		end
 
+feature  -- Access
+
+	settings: HASH_TABLE [STRING, STRING]
+			-- All current settings
+
+	settings_report: STRING is
+			-- `settings' formatted as a STRING
+		do
+			if settings_report_cache = Void then
+				settings.current_keys.linear_representation.do_all (agent
+					add_setting_report)
+				settings_report_cache := settings_report_cache +
+					additional_settings_report
+			end
+			Result := settings_report_cache
+		end
+
+	setting_report (key: STRING): STRING is
+			-- Setting for `key' formatted as a string
+		require
+			valid_key: key /= Void and then settings.has (key)
+		do
+			Result := key + ": " + settings @ key + "%N"
+		ensure
+			exists: Result /= Void
+		end
+
+	additional_settings_report: STRING is
+			-- Additional settings, if any, formatted as a string
+		deferred
+		ensure
+			Result_exists: Result /= Void
+		end
+
 feature {NONE} -- Implementation - Hook routines
 
 	initialize is
@@ -268,13 +302,25 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - attributes
 
-	settings: HASH_TABLE [STRING, STRING]
-
 	current_line: INTEGER
 
 	su: expanded STRING_UTILITIES
 
 	file_reader: FILE_READER
+
+	settings_report_cache: STRING
+
+	add_setting_report (key: STRING) is
+			-- Add `setting_report' for key to settings_report_cache.
+		require
+			valid_key: key /= Void and then settings.has (key)
+		do
+			if settings_report_cache = Void then
+				settings_report_cache := ""
+			end
+			settings_report_cache := settings_report_cache + setting_report (
+				key)
+		end
 
 invariant
 
