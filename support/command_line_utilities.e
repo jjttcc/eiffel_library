@@ -403,4 +403,6 @@ feature {NONE} -- Implementation
 
 	eom_cache: STRING
 
+	output_date_field_separator: STRING is "/"
+
 end -- class COMMAND_LINE_UTILITIES
