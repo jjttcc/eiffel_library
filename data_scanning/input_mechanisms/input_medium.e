@@ -75,8 +75,6 @@ feature -- Cursor movement
 	advance_to_next_record is
 			-- Advance the cursor to the next record.
 			-- Set error_occurred and error_string if an error is encountered.
-		local
-			i: INTEGER
 		do
 			last_error_fatal := False
 			error_occurred := False

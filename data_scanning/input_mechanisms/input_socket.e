@@ -21,7 +21,7 @@ class INPUT_SOCKET inherit
 			handle as descriptor, handle_available as descriptor_available
 		end
 
-creation {SOCKET_TRADABLE_LIST}
+creation
 
 	make_client_by_port
 
