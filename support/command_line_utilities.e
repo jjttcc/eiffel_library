@@ -222,11 +222,12 @@ feature {NONE} -- Access
 			end
 		end
 
-	character_enumeration_selection (msg: STRING;
+	character_enumeration_selection (msg, invalid_msg: STRING;
 		members: SET [ENUMERATED [CHARACTER]]): ENUMERATED [CHARACTER] is
 			-- User-selected character-based enumeration selection, from
 			-- `members' - User will be prompted, with `msg', for a
-			-- selection until he makes a valid choice.
+			-- selection until he makes a valid choice.  `invalid_msg'
+			-- is displayed to the user when a selection is invalid.
 		local
 			c: CHARACTER
 			l: LINEAR [ENUMERATED [CHARACTER]]
@@ -248,7 +249,7 @@ feature {NONE} -- Access
 					l.forth
 				end
 				if Result = Void then
-					print ("%NInvalid selection%N")
+					print (invalid_msg)
 				end
 			end
 		ensure
