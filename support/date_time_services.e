@@ -100,6 +100,102 @@ feature -- Access
 			create Result.make_now
 		end
 
+	formatted_date (date: DATE; f1, f2, f3: CHARACTER; fs: STRING): STRING is
+			-- Formatted `date', with year, month, and day in the order
+			-- specified by `f1', `f2', and `f3', separated by `fs'.  If
+			-- `fs' is empty, no field separator is used.
+		require
+			fields_y_m_or_d:
+				(f1 = 'y' or f1 = 'm' or f1 = 'd') and
+				(f2 = 'y' or f2 = 'm' or f2 = 'd') and
+				(f3 = 'y' or f3 = 'm' or f3 = 'd')
+			fields_unique: f1 /= f2 and f2 /= f3 and f3 /= f1
+			not_void: date /= Void and fs /= Void
+		local
+			fmtr: FORMAT_INTEGER
+			i1, i2, i3: INTEGER
+		do
+			create fmtr.make (2)
+			fmtr.set_fill ('0')
+			if f1 = 'y' then
+				i1 := date.year
+			elseif f1 = 'm' then
+				i1 := date.month
+			else
+				check f1 = 'd' end
+				i1 := date.day
+			end
+			if f2 = 'y' then
+				i2 := date.year
+			elseif f2 = 'm' then
+				i2 := date.month
+			else
+				check f2 = 'd' end
+				i2 := date.day
+			end
+			if f3 = 'y' then
+				i3 := date.year
+			elseif f3 = 'm' then
+				i3 := date.month
+			else
+				check f3 = 'd' end
+				i3 := date.day
+			end
+			Result := fmtr.formatted (i1)
+			Result.append (fs)
+			Result.append (fmtr.formatted (i2))
+			Result.append (fs)
+			Result.append (fmtr.formatted (i3))
+		end
+
+	formatted_time (time: TIME; f1, f2, f3: CHARACTER; fs: STRING): STRING is
+			-- Formatted `time', with hour, minute, and second in the order
+			-- specified by `f1', `f2', and `f3', separated by `fs'.  If
+			-- `fs' is empty, no field separator is used.
+		require
+			fields_y_m_or_d:
+				(f1 = 'h' or f1 = 'm' or f1 = 's') and
+				(f2 = 'h' or f2 = 'm' or f2 = 's') and
+				(f3 = 'h' or f3 = 'm' or f3 = 's')
+			fields_unique: f1 /= f2 and f2 /= f3 and f3 /= f1
+			not_void: time /= Void and fs /= Void
+		local
+			fmtr: FORMAT_INTEGER
+			i1, i2, i3: INTEGER
+		do
+			create fmtr.make (2)
+			fmtr.set_fill ('0')
+			if f1 = 'h' then
+				i1 := time.hour
+			elseif f1 = 'm' then
+				i1 := time.minute
+			else
+				check f1 = 's' end
+				i1 := time.second
+			end
+			if f2 = 'h' then
+				i2 := time.hour
+			elseif f2 = 'm' then
+				i2 := time.minute
+			else
+				check f2 = 's' end
+				i2 := time.second
+			end
+			if f3 = 'h' then
+				i3 := time.hour
+			elseif f3 = 'm' then
+				i3 := time.minute
+			else
+				check f3 = 's' end
+				i3 := time.second
+			end
+			Result := fmtr.formatted (i1)
+			Result.append (fs)
+			Result.append (fmtr.formatted (i2))
+			Result.append (fs)
+			Result.append (fmtr.formatted (i3))
+		end
+
 feature -- Status report
 
 	hour_valid (h: INTEGER): BOOLEAN is
