@@ -14,12 +14,19 @@ deferred class COMMAND_LINE inherit
 			{NONE} all
 		end
 
+      POSIX_SYSTEM
+
+      POSIX_CURRENT_PROCESS
+
+      POSIX_FILE_SYSTEM
+
 feature {NONE} -- Initialization
 
 	make is
 		local
 			i: INTEGER
 		do
+shmtest
 			error_description := ""
 			create contents.make
 			from
@@ -36,6 +43,20 @@ feature {NONE} -- Initialization
 			process_arguments (main_setup_procedures)
 			finish_argument_processing
 			check_for_invalid_flags
+		end
+
+	shmtest is
+		local
+			fd: POSIX_SHARED_MEMORY
+		do
+			if not supports_shared_memory_objects then
+				 stderr.puts ("Shared memory objects not supported.%N")
+				 exit_with_failure
+			end
+			create fd.create_read_write ("/test.berend")
+			fd.write_string ("Hello world.%N")
+			fd.close
+			unlink_shared_memory_object ("/test.berend")
 		end
 
 feature -- Access
