@@ -22,7 +22,6 @@ feature -- Basic operations
 			-- Execute the command with the specified argument.
 		require
 			arg_not_void_if_used: arg_used implies arg /= Void
-			execute_precondition: execute_precondition
 		deferred
 		end
 
@@ -30,15 +29,6 @@ feature -- Status report
 
 	arg_used: BOOLEAN is
 		deferred
-		end
-
-	execute_precondition: BOOLEAN is
-			-- Precondition for execute function
-			-- Descendants redefine as needed.
-		do
-			Result := true
-		ensure
-			Result implies true
 		end
 
 end -- class COMMAND
