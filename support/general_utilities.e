@@ -122,16 +122,16 @@ feature -- Logging
 			-- If `msg' is longer than `Maximum_message_length', only
 			-- the first `Maximum_message_length' characters of `msg'
 			-- will be logged.
-		require
-			not_void: msg /= Void
 		local
 			s: STRING
 		do
-			s := msg
-			if msg.count > Maximum_message_length then
-				s := msg.substring (1, Maximum_message_length) + "%N"
+			if msg /= Void then
+				s := msg
+				if msg.count > Maximum_message_length then
+					s := msg.substring (1, Maximum_message_length) + "%N"
+				end
+				io.error.put_string (s)
 			end
-			io.error.put_string (s)
 		end
 
 	log_errors (list: ARRAY [ANY]) is
@@ -154,6 +154,17 @@ feature -- Logging
 				end
 				i := i + 1
 			end
+		end
+
+	log_error_list (list: LIST [ANY]) is
+			-- Log actual LIST of error messages.  If any element of `list' is
+			-- longer than `Maximum_message_length', only the first
+			-- `Maximum_message_length' characters of that element will
+			-- be logged.
+		require
+			not_void: list /= Void
+		do
+			list.do_all (agent log_error)
 		end
 
 	log_information (msg: STRING) is
