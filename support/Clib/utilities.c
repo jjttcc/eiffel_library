@@ -46,11 +46,14 @@ void microsleep (int seconds, int microseconds) {
 }
 
 /* Try to open file `s' if it doesn't exist, returning 0 if successful.  If
- * it exists, if `wait', wait for it to be unlinked; otherwise, return -1. */
+ * it exists, if `wait', wait for it to be unlinked; otherwise, return -1.
+ * If an error occurs, error_on_last_operation will be true; otherwise, it
+ * will be false. */
 int try_to_open (char* s, int wait) {
 	int result;
 	int sleep_msecs = 90000;
 
+	errno = 0;
 printf("Locking file %s.\n", s);
 	result = open (s, O_RDWR | O_CREAT | O_EXCL);
 	if (wait && result == -1) {
@@ -63,10 +66,18 @@ printf("Locking file %s.\n", s);
 	return result;
 }
 
+/* Did an error occur during the last operation?  Result is boolean - that
+ * is, 0 is false, not 0 is true. */
+int error_on_last_operation() {
+	return errno != 0;
+}
+
+/* Remove file with name `s'. Return -1 if operation failed. */
 int remove_file (char* s) {
 	return unlink (s);
 }
 
+/* Description of last error that occurred. */
 char* last_c_error() {
 	return strerror(errno);
 }
