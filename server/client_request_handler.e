@@ -16,7 +16,7 @@ feature -- Basic operations
 		local
 			cmd: CLIENT_REQUEST_COMMAND
 		do
-			request_id := -1; command_argument := Void
+			request_id := Void; command_argument := Void
 			process_request
 			if handle_logout_separately and is_logout_request (request_id) then
 				handle_logout
