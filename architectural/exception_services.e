@@ -27,11 +27,6 @@ class EXCEPTION_SERVICES inherit
 			{NONE} all
 		end
 
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
-
 feature -- Access
 
 	Error_exit_status: INTEGER is 1
@@ -99,17 +94,17 @@ feature -- Basic operations
 			-- is false, call `termination_cleanup'.
 		do
 			if status /= 0 then
-				io.print ("Aborting the server.%N")
+				log_information ("Aborting the server.%N")
 			else
-				io.print ("Terminating the server.%N")
+				log_information ("Terminating the server.%N")
 			end
 			if not no_cleanup then
 				debug ("persist")
-					io.print ("Cleaning up ...%N")
+					log_information ("Cleaning up ...%N")
 				end
 				termination_cleanup
 				debug ("persist")
-					io.print ("Finished cleaning up.%N")
+					log_information ("Finished cleaning up.%N")
 				end
 			end
 			die (status)
