@@ -171,4 +171,4 @@ invariant
 		descendants.is_empty
 	name_not_void: name /= Void
 
-end -- class COMMAND
+end
