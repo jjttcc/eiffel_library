@@ -17,14 +17,16 @@ creation
 feature
 
 	execute (arg: ANY) is
-			-- Set value to the result of operand1 + operand2
+			-- Execute `operand1' and `operand2' and set `value' to the
+			-- sum of their resulting values.
+		local
+			op1value: REAL
 		do
 			operand1.execute (arg)
+			-- Retrieve result in case the following statement changes it.
+			op1value := operand1.value
 			operand2.execute (arg)
-			value := operand1.value + operand2.value
-		ensure then
-			addition_correct:
-				rabs (value - (operand1.value + operand2.value)) < epsilon
+			value := op1value + operand2.value
 		end
 
 end -- class ADDITION

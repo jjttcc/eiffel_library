@@ -17,14 +17,18 @@ creation
 feature
 
 	execute (arg: ANY) is
-			-- Set value to the result of operand1 - operand2
+			-- Execute `operand1' and `operand2' and set `value' to
+			-- v1 - v2, where v1 is value resulting from `operand1''s
+			-- execution and v2 is the value resulting from `operand2''s
+			-- execution.
+		local
+			op1value: REAL
 		do
 			operand1.execute (arg)
+			-- Retrieve result in case the following statement changes it.
+			op1value := operand1.value
 			operand2.execute (arg)
-			value := operand1.value - operand2.value
-		ensure then
-			subtraction_correct:
-				rabs (value - (operand1.value - operand2.value)) < epsilon
+			value := op1value - operand2.value
 		end
 
 end -- class SUBTRACTION
