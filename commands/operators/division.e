@@ -9,6 +9,10 @@ inherit
 
 	BINARY_OPERATOR
 
+creation
+
+	make_with_operands
+
 feature
 
 	execute (arg: ANY) is
