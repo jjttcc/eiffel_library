@@ -1,5 +1,6 @@
 indexing
 	description: "Work-around for ISE Eiffel 4.4 bug in EXECUTION_ENVIRONMENT"
+	note: "@@Check if this bug has been fixed in 5.1."
 	author: "Eirik Mangseth"
 	date: "$Date$"
 	revision: "$Revision$"
