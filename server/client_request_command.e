@@ -45,14 +45,20 @@ feature -- Basic operations
 				-- the exception was non-fatal.
 				warn_client (<<"Error occurred ", error_context (arg), ".">>)
 			else
+				execution_retries := 0
 				prepare_for_execution
 				do_execute (arg)
 				do_post_processing
 			end
 		rescue
 			handle_exception ("responding to client request")
-			exception_occurred := true
-			retry
+			if execution_retries = Maximum_execution_tries then
+				exit (1)
+			else
+				execution_retries := execution_retries + 1
+				exception_occurred := true
+				retry
+			end
 		end
 
 feature {NONE} -- Hook routines
@@ -95,5 +101,22 @@ feature {NONE} -- Hook routines
 		once
 			Result := True
 		end
+
+feature {NONE} -- Implementation
+
+	execution_retries: INTEGER
+			-- Number of times `execute' caught an exception and retried
+
+	Maximum_execution_tries: INTEGER is
+			-- Maximum number of times for `execute' to retry before aborting
+		once
+			-- Redefine as needed.
+			Result := 1
+		end
+
+invariant
+
+	Maximum_execution_tries >= 0 and
+		execution_retries <= Maximum_execution_tries
 
 end -- class CLIENT_REQUEST_COMMAND
