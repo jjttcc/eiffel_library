@@ -6,16 +6,11 @@ indexing
 
 deferred class NUMERIC_COMMAND inherit
 
-	COMMAND
+	RESULT_COMMAND [REAL]
 
 	MATH_CONSTANTS
 		export {NONE}
 			all
 		end
-
-feature -- Access
-
-	value: REAL
-			-- The result of execution
 
 end -- class NUMERIC_COMMAND

@@ -8,25 +8,17 @@ class MULTIPLICATION
 
 inherit
 
-	BINARY_NUMERIC_OPERATOR
+	BINARY_OPERATOR [REAL, REAL]
 
 creation
 
 	make
 
-feature
+feature {NONE} -- Hook routine implementation
 
-	execute (arg: ANY) is
-			-- Execute `operand1' and `operand2' and set `value' to the
-			-- product of their resulting values.
-		local
-			op1value: REAL
+	operate (v1, v2: REAL) is
 		do
-			operand1.execute (arg)
-			-- Retrieve result in case the following statement changes it.
-			op1value := operand1.value
-			operand2.execute (arg)
-			value := op1value * operand2.value
+			value := v1 * v2
 		end
 
 end -- class MULTIPLICATION

@@ -6,17 +6,17 @@ indexing
 
 class GT_OPERATOR inherit
 
-	BOOLEAN_OPERATOR
+	BINARY_OPERATOR [BOOLEAN, REAL]
 
 creation
 
 	make
 
-feature {NONE} -- Implementation
+feature {NONE} -- Hook routine implementation
 
-	operation (v1, v2: REAL): BOOLEAN is
+	operate (v1, v2: REAL) is
 		do
-			Result := v1 > v2
+			value := v1 > v2
 		end
 
 end -- class GT_OPERATOR
