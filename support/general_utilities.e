@@ -92,14 +92,26 @@ feature -- Logging
 
 	log_error (msg: STRING) is
 			-- Log `msg' as an error.
+			-- If `msg' is longer than `Maximum_message_length', only
+			-- the first `Maximum_message_length' characters of `msg'
+			-- will be logged.
 		require
 			not_void: msg /= Void
+		local
+			s: STRING
 		do
-			io.error.put_string (msg)
+			s := msg
+			if msg.count > Maximum_message_length then
+				s := msg.substring (1, Maximum_message_length) + "%N"
+			end
+			io.error.put_string (s)
 		end
 
 	log_errors (list: ARRAY [ANY]) is
-			-- Log `list' of error messages.
+			-- Log `list' of error messages.  If any element of `list' is
+			-- longer than `Maximum_message_length', only the first
+			-- `Maximum_message_length' characters of that element will
+			-- be logged.
 		require
 			not_void: list /= Void
 		local
@@ -181,6 +193,14 @@ feature -- Miscellaneous
 			-- Is `o' Void?  (Candidate `ok' function for `check_objects')
 		do
 			Result := o = Void
+		end
+
+feature -- Constants
+
+	Maximum_message_length: INTEGER is
+			-- Maximum length of messages to be logged
+		once
+			Result := 1000
 		end
 
 end -- class GENERAL_UTILITIES
