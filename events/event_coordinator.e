@@ -25,7 +25,7 @@ feature -- Basic operations
 			create_queue
 			generate_events
 			if not event_queue.empty then
-				create_dispatcher
+				dispatcher.set_event_queue (event_queue)
 				dispatcher.execute
 			end
 		end
@@ -41,13 +41,6 @@ feature {NONE} -- Hook methods
 			!LINKED_QUEUE [EVENT]!event_queue.make
 		ensure
 			event_queue /= Void
-		end
-
-	create_dispatcher is
-		do
-			!!dispatcher.make (event_queue)
-		ensure
-			not_void: dispatcher /= Void
 		end
 
 	generate_events is
@@ -84,5 +77,10 @@ feature {NONE} -- Implementation
 				event_generators.forth
 			end
 		end
+
+invariant
+
+	dispatcher_not_void: dispatcher /= Void
+	event_generators_not_void: event_generators /= Void
 
 end -- class EVENT_COORDINATOR
