@@ -18,7 +18,7 @@ feature -- Basic operations
 		do
 			request_id := -1; command_argument := Void
 			process_request
-			if is_logout_request (request_id) then
+			if handle_logout_separately and is_logout_request (request_id) then
 				handle_logout
 				if sessions_used and session /= Void then
 					-- Logout requests are handled specially - simply clean
@@ -71,6 +71,11 @@ feature {NONE} -- Hook routines
 				(request_handlers @ request_id).arg_mandatory implies
 				command_argument /= Void
 			session_valid: session_valid
+		end
+
+	handle_logout_separately: BOOLEAN is
+		once
+			Result := True
 		end
 
 	handle_logout is
