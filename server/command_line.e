@@ -33,6 +33,8 @@ feature {NONE} -- Initialization
 			check_for_ambiguous_options
 			set_help
 			set_version_request
+			process_remaining_arguments
+			check_for_invalid_flags
 		end
 
 feature -- Access
@@ -67,7 +69,39 @@ feature -- Basic operations
 		deferred
 		end
 
+	check_for_invalid_flags is
+			-- Check for invalid arguments - that is, items in
+			-- `contents' that begin with '-' that remain after the valid
+			-- arguments have been processed and removed from `contents'.
+		require
+			error_description_exists: error_description /= Void
+		local
+			flags: LIST [STRING]
+		do
+			flags := remaining_flags
+			if not flags.is_empty then
+				error_occurred := True
+				flags.start
+				error_description.append ("Invalid option: " + flags.item +
+					"%N")
+				from
+					flags.forth
+				until
+					flags.exhausted
+				loop
+					error_description.append ("Invalid option: " + flags.item +
+						"%N")
+					flags.forth
+				end
+			end
+		end
+
 feature {NONE} -- Implementation - Hook routines
+
+	process_remaining_arguments is
+			-- Process remaining application-specific arguments.
+		deferred
+		end
 
 	ambiguous_characters: LINEAR [CHARACTER] is
 		once
@@ -227,6 +261,26 @@ feature {NONE} -- Implementation
 				end
 				ambiguous_characters.forth
 			end
+		end
+
+	remaining_flags: LINKED_LIST [STRING] is
+			-- Arguments remaining in `contents' that begin with '-' -
+			-- Intended to be used to find invalid arguments after the valid
+			-- arguments have been processed and removed from `contents'.
+		do
+			from
+				create Result.make
+				contents.start
+			until
+				contents.exhausted
+			loop
+				if contents.item @ 1 = '-' then
+					Result.extend (contents.item)
+				end
+				contents.forth
+			end
+		ensure
+			result_exists: Result /= Void
 		end
 
 feature {NONE} -- Implementation - Constants
