@@ -310,7 +310,7 @@ feature -- Miscellaneous
 		end
 
 	is_not_void (o: ANY): BOOLEAN is
-			-- Is `o' Void?  (Candidate `ok' function for `check_objects')
+			-- Is `o' not Void?  (Candidate `ok' function for `check_objects')
 		do
 			Result := o /= Void
 		end
@@ -319,6 +319,12 @@ feature -- Miscellaneous
 			-- Is `o' Void?  (Candidate `ok' function for `check_objects')
 		do
 			Result := o = Void
+		end
+
+	no_elements_void (l: TRAVERSABLE [ANY]): BOOLEAN is
+			-- Are all elements of `l' non-Void?
+		do
+			Result := l.for_all (agent is_not_void)
 		end
 
 	non_empty_string (s: STRING): BOOLEAN is
