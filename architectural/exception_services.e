@@ -12,6 +12,7 @@ class EXCEPTION_SERVICES inherit
 	EXCEPTIONS
 		export
 			{NONE} all
+			{ANY} raise
 		end
 
 	UNIX_SIGNALS
