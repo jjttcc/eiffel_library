@@ -19,8 +19,8 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute_commands (cmdlist: LIST [STRING]) is
-			-- Execute all SQL commands in `cmdlist'.
+	execute_commands (cmdlist: LINEAR [STRING]) is
+			-- Execute each SQL command in `cmdlist' within a transaction.
 		require
 			cmdlist_exists: cmdlist /= Void
 		local
@@ -50,6 +50,14 @@ print ("Executing '" + stmt.sql + "'%N")
 				end
 				cmdlist.forth
 			end
+		end
+
+	execute_command_array (cmdlist: ARRAY [STRING]) is
+			-- Execute each SQL command in `cmdlist' within a transaction.
+		require
+			cmdlist_exists: cmdlist /= Void
+		do
+			execute_commands (cmdlist.linear_representation)
 		end
 
 	strings_from_query (q: STRING): LIST [STRING] is
@@ -104,7 +112,9 @@ print ("Executing '" + stmt.sql + "'%N")
 					Result.sql, "%N">>)
 			end
 			execute_statement (Result)
-			Result.set_cursor (value_holders)
+			if not error_occurred then
+				Result.set_cursor (value_holders)
+			end
 		end
 
 	execute_statement (stmt: ECLI_STATEMENT) is
