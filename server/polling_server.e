@@ -41,7 +41,7 @@ feature {NONE} -- Hook routine implementation
 				additional_read_commands.do_all (agent poller.put_read_command)
 			end
 			report_errors (errors)
-		ensure
+		ensure then
 			poller_exists: poller /= Void
 		end
 

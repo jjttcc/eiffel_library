@@ -30,8 +30,6 @@ feature -- Access
 		do
 			-- Empty by default - redefine if needed.
 			create {LINKED_LIST [COMMAND]} Result.make
-		ensure
-			not_void: Result /= Void
 		end
 
 	suppliers: SET [ANY] is
