@@ -1,5 +1,7 @@
 indexing
 	description: "Binary operator that implements subtraction."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class SUBTRACTION
 

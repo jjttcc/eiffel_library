@@ -1,5 +1,7 @@
 indexing
 	description: "Abstraction for an operator that operates on two operands."
+	date: "$Date$";
+	revision: "$Revision$"
 
 deferred class BINARY_OPERATOR
 
@@ -15,7 +17,7 @@ feature -- Access
 	operand2: NUMERIC_COMMAND
 			-- the second operand to be operated on
 
-feature {FINANCE_ROOT} -- Export to test clas for now.
+feature {TEST_FUNCTION_FACTORY} -- Export to test factory class for now.
 
 	set_operands (op1: NUMERIC_COMMAND; op2: NUMERIC_COMMAND) is
 			-- Set the operands to the specified values.

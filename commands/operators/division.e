@@ -1,5 +1,7 @@
 indexing
 	description: "Binary operator that implements division."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class DIVISION
 
