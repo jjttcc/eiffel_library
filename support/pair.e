@@ -1,5 +1,5 @@
 indexing
-	description: "A pair of objects"
+	description: "Pairs of objects"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -34,10 +34,10 @@ feature -- Initialization
 feature -- Access
 
 	first: G
-		-- First element of the pair
+			-- First element of the pair
 
 	second: H
-		-- Second element of the pair
+			-- Second element of the pair
 
 	left: G is
 			-- Left element of the pair - synonym for `first'
