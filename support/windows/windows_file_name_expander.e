@@ -55,9 +55,9 @@ feature {NONE} -- Implemetation
 			end
 		end
 
-		read_file_names is
-			local
-				f: PLAIN_TEXT_FILE
+	read_file_names is
+		local
+			f: PLAIN_TEXT_FILE
 		do
 			create f.make(markets_file)
 			if f.exists then
@@ -76,11 +76,10 @@ feature {NONE} -- Implemetation
 			end
 		end
 
-		markets_file: STRING is "markets.mas"
+	markets_file: STRING is "markets.mas"
 
-		dir_cmd: STRING is " /C DIR /B "
+	dir_cmd: STRING is " /C DIR /B "
 
-		pipe: STRING IS " > "
-
+	pipe: STRING IS " > "
 
 end -- class WINDOWS_FILE_NAME_EXPANDER
