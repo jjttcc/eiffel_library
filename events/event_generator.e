@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Objects that generate a list of market events, based on specified %
+		"Objects that generate a list of events, based on specified %
 		%conditions"
 	author: "Jim Cochrane"
 	date: "$Date$";
