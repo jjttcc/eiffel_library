@@ -254,7 +254,7 @@ invariant
 		tuple_maker /= Void and value_setters /= Void and
 		field_separator /= Void and record_separator /= Void and
 		input_file /= Void
-	input_file_open_for_read: input_file.exists and input_file.readable
+	input_file_open_for_read: input_file.exists and input_file.is_open_read
 	value_setters_not_empty: not value_setters.empty
 
 end -- class DATA_SCANNER
