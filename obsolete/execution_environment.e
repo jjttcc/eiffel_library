@@ -6,7 +6,7 @@ indexing
 	licensing: "Copyright 1998 - 2003: Eirik Mangseth and Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class MAS_EXECUTION_ENVIRONMENT inherit
+class EXECUTION_ENVIRONMENT inherit
 
 	EXECUTION_ENVIRONMENT
 		redefine
@@ -42,4 +42,4 @@ feature {NONE}
 			"getenv"
 		end
 
-end --class MAS_EXECUTION_ENVIRONMENT
+end

@@ -43,7 +43,7 @@ feature {NONE} -- Implemetation
 
 	expand_file_names (s: STRING) is
 		local
-			e : MAS_EXECUTION_ENVIRONMENT
+			e : EXECUTION_ENVIRONMENT
 			b : STRING
 			c : STRING
 		do
@@ -83,4 +83,4 @@ feature {NONE} -- Implemetation
 
 	pipe: STRING IS " > "
 
-end -- class WINDOWS_FILE_NAME_EXPANDER
+end
