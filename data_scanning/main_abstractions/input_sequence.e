@@ -6,7 +6,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class BILINEAR_INPUT_SEQUENCE inherit
+deferred class INPUT_SEQUENCE inherit
 
 	BILINEAR [CHARACTER]
 		export {NONE}
@@ -44,6 +44,14 @@ feature -- Access
 			-- Last double read by `read_double'
 		deferred
 		end
+
+	error_string: STRING
+			-- Description of last error
+
+feature -- Status report
+
+	error_occurred: BOOLEAN
+			-- Did an error occur in the last operation?
 
 feature -- Measurement
 
@@ -111,4 +119,16 @@ feature -- Input
 		deferred
 		end;
 
-end -- class BILINEAR_INPUT_SEQUENCE
+feature -- Basic operations
+
+	advance_to_next_record is
+			-- Advance the cursor to the next record.
+		deferred
+		end
+
+	advance_to_next_field is
+			-- Advance the cursor to the next field.
+		deferred
+		end
+
+end -- class INPUT_SEQUENCE
