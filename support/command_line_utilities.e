@@ -1,10 +1,10 @@
 indexing
-	description: "User interface utilities"
+	description: "Command-line user interface functionality"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class UI_UTILITIES inherit
+class COMMAND_LINE_UTILITIES [G] inherit
 
 	STD_FILES
 		export
@@ -21,7 +21,7 @@ class UI_UTILITIES inherit
 			all
 		end
 
-feature
+feature -- Access
 
 	selected_character: CHARACTER is
 			-- Character selected by user
@@ -38,8 +38,29 @@ feature
 			end
 		end
 
+	integer_selection (msg: STRING): INTEGER is
+			-- User-selected integer value
+		do
+			print_list (<<"Enter an integer value for ", msg, ": ">>)
+			read_integer
+			Result := last_integer
+		end
+
+	real_selection (msg: STRING): REAL is
+			-- User-selected real value
+		do
+			print_list (<<"Enter a real value for ", msg, ": ">>)
+			read_real
+			Result := last_real
+		end
+
 	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
 				general_msg: STRING): INTEGER is
+			-- User's selection of one element from one of the `lists'.
+			-- Display all lists in `lists' that are not empty and return
+			-- the relative position of the selected item.  For example,
+			-- if the first list has a count of 5 and the 2nd item in the
+			-- 2nd list is selected, return a value of 7 (5 + 2).
 		local
 			i, startnum: INTEGER
 		do
@@ -82,9 +103,40 @@ feature
 
 	spaces (i: INTEGER): STRING is
 			-- `i' spaces
+		require
+			not_negative: i >= 0
 		do
 			!!Result.make (i)
 			Result.fill_blank
+		end
+
+feature -- Miscellaneous
+
+	print_object_tree (o: G; level: INTEGER) is
+			-- Print the type name of `o' and, recursively, that of all
+			-- of its operands.
+		local
+			i: INTEGER
+		do
+			from
+				i := 1
+			until
+				i = level
+			loop
+				print ("  ")
+				i := i + 1
+			end
+			print_list (<<o.generator, "%N">>)
+			debug ("object_editing")
+				print_list (<<"(", o.out, ")%N">>)
+			end
+			print_component_trees (o, level + 1)
+		end
+
+	print_message (msg: STRING) is
+			-- Print `msg' to standard out.
+		do
+			print_list (<<msg, "%N">>)
 		end
 
 	print_names_in_4_columns (names: LIST [STRING]) is
@@ -174,4 +226,66 @@ feature
 			end
 		end
 
-end -- class UI_UTILITIES
+	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
+				allowed_selections: INTEGER) is
+			-- Implementation, needed by some children, of procedure for
+			-- obtaining a desired list of selections from the user -
+			-- resulting in the right member of each pair in `choices'
+			-- set to true and the right member of all other pairs
+			-- set to false.
+		local
+			finished, choice_made: BOOLEAN
+			slimit: INTEGER
+			names: ARRAYED_LIST [STRING]
+		do
+			from
+				slimit := allowed_selections
+				print_list (<<descr, "%N(Up to ",
+							allowed_selections, " choices)%N">>)
+				from
+					!!names.make (choices.count)
+					choices.start
+				until
+					choices.exhausted
+				loop
+					names.extend (choices.item.left)
+					choices.forth
+				end
+			until
+				slimit = 0 or finished
+			loop
+				from
+					choice_made := false
+				until
+					choice_made
+				loop
+					print ("Select an item (0 to end):%N")
+					print_names_in_1_column (names, 1)
+					read_integer
+					if last_integer <= -1 or last_integer > choices.count then
+						print_list (<<"Selection must be between 0 and ",
+									choices.count, "%N">>)
+					elseif last_integer = 0 then
+						finished := true
+						choice_made := true
+					else
+						print_list (<<"Added %"", names @ last_integer,
+									"%"%N">>)
+						choices.i_th (last_integer).set_right (true)
+						choice_made := true
+					end
+				end
+				slimit := slimit - 1
+			end
+		end
+
+feature {NONE} -- Implementation - Hook methods
+
+	print_component_trees (o: G; level: INTEGER) is
+			-- Call print_object_tree on all of `o's G-typed components,
+			-- if it has any.  Default null implementation for children
+			-- who don't need tool.
+		do
+		end
+
+end -- class COMMAND_LINE_UTILITIES
