@@ -40,6 +40,7 @@ feature -- Status report
 			s_exists_or_target_exists: s /= Void or target_socket /= Void
 		local
 			debug_socket: SOCKET
+			nw_stream_socket: NETWORK_STREAM_SOCKET
 		do
 			debug_socket := s
 			if debug_socket = Void then
@@ -159,6 +160,36 @@ feature -- Status report
 				Result := Result + "process_id: " +
 				 debug_socket.process_id.out + "%N"
 			end
+			nw_stream_socket ?= debug_socket
+			if nw_stream_socket /= Void then
+				Result := Result + nss_report (nw_stream_socket)
+			end
+--!!!!:
+if not debug_socket.readable then
+	print ("socket not readable - stopping point" + "%N")
+end
+		end
+
+feature {NONE} -- Implementation
+
+	nss_report (s: NETWORK_STREAM_SOCKET): STRING is
+			-- Report on network stream socket `s'.
+		require
+			s_exists: s /= Void
+		do
+			Result := "<<<BEGIN NETWORK_STREAM_SOCKET REPORT>>>" + "%N" +
+-- has_exception_state causes a delay - uncomment only if needed:
+--				"has_exception_state: " + s.has_exception_state.out + "%N" +
+				"port: " + s.port.out + "%N" +
+--				"ready_for_reading: " + s.ready_for_reading.out + "%N" +
+--				"ready_for_writing: " + s.ready_for_writing.out + "%N" +
+				"reuse_address: " + s.reuse_address.out + "%N" +
+				"timeout: " + s.timeout.out + "%N" +
+				"is_linger_on: " + s.is_linger_on.out + "%N" +
+				"is_out_of_band_inline: " + s.is_out_of_band_inline.out + "%N"+
+				"linger_time: " + s.linger_time.out + "%N" +
+				"maximum_seg_size: " + s.maxium_seg_size.out + "%N" +
+				"<<<END NETWORK_STREAM_SOCKET REPORT>>>" + "%N"
 		end
 
 end -- class TIMER

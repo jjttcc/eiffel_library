@@ -37,7 +37,10 @@ feature -- Access
 			end
 		end
 
-	record_index: INTEGER
+	record_index: INTEGER is
+		do
+			Result := record_index_implementation
+		end
 
 	field_count: INTEGER is
 		do
@@ -79,7 +82,7 @@ feature -- Cursor movement
 		do
 			last_error_fatal := False
 			error_occurred := False
-			record_index := record_index + 1
+			record_index_implementation := record_index_implementation + 1
 			if data_available then
 				split_current_record
 				current_record.start
@@ -102,7 +105,7 @@ print ("discard current record called" + "%N")
 	start is
 		do
 			implementation_start
-			record_index := 1
+			record_index_implementation := 1
 			after_last_record := not data_available
 			if not after_last_record then
 				if split_current_record_on_start then
@@ -235,6 +238,8 @@ feature {NONE} -- Implementation
 
 	current_record: LIST [STRING]
 			-- The record (line) currently being parsed
+
+	record_index_implementation: INTEGER
 
 --!!!Perhaps this should be called split_next_record?
 	split_current_record is

@@ -66,7 +66,7 @@ feature -- Cursor movement
 			p_valid: p >= 0 and p < count
 		do
 			go (p)
-			record_index := 1
+			record_index_implementation := 1
 			after_last_record := count = position
 			if not after_last_record then
 				split_current_record

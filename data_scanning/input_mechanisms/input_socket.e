@@ -17,6 +17,9 @@ class INPUT_SOCKET inherit
 	NETWORK_STREAM_SOCKET
 		export
 			{NONE} all
+			{INPUT_SOCKET_CLIENT} is_linger_on, linger_time, set_delay,
+				set_linger_off, set_linger_on, set_nodelay, set_timeout,
+				timeout, set_blocking, set_non_blocking, is_blocking, socket_ok
 		undefine
 			read_integer, read_real, read_double, read_line, readline
 		redefine
@@ -54,7 +57,12 @@ feature -- Status report
 feature -- Input
 
 	read_line, readline is
+local
+sdb: SOCKET_DEBUGGER
 		do
+create sdb.make_with_socket (Current)
+--!!!!:
+--print ("socket report before reading line:%N" + sdb.report (Void) + "%N")
 			create last_string.make (512);
 			read_character;
 			from
@@ -64,6 +72,8 @@ feature -- Input
 				last_string.extend (last_character);
 				read_character
 			end
+--!!!!:
+--print ("socket report after reading line:%N" + sdb.report (Void) + "%N")
 		end;
 
 feature {NONE} -- Hook routine implementations

@@ -167,7 +167,7 @@ feature -- Cursor movement
 				i := i + 1
 			end
 			field_index := 1
-			record_index := record_index + 1
+			record_index_implementation := record_index_implementation + 1
 			-- If just before the end-of-file, force EOF.
 			if not end_of_file then
 				check
@@ -235,7 +235,7 @@ end
 		do
 			{PLAIN_TEXT_FILE} Precursor
 			field_index := 1
-			record_index := 1
+			record_index_implementation := 1
 			after_last_record := count = 0
 		end
 
@@ -243,7 +243,7 @@ end
 		do
 			go (p)
 			field_index := 1
-			record_index := 1
+			record_index_implementation := 1
 			after_last_record := count = position
 		end
 

@@ -98,9 +98,9 @@ feature {NONE} -- Hook routine implementation
 			Precursor (status)
 		end
 
-	log_errors (a: ARRAY [STRING]) is
+	log_errors (a: ARRAY [ANY]) is
 		local
-			l: LINEAR [STRING]
+			l: LINEAR [ANY]
 		do
 			Precursor (a)
 			from
@@ -109,7 +109,7 @@ feature {NONE} -- Hook routine implementation
 			until
 				l.exhausted
 			loop
-				errors := errors + l.item
+				errors := errors + l.item.out
 				l.forth
 			end
 		end
