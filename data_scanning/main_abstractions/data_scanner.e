@@ -1,12 +1,20 @@
 indexing
 	description:
-		"Abstraction that provides the top level data scanning algorithm, %
+		"Abstraction that provides a top level data scanning algorithm, %
 		%configured by providing different types in the tuple_maker and %
 		%value_setters attributes"
+	detailed_description:
+		"The value_setters attribute must contain instances of descendants %
+		%of VALUE_SETTER that will create tuples arranged in the correct %
+		%order according to the input format.  For example, if the input %
+		%fields are name, address, and telephone number of a PERSON, %
+		%value_setters would contain instances of the classes (with names %
+		%such as) NAME_SETTER, ADDRESS_SETTER, and TELEPHONE_SETTER, %
+		%arranged in that order."
 	date: "$Date$";
 	revision: "$Revision$"
 
-class DATA_SCANNER inherit
+deferred class DATA_SCANNER inherit
 
 	FACTORY
 		redefine
@@ -15,26 +23,26 @@ class DATA_SCANNER inherit
 
 feature -- Access
 
-	product: SIMPLE_FUNCTION [MARKET_TUPLE]
+	product: LIST [ANY]
 			-- Tuples produced by scanning the input
 
 	error_list: LINKED_LIST [STRING]
 			-- Errors that occurred during scanning
 			-- errror_list.count = number of errors that occurred
 
-feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
-									-- temporary.)
+feature -- Basic operations
 
 	execute (arg: NONE) is
-			-- Scan input and create tuples from it
+			-- Scan input and create tuples from it.
 		local
-			tuple: BASIC_MARKET_TUPLE
+			tuple: ANY
 		do
 			if error_list = Void then
 				!!error_list.make
 			end
 			from
-				!!product.make (0)
+				create_product
+				check product /= Void end
 				input_file.start
 			invariant
 				-- product.count = number_of_records_in (
@@ -47,7 +55,7 @@ feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
 				from
 					tuple_maker.execute (Void)
 					tuple := tuple_maker.product
-					tuple.begin_editing
+					open_tuple (tuple)
 					product.extend (tuple)
 					value_setters.start
 					check not value_setters.after end
@@ -71,21 +79,14 @@ feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
 					end
 					value_setters.forth
 				end
-				tuple.end_editing
+				close_tuple (tuple)
 				skip_record_separator
 			end
-			--!!!Include this test if it's not too slow in the compiled
-			--!!!(assertions-off) version:
-			--if not product.sorted_by_date_time then
-				-- !!!Report the error message?  Then do what? Return error
-				-- !!!status?
-			--end
 		ensure then
 			-- product.count = number of records in input_file
 		end
 
-feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
-									-- temporary.)
+feature -- Status report
 
 	execute_precondition: BOOLEAN is
 		do
@@ -100,10 +101,9 @@ feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
 				input_file.readable and not value_setters.empty)
 		end
 
-feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
-									-- temporary.)
+feature -- Access
 
-	tuple_maker: BASIC_TUPLE_FACTORY
+	tuple_maker: FACTORY
 			-- Tuple manufacturer
 
 	value_setters: LIST [VALUE_SETTER]
@@ -118,10 +118,9 @@ feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
 	input_file: FILE
 			-- Input file or stream
 
-feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
-									-- temporary.)
+feature -- Element change
 
-	set_tuple_maker (arg: BASIC_TUPLE_FACTORY) is
+	set_tuple_maker (arg: FACTORY) is
 		do
 			tuple_maker := arg
 		end
@@ -144,6 +143,31 @@ feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
 	set_input_file (arg: FILE) is
 		do
 			input_file := arg
+		end
+
+feature {NONE} -- Hook methods
+
+	create_product is
+			-- Instantiate product as an effective descendant.
+		deferred
+		ensure
+			product /= Void
+		end
+
+	open_tuple (t: ANY) is
+			-- Perform any initialization of `t' needed before setting
+			-- its fields.
+		require
+			t /= Void
+		do
+		end
+
+	close_tuple (t: ANY) is
+			-- Perform any close/clean-up of `t' needed after setting
+			-- its fields.
+		require
+			t /= Void
+		do
 		end
 
 feature {NONE}
@@ -214,30 +238,5 @@ feature {NONE}
 				i := i + 1
 			end
 		end
-
-	print_tuple_values (tuple: BASIC_MARKET_TUPLE) is
-			-- For debugging
-		local
-			t: VOLUME_TUPLE
-		do
-			t ?= tuple
-			io.put_string (t.date_time.date.out)
-			io.put_string (", ")
-			io.put_real (t.open.value)
-			io.put_string (", ")
-			io.put_real (t.high.value)
-			io.put_string (", ")
-			io.put_real (t.low.value)
-			io.put_string (", ")
-			io.put_real (t.close.value)
-			io.put_string (", ")
-			io.put_integer (t.volume)
-			io.put_string ("%N")
-		end
-
-invariant
-
-	--product /= Void implies product.sorted_by_date_time
-	-- (Commented out for efficiency.)
 
 end -- class DATA_SCANNER

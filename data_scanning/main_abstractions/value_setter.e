@@ -1,36 +1,34 @@
 indexing
 	description:
 		"Abstraction that scans input and uses it to set the appropriate %
-		%field of a MARKET_TUPLE";
+		%field of a `tuple'";
 	detailed_description:
-		"Each descendant class will set the appropriate field of the tuple %
-		%according to the type of the class.  For example, a CLOSE_SETTER %
-		%will set the close field of the tuple.  Thus, the instances of %
-		%descendants of this class that are used to create tuples must %
-		%be arranged in the correct order according to the input format. %
-		%For example, if the input field format is open, high, low, close, %
-		%there must be four class instances of types OPEN_SETTER, %
-		%HIGH_SETTER, LOW_SETTER, and CLOSE_SETTER, respectively."
+		"Each descendant class will, in the set procedure, set the %
+		%appropriate field of the tuple according to the type of the class. %
+		%For example, a CLOSE_SETTER in a financial analysis application %
+		%will set the close field of the tuple.	Or, an application that %
+		%deals with people or other objects that have names would use a %
+		%NAME_SETTER to set the name field of a tuple."
 	date: "$Date$";
 	revision: "$Revision$"
 
 deferred class VALUE_SETTER inherit
 
-	MATH_CONSTANTS
-		export {NONE}
-			all
-		end
-
 feature {FACTORY} -- Basic operations
 
-	set (stream: IO_MEDIUM; tuple: MARKET_TUPLE) is
+	set (stream: IO_MEDIUM; tuple: ANY) is
 			-- Set the appropriate field of tuple using `stream' as input.
 		require
 			args_not_void: stream /= Void and tuple /= Void
 			stream_readable: stream.exists and then stream.readable
 		do
 			error_occurred := false
-			do_set (stream, tuple)
+			read_value (stream)
+			if
+				not is_dummy and not error_occurred
+			then
+				do_set (stream, tuple)
+			end
 		end
 
 feature {FACTORY} -- Access
@@ -55,13 +53,39 @@ feature {FACTORY} -- Element change
 			set_to_b: is_dummy = b
 		end
 
-feature {NONE}
+feature {NONE} -- Hook methods
 
-	do_set (stream: IO_MEDIUM; tuple: MARKET_TUPLE) is
-			-- Hook method to do the actual setting
-		require
-			not error_occurred
+	read_value (stream: IO_MEDIUM) is
+			-- Read the next value (char or integer or etc.) from `stream'.
 		deferred
+		end
+
+	do_set (stream: IO_MEDIUM; tuple: ANY) is
+			-- Set appropriate field of `tuple' according
+			-- to the last value read in stream.
+		require
+			not is_dummy and not error_occurred
+		deferred
+		end
+
+feature {NONE} -- Utility
+
+	handle_input_error (main_msg, msg2: STRING) is
+			-- Instantiate last_error, append main_msg (and msg2 if
+			-- not Void) to last_error, and set error_occurred to True.
+		require
+			main_msg /= Void
+		do
+			!!last_error.make (128)
+			last_error.append (main_msg)
+			if msg2 /= Void then
+				last_error.append (msg2)
+			end
+			error_occurred := True
+		ensure
+			error_occurred: error_occurred
+			msg_appended:
+				last_error /= Void and last_error.count >= main_msg.count
 		end
 
 end -- class VALUE_SETTER
