@@ -16,14 +16,14 @@ feature -- Basic operations
 		local
 			cmd: CLIENT_REQUEST_COMMAND
 		do
-			request_id := -1; session_key := -1; command_argument := Void
+			request_id := -1; command_argument := Void
 			process_request
 			if is_logout_request (request_id) then
 				handle_logout
-				if sessions_used then
-					-- Logout requests are handled specially - simply remove
-					-- the client's session.
-					sessions.remove (session_key)
+				if sessions_used and session /= Void then
+					-- Logout requests are handled specially - simply clean
+					-- up the client's session.
+					cleanup_session
 				end
 			else
 				check
@@ -39,9 +39,9 @@ feature -- Basic operations
 					-- since it will create one.
 				then
 					check
-						valid_key: sessions.has (session_key)
+						valid_session: session /= Void
 					end
-					cmd.set_session (sessions @ session_key)
+					cmd.set_session (session)
 				end
 				-- `cmd.execute' is expected to handle the error if
 				-- `request_error' is true.
@@ -58,12 +58,11 @@ feature {NONE} -- Hook routines
 		end
 
 	process_request is
-			-- Input the next client request, blocking if necessary, and split
-			-- the received message into `request_id', `session_key',
-			-- and `command_argument'.
+			-- Input the next client request, blocking if necessary, and use
+			-- it to set `request_id', `command_argument', and, if
+			-- `sessions_used', `session'.
 		require
-			components_unset: request_id = -1 and session_key = -1 and
-				command_argument = Void
+			components_unset: request_id = -1 and command_argument = Void
 		deferred
 		ensure
 			reqid_legal: not is_logout_request (request_id) implies
@@ -71,7 +70,7 @@ feature {NONE} -- Hook routines
 			cmdarg_set: not is_logout_request (request_id) and then
 				(request_handlers @ request_id).arg_mandatory implies
 				command_argument /= Void
-			session_key_valid: session_key_valid
+			session_valid: session_valid
 		end
 
 	handle_logout is
@@ -92,6 +91,13 @@ feature {NONE} -- Hook routines
 		do
 		end
 
+	cleanup_session is
+			-- Perform needed cleanup on `session'.
+		require
+			valid_session: session /= Void
+		do
+		end
+
 	is_logout_request (id: INTEGER): BOOLEAN is
 			-- Is `id' the request_id for a logout request?
 		deferred
@@ -104,24 +110,20 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	session_key_valid: BOOLEAN is
-			-- Is `session_key' valid?
+	session_valid: BOOLEAN is
+			-- Is `session' valid?
 		do
 			Result := sessions_used and
 				not is_login_request (request_id) and
-				not request_error implies sessions.has (session_key)
+				not request_error implies session /= Void
 		ensure
 			definition: sessions_used and
 				not is_login_request (request_id) and
-				not request_error implies sessions.has (session_key)
+				not request_error implies session /= Void
 		end
 
 	request_handlers: HASH_TABLE [CLIENT_REQUEST_COMMAND, INTEGER]
 			-- Handlers of client requests, keyed by `request_id'
-
-	session_key: INTEGER
-			-- Session key for last client request, extracted
-			-- by `process_request'
 
 	request_id: INTEGER
 			-- ID of last client request, extracted
@@ -131,14 +133,13 @@ feature {NONE} -- Implementation
 			-- Argument for the current client request command, extracted
 			-- by `process_request'
 
-	sessions: HASH_TABLE [SESSION, INTEGER] is
-			-- Existing client sessions, keyed by `session_key'
+	session: SESSION is
+			-- The current log-in session
 		deferred
 		end
 
 invariant
 
 	request_handlers_initialized: request_handlers /= Void
-	sessions_not_void_if_used: sessions_used implies sessions /= Void
 
 end -- class CLIENT_REQUEST_HANDLER
