@@ -1,5 +1,5 @@
 indexing
-	description: "A text file used only for input"
+	description: "A text file/record sequence used only for input"
 	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -9,14 +9,18 @@ class INPUT_FILE inherit
 	PLAIN_TEXT_FILE
 		export
 			{NONE} all
-			{ANY} close
+			{ANY} close, after
+		redefine
+			start
 		end
 
-	INPUT_SEQUENCE
+	INPUT_RECORD_SEQUENCE
+
+	ITERABLE_INPUT_SEQUENCE
 		rename
 			index as position
 		undefine
-			off, item
+			off
 		end
 
 creation
@@ -30,6 +34,131 @@ feature -- Access
 
 	record_separator: STRING
 			-- Record separator used in `advance_to_next_record'
+
+	field_index: INTEGER
+
+	record_index: INTEGER
+
+feature -- Status report
+
+	after_last_record: BOOLEAN is
+		do
+			Result := after and then field_index = 1
+		end
+
+feature -- Cursor movement
+
+	advance_to_next_field is
+			-- Advance the cursor to the next field.
+			-- Set error_occurred and error_string if an error is encountered.
+		local
+			i: INTEGER
+		do
+			error_occurred := false
+			from
+				i := 1
+			variant
+				field_separator.count + 1 - i
+			until
+				i > field_separator.count
+			loop
+				-- If field_separator @ i is a tab or space, it will have
+				-- been eaten in the last read_x call (idiosyncracy of an
+				-- PLAIN_TEXT_FILE).  If it's something else, then the
+				-- character still needs to be eaten.
+				if
+					not (field_separator @ i = '%T' or
+						field_separator @ i = ' ')
+				then
+					read_character
+					if
+						last_character /= field_separator @ i
+					then
+						error_occurred := true
+						error_string := "Incorrect field separator detected."
+					end
+				end
+				i := i + 1
+			end
+			field_index := field_index + 1
+		end
+
+	advance_to_next_record is
+			-- Advance the cursor to the next record.
+			-- Set error_occurred and error_string if an error is encountered.
+		local
+			i: INTEGER
+		do
+			error_occurred := false
+			from
+				i := 1
+			variant
+				record_separator.count + 1 - i
+			until
+				i > record_separator.count
+			loop
+				-- If record_separator @ i is a tab or space or newline,
+				-- it will have been eaten in the last read_x call.  If it's
+				-- something else, then the character still needs to be eaten.
+				if
+					not is_tab_space_or_newline (record_separator @ i)
+				then
+					read_character
+					if
+						last_character /= record_separator @ i
+					then
+						error_occurred := true
+						error_string := "Incorrect record separator detected."
+					end
+				end
+				i := i + 1
+			end
+			field_index := 1
+			record_index := record_index + 1
+		end
+
+	discard_current_record is
+		local
+			first_rsep_char: CHARACTER
+			last_character_was_record_separator: BOOLEAN
+		do
+			first_rsep_char := record_separator @ 1
+			if
+				not before and not (field_index = 1) and
+				is_tab_space_or_newline (first_rsep_char)
+			then
+				back
+				read_character
+				if last_character = first_rsep_char then
+					last_character_was_record_separator := true
+				end
+			end
+			if not last_character_was_record_separator then
+				from
+					read_character
+				until
+					last_character = first_rsep_char or end_of_file
+				loop
+					read_character
+				end
+				if not is_tab_space_or_newline (last_character) then
+					back
+				end
+				advance_to_next_record
+			end
+			-- If just before the end-of-file, force EOF.
+			read_character
+			if not after then
+				back
+			end
+		end
+
+	start is
+		do
+			Precursor
+			field_index := 1
+			record_index := 1
+		end
 
 feature -- Element change
 
@@ -55,73 +184,12 @@ feature -- Element change
 				record_separator /= Void
 		end
 
-feature -- Basic operations
+feature {NONE} -- Implementation
 
-	advance_to_next_field is
-			-- Advance the cursor to the next field.
-			-- Set error_occurred and error_string if an error is encountered.
-		local
-			i: INTEGER
+	is_tab_space_or_newline (c: CHARACTER): BOOLEAN is
+			-- Is `c' a tab, space, or newline character?
 		do
-			error_occurred := False
-			from
-				i := 1
-			variant
-				field_separator.count + 1 - i
-			until
-				i > field_separator.count
-			loop
-				-- If field_separator @ i is a tab or space, it will have
-				-- been eaten in the last read_x call (idiosyncracy of an
-				-- PLAIN_TEXT_FILE).  If it's something else, then the
-				-- character still needs to be eaten.
-				if
-					not (field_separator @ i = '%T' or
-						field_separator @ i = ' ')
-				then
-					read_character
-					if
-						last_character /= field_separator @ i
-					then
-						error_occurred := True
-						error_string := "Incorrect field separator detected."
-					end
-				end
-				i := i + 1
-			end
-		end
-
-	advance_to_next_record is
-			-- Advance the cursor to the next record.
-			-- Set error_occurred and error_string if an error is encountered.
-		local
-			i: INTEGER
-		do
-			from
-				i := 1
-			variant
-				record_separator.count + 1 - i
-			until
-				i > record_separator.count
-			loop
-				-- If record_separator @ i is a tab or space or newline,
-				-- it will have been eaten in the last read_x call.  If it's
-				-- something else, then the character still needs to be eaten.
-				if
-					not (record_separator @ i = '%T' or
-						record_separator @ i = ' ' or
-						record_separator @ i = '%N')
-				then
-					read_character
-					if
-						last_character /= record_separator @ i
-					then
-						error_occurred := True
-						error_string := "Incorrect record separator detected."
-					end
-				end
-				i := i + 1
-			end
+			Result := c = '%T' or c = ' ' or c = '%N'
 		end
 
 invariant
