@@ -20,6 +20,33 @@ feature -- Initialization
 		do
 		end
 
+feature -- Access
+
+	children: LIST [COMMAND] is
+			-- This command's children, if this is a composite command
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+		ensure
+			not_void: Result /= Void
+		end
+
+	descendants: LIST [COMMAND] is
+			-- All of this command's descendants, if this is a composite
+			-- command - children, children's children, etc.
+		local
+			l: LIST [COMMAND]
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			l := children
+			from l.start until l.exhausted loop
+				Result.extend (l.item)
+				Result.append (l.item.descendants)
+				l.forth
+			end
+		ensure
+			not_void: Result /= Void
+		end
+
 feature -- Basic operations
 
 	execute (arg: ANY) is
@@ -35,5 +62,9 @@ feature -- Status report
 			-- Is the argument to execute mandatory?
 		deferred
 		end
+
+invariant
+
+	children_and_descendants_correspond: children.empty = descendants.empty
 
 end -- class COMMAND
