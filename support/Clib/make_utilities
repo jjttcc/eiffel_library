@@ -1,3 +1,5 @@
 Includes="-IC:/Eiffel51/studio/spec/windows/include"
 Includes="$Includes -IC:/Eiffel51/C_library/zlib *.c"
-bcc32 -c -DBCC $Includes *.c && cp utilities.obj ../../lib
+Libdir=../../lib
+if [ ! -e $Libdir ]; then mkdir $Libdir; fi
+bcc32 -c -DBCC $Includes *.c && cp utilities.obj $Libdir
