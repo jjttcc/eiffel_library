@@ -30,8 +30,24 @@ feature -- Basic operations
 			sorted: Result.sorted
 		end
 
+	sorted_set (l: LIST [G]): PART_SORTED_SET [G] is
+			-- All elements of `l', sorted, with duplicates removed
+		require
+			not_void: l /= Void
+		do
+			create Result.make
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				Result.extend (l.item)
+				l.forth
+			end
+		end
+
 	duplicates (l: LIST [H]): BOOLEAN is
-			-- Are there any items with duplicate names in `l'?
+			-- Are there any items with duplicates in `l'?
 		local
 			tbl: HASH_TABLE [H, H]
 		do
