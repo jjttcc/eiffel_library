@@ -170,9 +170,11 @@ feature {NONE} -- Access
 			-- if the first list has a count of 5 and the 2nd item in the
 			-- 2nd list is selected, return a value of 7 (5 + 2).
 		local
-			i, startnum, columns: INTEGER
+			i, startnum, columns, max_label_size: INTEGER
 		do
 			current_lines_read := 0
+			-- Maximum size of an item label, e.g.: "11) "
+			max_label_size := 4
 			print (general_msg)
 			from
 			until
@@ -185,8 +187,8 @@ feature {NONE} -- Access
 				loop
 					if lists.item (i).left.count > 0 then
 						if
-							longest_string (lists.item (i).left) >
-							Maximum_screen_width / 2
+							longest_string (lists.item (i).left) +
+							max_label_size > Maximum_screen_width / 2
 						then
 							columns := 1
 						else
