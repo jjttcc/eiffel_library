@@ -140,6 +140,7 @@ feature -- Element change
 
 feature -- Basic operations
 
+--!!!:
 	execute is
 			-- Scan input and create tuples from it.  If `start_input',
 			-- call 'input.start' before scanning.
@@ -157,10 +158,15 @@ feature -- Basic operations
 					input_valid: input /= Void and then
 					(input.readable or else input.after_last_record)
 				end
+print ("A" + "%N")
 				if
-					value_setters_used and
+					start_input and then value_setters_used and
 					input.field_count /= value_setters.count
 				then
+print ("B" + "%N")
+					-- (If not `start_input', assume that the field count
+					-- for the current tradable was already checked the
+					-- first time it was read [when `start_input' was true].)
 					last_error_fatal := True
 					error_in_current_tuple := True
 					error_list.extend (Wrong_field_count_message)
@@ -308,8 +314,16 @@ feature {NONE}
 			-- Advance to the next field in the input.
 			-- Call `input.advance_to_next_field' by default.  Can be
 			-- overridden in a descendant if different behavior is needed.
-		local
 		do
+--!!!:
+--print ("DS.atnf - findex, fcount: " +
+--input.field_index.out + ", " + input.field_count.out + "%N")
+--if input.field_index > input.field_count then
+--	print ("OOOOPS" + "%N")
+--end
+if not input.readable then
+print ("scanner.adv next field - readable: " + input.readable.out + "%N")
+end
 			input.advance_to_next_field
 			if input.error_occurred then
 				error_list.extend (input.error_string)
@@ -326,6 +340,14 @@ feature {NONE}
 			-- Call `input.advance_to_next_record' by default.  Can be
 			-- overridden in a descendant if different behavior is needed.
 		do
+--!!!:
+--print ("DS.atnr - findex, fcount: " +
+--input.field_index.out + ", " + input.field_count.out + "%N")
+print ("recidx, after last record: " +
+input.record_index.out + ", " + input.after_last_record.out + "%N")
+if not input.readable then
+print ("scanner.adv next rec - readable: " + input.readable.out + "%N")
+end
 			if not discard_current_tuple then
 				input.advance_to_next_record
 			else
