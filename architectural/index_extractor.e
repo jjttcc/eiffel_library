@@ -14,8 +14,13 @@ class INDEX_EXTRACTOR inherit
 
 	RESULT_COMMAND [REAL]
 		redefine
-			initialize, children
-,node_contains_cycle
+			initialize, children, descendants_locked, lock_descendants,
+			unlock_descendants
+		end
+
+	STATE_SET
+		export
+			{NONE} all
 		end
 
 creation
@@ -23,10 +28,6 @@ creation
 	make
 
 feature -- Initialization
-node_contains_cycle (node: like Current): BOOLEAN is
-do
-Result := node.descendants_contain_cycle
-end
 
 	make (i: INDEXED) is
 		do
@@ -101,6 +102,36 @@ feature -- Basic operations
 			value := indexable.index
 		end
 
+feature {NONE} -- Hook routine implementation
+
+	descendants_locked: BOOLEAN is
+			-- Implementation state to prevent infinite calls to descendants
+			-- when Current is part of a -time cycle.
+		do
+			Result := state_at (Descendants_locked_index)
+		end
+
+	lock_descendants is
+		do
+			set_descendants_locked (True)
+		end
+
+	unlock_descendants is
+		do
+			set_descendants_locked (False)
+		end
+
+	set_descendants_locked (arg: BOOLEAN) is
+			-- Set `descendants_locked' according to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			put_state (arg, Descendants_locked_index)
+		ensure
+			descendants_locked_set: descendants_locked = arg and
+				descendants_locked /= Void
+		end
+
 feature {NONE} -- Implementation
 
 	initialized: BOOLEAN is
@@ -122,5 +153,7 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation - constants
 
 	Initialized_state_index: INTEGER is 1
+
+	Descendants_locked_index: INTEGER is 2
 
 end -- class INDEX_EXTRACTOR

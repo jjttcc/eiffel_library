@@ -10,11 +10,6 @@ deferred class TREE_NODE inherit
 
 	ANY
 
-	STATE_SET
-		export
-			{NONE} all
-		end
-
 feature -- Access
 
 	children: LIST [like Current] is
@@ -32,8 +27,8 @@ feature -- Access
 			node_set: LINKED_SET [like Current]
 		do
 			create {LINKED_LIST [TREE_NODE]} Result.make
-			if not cycle_in_descendants and then not already_visited then
-				set_already_visited (True)
+			if not descendants_locked then
+				lock_descendants
 				l := copy_of_children
 				create node_set.make
 				if descendant_comparison_is_by_objects then
@@ -45,17 +40,14 @@ feature -- Access
 					l.forth
 				end
 				Result.append (node_set)
-				set_already_visited (False)
-			else
-				-- Since `already_visited', Current.descendants must have
-				-- already been called as the result of a call to 
-				-- `descendants' on the root of the tree.  This indicates
-				-- that there is a cycle in the tree structure.
-				set_cycle_in_descendants (True)
+				unlock_descendants
 			end
 		ensure
 			exists: Result /= Void
-			current_excluded: not Result.has (Current)
+			current_excluded: not tree_contains_cycle (
+				create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) implies
+				not Result.has (Current)
+			same_lock_state: descendants_locked = old descendants_locked
 		end
 
 	name: STRING is
@@ -89,23 +81,33 @@ feature -- Status report
 			Result := report (0, agent {TREE_NODE}.name)
 		end
 
-	descendants_contain_cycle: BOOLEAN is
-			-- Is there a cycle in `descendants'?
+	tree_contains_cycle (visited: HASH_TABLE [BOOLEAN, STRING]): BOOLEAN is
+			-- Does the tree with Current as the root contain a cycle?
+		require
+			arg_exists: visited /= Void
 		local
-			d: LIST [like Current]
+			current_tag: STRING
+			l: LIST [like Current]
 		do
-			Result := cycle_in_descendants
+			current_tag := out
+			-- If Current has already been visited for this cycle check,
+			-- then there is a cycle:
+			Result := visited @ current_tag
 			if not Result then
-				-- Calling `descendants' will cause `cycle_in_descendants'
-				-- to be true if Current contains a cycle.
-				d := descendants
-				Result := cycle_in_descendants
-				if not Result then
-					-- Do the children or their descendants contain a cycle?
-					Result := children.there_exists (agent
-						node_contains_cycle (?))
+				visited.force (True, current_tag)
+				from
+					l := children
+					l.start
+				until
+					Result or else l.exhausted
+				loop
+					Result := l.item.tree_contains_cycle (visited)
+					l.forth
 				end
+				visited.force (False, current_tag)
 			end
+		ensure
+			true_if_already_visited: old (visited @ out) implies Result
 		end
 
 feature {NONE} -- Implementation - Hook routines
@@ -155,6 +157,23 @@ feature {NONE} -- Implementation - Hook routines
 			Result := ""
 		end
 
+	descendants_locked: BOOLEAN is
+			-- Implementation state to prevent infinite calls to descendants
+			-- when Current is part of a cycle - Redefine appropriately,
+			-- along with `lock_descendants' and `unlock_descendants',
+			-- if this functionality is required.
+		do
+			Result := False
+		end
+
+	lock_descendants is
+		do
+		end
+
+	unlock_descendants is
+		do
+		end
+
 feature {TREE_NODE} -- Implementation
 
 	report (indent_size: INTEGER;
@@ -202,49 +221,7 @@ feature {TREE_NODE} -- Implementation
 			end
 		end
 
-	cycle_in_descendants: BOOLEAN is
-			-- Has a cycle been detected in `descendants'?
-		do
-			Result := state_at (Descendants_cycle_index)
-		end
-
-	set_cycle_in_descendants (arg: BOOLEAN) is
-			-- Set `cycle_in_descendants' according to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			put_state (arg, Descendants_cycle_index)
-		ensure
-			descendants_cycle_set: cycle_in_descendants = arg
-		end
-
-	already_visited: BOOLEAN is
-			-- Has Current already been visitied in the context of a
-			-- call to `descendants'?
-		do
-			Result := state_at (Already_visited_index)
-		end
-
-	set_already_visited (arg: BOOLEAN) is
-			-- Set `already_visited' according to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			put_state (arg, Already_visited_index)
-		ensure
-			already_visited_set: already_visited = arg
-		end
-
-	node_contains_cycle (node: like Current): BOOLEAN is
-		do
-			Result := node.descendants_contain_cycle
-		end
-
 feature {NONE} -- Implementation - constants
-
-	Descendants_cycle_index: INTEGER is 32
-
-	Already_visited_index: INTEGER is 31
 
 	Indent_increment: INTEGER is 3
 
@@ -252,7 +229,7 @@ invariant
 
 	children_exist: children /= Void
 	descendants_exist: descendants /= Void
-	children_and_descendants_correspond: not descendants_contain_cycle implies
+	children_and_descendants_correspond: not descendants_locked implies
 		children.is_empty = descendants.is_empty
 	name_not_void: name /= Void
 
