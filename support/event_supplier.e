@@ -8,26 +8,37 @@ indexing
 
 deferred class EVENT_SUPPLIER
 
-feature -- Access
+feature -- Basic operations
 
-	action_code: INTEGER
-			-- The action code specified by the last call to `register_client'
-
-	client: EVENT_CLIENT
-
-feature -- Client services
-
-	register_client (c: EVENT_CLIENT; actn_code: INTEGER) is
-			-- Register `c' as a "session-location" client with `actn_code'
-			-- spcifying what action for the client to take on callback.
+	register_client (p: PROCEDURE [ANY, TUPLE [EVENT_SUPPLIER]]) is
+			-- Register `p' as a client action to be called when
+			-- an event has occurred.
 		require
-			arg_exists: c /= Void
+			arg_exists: p /= Void
 		do
-			client := c
-			action_code := actn_code
+			if client_actions = Void then
+				create client_actions.make
+			end
+			client_actions.extend (p)
 		ensure
-			client_set: client = c
-			code_set: action_code = actn_code
+			p_added: client_actions.has (p)
+		end
+
+feature {NONE} -- Implementation
+
+	client_actions: LINKED_LIST [PROCEDURE [ANY, TUPLE [EVENT_SUPPLIER]]]
+
+	notify_clients is
+			-- Call all agents in `client_actions' with Current as an argument.
+		do
+			from
+				client_actions.start
+			until
+				client_actions.exhausted
+			loop
+				client_actions.item.call ([Current])
+				client_actions.forth
+			end
 		end
 
 end
