@@ -16,4 +16,7 @@ feature -- Access
 
 	product: SEQUENCE [EVENT]
 
+	event_type: EVENT_TYPE
+			-- The type of the generated events
+
 end -- class EVENT_GENERATOR
