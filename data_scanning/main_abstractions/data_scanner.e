@@ -17,9 +17,6 @@ indexing
 deferred class DATA_SCANNER inherit
 
 	FACTORY
-		redefine
-			execute_precondition
-		end
 
 feature -- Access
 
@@ -86,21 +83,6 @@ feature -- Basic operations
 			-- product.count = number of records in input_file
 		end
 
-feature -- Status report
-
-	execute_precondition: BOOLEAN is
-		do
-			Result := (tuple_maker /= Void and value_setters /= Void and
-				field_separator /= Void and record_separator /= Void and
-				input_file /= Void and input_file.exists and
-				input_file.readable and not value_setters.empty)
-		ensure then
-			Result = (tuple_maker /= Void and value_setters /= Void and
-				field_separator /= Void and record_separator /= Void and
-				input_file /= Void and input_file.exists and
-				input_file.readable and not value_setters.empty)
-		end
-
 feature -- Access
 
 	tuple_maker: FACTORY
@@ -121,28 +103,55 @@ feature -- Access
 feature -- Element change
 
 	set_tuple_maker (arg: FACTORY) is
+			-- Set tuple_maker to `arg'.
+		require
+			arg /= Void
 		do
 			tuple_maker := arg
+		ensure
+			tuple_maker_set: tuple_maker = arg and tuple_maker /= Void
 		end
 
 	set_value_setters (arg: LIST [VALUE_SETTER]) is
+			-- Set value_setters to `arg'.
+		require
+			arg /= Void
 		do
 			value_setters := arg
+		ensure
+			value_setters_set: value_setters = arg and value_setters /= Void
 		end
 
 	set_field_separator (arg: STRING) is
+			-- Set field_separator to `arg'.
+		require
+			arg /= Void
 		do
 			field_separator := arg
+		ensure
+			field_separator_set: field_separator = arg and
+				field_separator /= Void
 		end
 
 	set_record_separator (arg: STRING) is
+			-- Set record_separator to `arg'.
+		require
+			arg /= Void
 		do
 			record_separator := arg
+		ensure
+			record_separator_set: record_separator = arg and
+				record_separator /= Void
 		end
 
 	set_input_file (arg: FILE) is
+			-- Set input_file to `arg'.
+		require
+			arg /= Void
 		do
 			input_file := arg
+		ensure
+			input_file_set: input_file = arg and input_file /= Void
 		end
 
 feature {NONE} -- Hook methods
@@ -238,5 +247,14 @@ feature {NONE}
 				i := i + 1
 			end
 		end
+
+invariant
+
+	properties_not_void:
+		tuple_maker /= Void and value_setters /= Void and
+		field_separator /= Void and record_separator /= Void and
+		input_file /= Void
+	input_file_open_for_read: input_file.exists and input_file.readable
+	value_setters_not_empty: not value_setters.empty
 
 end -- class DATA_SCANNER
