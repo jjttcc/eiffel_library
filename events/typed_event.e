@@ -19,7 +19,7 @@ feature -- Access
 	type: EVENT_TYPE
 			-- The type of the event
 
-feature -- Status report
+feature -- Comparison
 
 	is_equal (other: like Current): BOOLEAN is
 		do
