@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	sorted_list (l: LIST [G]): PART_SORTED_TWO_WAY_LIST [G] is
+	sorted_list (l: LINEAR [G]): PART_SORTED_TWO_WAY_LIST [G] is
 			-- All elements of `l', sorted
 		require
 			not_void: l /= Void
@@ -30,7 +30,7 @@ feature -- Access
 			sorted: Result.sorted
 		end
 
-	sorted_set (l: LIST [G]): PART_SORTED_SET [G] is
+	sorted_set (l: LINEAR [G]): PART_SORTED_SET [G] is
 			-- All elements of `l', sorted, with duplicates removed
 		require
 			not_void: l /= Void
