@@ -497,7 +497,7 @@ feature {NONE} -- Implementation - date-related routines
 			-- Date obtained from user.
 		do
 			print_list (<<"Enter the date to use for analysis or %
-				%hit <Enter> to use the%Ncurrent date (dd/mm/yyyy): ", eom>>)
+				%hit <Enter> to use the%Ncurrent date (mm/dd/yyyy): ", eom>>)
 			!!Result.make_now
 			from
 				read_line
