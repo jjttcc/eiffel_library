@@ -648,14 +648,16 @@ SRCS = utilities.c
 
 OBJS = utilities.o
 
-LIB = ../../lib/utilities.o
+LIBDIR = ../../lib/
+
+LIB = $(LIBDIR)/utilities.o
 
 all:: $(LIB)
 
 $(LIB): $(OBJS)
 
 all:: $(LIB)
-	cp $(OBJS) $(LIB)
+	mkdir -p $(LIBDIR); cp $(OBJS) $(LIB)
 
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit
