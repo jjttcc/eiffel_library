@@ -128,7 +128,6 @@ feature {TREE_NODE} -- Implementation
 			child_indent: INTEGER
 			i: INTEGER
 			tuple: TUPLE
-			resport_result: STRING
 		do
 			create spaces.make (0)
 			from i := 1 until i > indent_size loop
