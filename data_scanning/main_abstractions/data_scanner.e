@@ -7,9 +7,9 @@ indexing
 		"The value_setters attribute must contain instances of descendants %
 		%of VALUE_SETTER that will create tuples arranged in the correct %
 		%order according to the input format.  For example, if the input %
-		%fields are name, address, and telephone number of a PERSON, %
+		%fields are name, address, and telephone number of a person class, %
 		%value_setters would contain instances of the classes (with names %
-		%such as) NAME_SETTER, ADDRESS_SETTER, and TELEPHONE_SETTER, %
+		%such as) name_setter, address_setter, and telephone_setter, %
 		%arranged in that order."
 	author: "Jim Cochrane"
 	date: "$Date$";

@@ -8,7 +8,7 @@ indexing
 		%For example, a CLOSE_PRICE_SETTER in a financial analysis application %
 		%will set the close field of the tuple.	Or, an application that %
 		%deals with people or other objects that have names would use a %
-		%NAME_SETTER to set the name field of a tuple."
+		%name_setter class to set the name field of a tuple."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
