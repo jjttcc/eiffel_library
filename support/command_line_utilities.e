@@ -97,8 +97,8 @@ feature -- Access
 			time: TIME
 			finished: BOOLEAN
 		do
-			!!date.make_now
-			!!time.make_now
+			create date.make_now
+			create time.make_now
 			if msg /= Void and not msg.empty then
 				print_list (<<msg, "%N">>)
 			end
@@ -128,7 +128,7 @@ feature -- Access
 				end
 				print ("%N%N")
 			end
-			!!Result.make_by_date_time (date, time)
+			create Result.make_by_date_time (date, time)
 			print_list (<<"Setting date and time for processing to ",
 							Result.out, "%N">>)
 		end
@@ -219,7 +219,7 @@ feature -- Access
 		require
 			not_negative: i >= 0
 		do
-			!!Result.make (i)
+			create Result.make (i)
 			Result.fill_blank
 		end
 
@@ -393,7 +393,7 @@ feature -- Miscellaneous
 				print_list (<<descr, "%N(Up to ",
 							allowed_selections, " choices)%N">>)
 				from
-					!!names.make (choices.count)
+					create names.make (choices.count)
 					choices.start
 				until
 					choices.exhausted
@@ -498,7 +498,7 @@ feature {NONE} -- Implementation - date-related routines
 		do
 			print_list (<<"Enter the date to use for analysis or %
 				%hit <Enter> to use the%Ncurrent date (mm/dd/yyyy): ", eom>>)
-			!!Result.make_now
+			create Result.make_now
 			from
 				read_line
 			until
@@ -509,7 +509,7 @@ feature {NONE} -- Implementation - date-related routines
 				read_line
 			end
 			if not last_string.empty then
-				!!Result.make_from_string_default (last_string)
+				create Result.make_from_string_default (last_string)
 			end
 			print_list (<<"Using date of ", Result, ".%N">>)
 		end
@@ -520,7 +520,7 @@ feature {NONE} -- Implementation - date-related routines
 			period: CHARACTER
 			period_name: STRING
 		do
-			!!Result.make_now
+			create Result.make_now
 			from
 			until
 				period = 'd' or period = 'm' or period = 'y'
@@ -567,7 +567,7 @@ feature {NONE} -- Implementation - date-related routines
 	time_choice: TIME is
 			-- Time obtained from user.
 		do
-			!!Result.make (0, 0, 0)
+			create Result.make (0, 0, 0)
 			print_list (<<"Enter the hour to use for analysis: ", eom>>)
 			from
 				read_integer
