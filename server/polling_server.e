@@ -52,7 +52,7 @@ feature {NONE} -- Hook routine implementation
 			check
 				poller: poller /= Void
 			end
-			poller.execute (15, 20000)
+			poller.execute (15, Polling_timeout_milliseconds)
 		end
 
 	cleanup is
@@ -140,6 +140,12 @@ feature {NONE} -- Implementation - Hook routines
 			-- calling `prepare_for_listening'.
 		do
 			-- Null action - redefine if needed.
+		end
+
+	Polling_timeout_milliseconds: INTEGER is
+			-- Polling timeout value, in milliseconds
+		once
+			Result := 20000
 		end
 
 feature {NONE} -- Implementation
