@@ -45,13 +45,14 @@ feature {NONE} -- Implemetation
 		local
 			e : EXECUTION_ENVIRONMENT
 			b : STRING
-			c : STRING
 		do
 			create e
 			b := clone(e.get("ComSpec"))
 			if b /= Void then
 				b.append(dir_cmd)
-				b.append(clone(s)); b.append(pipe); b.append(markets_file)
+				b.append(clone(s))
+				b.append(output_redirect)
+				b.append(work_file)
 				e.system(b)
 			end
 		end
@@ -60,7 +61,7 @@ feature {NONE} -- Implemetation
 		local
 			f: PLAIN_TEXT_FILE
 		do
-			create f.make(markets_file)
+			create f.make(work_file)
 			if f.exists then
 				f.open_read
 				from
@@ -77,10 +78,10 @@ feature {NONE} -- Implemetation
 			end
 		end
 
-	markets_file: STRING is "markets.mas"
+	work_file: STRING is "files.7z4"
 
 	dir_cmd: STRING is " /C DIR /B "
 
-	pipe: STRING IS " > "
+	output_redirect: STRING IS " > "
 
 end
