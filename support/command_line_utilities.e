@@ -79,6 +79,8 @@ feature -- Access
 			end
 			read_line
 			Result := clone (last_string)
+		ensure
+			Result_exists: Result /= Void
 		end
 
 	list_selection (l: LIST [STRING]; general_msg: STRING): INTEGER is
