@@ -273,20 +273,15 @@ feature {NONE} -- Input
 			-- `Line_limit', read the next line from `input_device'.
 			-- If `Line_limit' is greater than 0 and `current_lines_read' >=
 			-- `Line_limit', `current_lines_read' is set to 0 and an
-			-- exception is thrown.  If input_device.readable an exception
-			-- is thrown.
+			-- exception is thrown.
 		do
-			if input_device.readable then
-				if Line_limit < 0 or else current_lines_read < Line_limit then
-					input_device.read_line
-				else
-					current_lines_read := 0
-					raise (Line_limit_reached)
-				end
-				current_lines_read := current_lines_read + 1
+			if Line_limit < 0 or else current_lines_read < Line_limit then
+				input_device.read_line
 			else
-				raise (input_not_readable_error_message)
+				current_lines_read := 0
+				raise (Line_limit_reached)
 			end
+			current_lines_read := current_lines_read + 1
 		end
 
 feature {NONE} -- Miscellaneous
