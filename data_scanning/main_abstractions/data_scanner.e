@@ -49,6 +49,10 @@ feature -- Access
 			-- Errors that occurred during scanning
 			-- errror_list.count = number of errors that occurred
 
+	last_error_fatal: BOOLEAN
+			-- Was the last error that occurred during scanning fatal,
+			-- meaning that scanning can't continue?
+
 	tuple_maker: FACTORY
 			-- Tuple manufacturer
 
@@ -122,8 +126,6 @@ feature -- Basic operations
 
 	execute is
 			-- Scan input and create tuples from it.
-		local
-			tuple: ANY
 		do
 			if error_list = Void then
 				!!error_list.make
@@ -138,37 +140,15 @@ feature -- Basic operations
 			variant
 				input_file.count - input_file.index
 			until
-				input_file.after
+				input_file.after or last_error_fatal
 			loop
-				from
-					tuple_maker.execute
-					tuple := tuple_maker.product
-					open_tuple (tuple)
-					product.extend (tuple)
-					value_setters.start
-					check not value_setters.after end
-					-- Set first field of tuple:
-					value_setters.item.set (input_file, tuple)
-					if value_setters.item.error_occurred then
-						error_list.extend (value_setters.item.last_error)
-					end
-					value_setters.forth
-				invariant
-					-- tuple.number_of_fields_set = value_setters.index - 1
-				variant
-					value_setters.count - value_setters.index
-				until
-					value_setters.after
-				loop
-					skip_field_separator
-					value_setters.item.set (input_file, tuple)
-					if value_setters.item.error_occurred then
-						error_list.extend (value_setters.item.last_error)
-					end
-					value_setters.forth
+				make_tuple
+				if not last_error_fatal then
+					skip_record_separator
 				end
-				close_tuple (tuple)
-				skip_record_separator
+			end
+			if last_error_fatal then
+				handle_fatal_error
 			end
 		ensure then
 			-- product.count = number of records in input_file
@@ -182,6 +162,45 @@ feature {NONE} -- Hook methods
 		deferred
 		ensure
 			product /= Void
+		end
+
+	make_tuple is
+			-- Create a tuple and initialize it with the data from
+			-- the current record in `input_file'.  Default implementation.
+		local
+			tuple: ANY
+		do
+			tuple_maker.execute
+			tuple := tuple_maker.product
+			open_tuple (tuple)
+			product.extend (tuple)
+			from
+				value_setters.start
+				check not value_setters.after end
+				-- Set first field of tuple:
+				value_setters.item.set (input_file, tuple)
+				if value_setters.item.error_occurred then
+					error_list.extend (value_setters.item.last_error)
+				end
+				value_setters.forth
+			invariant
+				-- tuple.number_of_fields_set = value_setters.index - 1
+			variant
+				value_setters.count - value_setters.index
+			until
+				value_setters.after
+			loop
+				skip_field_separator
+				value_setters.item.set (input_file, tuple)
+				if value_setters.item.error_occurred then
+					error_list.extend (value_setters.item.last_error)
+				end
+				value_setters.forth
+			end
+			close_tuple (tuple)
+		ensure
+			one_more: product.count = old product.count + 1 or
+					scanning_error_occurred
 		end
 
 	open_tuple (t: ANY) is
@@ -198,6 +217,13 @@ feature {NONE} -- Hook methods
 		require
 			t /= Void
 		do
+		end
+
+	handle_fatal_error is
+			-- Clean up after fatal error.  Default implementation -
+			-- remove all elements of product.
+		do
+			product.wipe_out
 		end
 
 feature {NONE}
@@ -268,6 +294,9 @@ feature {NONE}
 				i := i + 1
 			end
 		end
+
+	scanning_error_occurred: BOOLEAN
+			-- Did an error occur during the last scan (in make_tuple)?
 
 invariant
 
