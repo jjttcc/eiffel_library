@@ -22,6 +22,7 @@ feature -- Access
 			m := value \\ 10000 // 100
 			d := value \\ 100
 			if
+				value < 10000 or
 				y < 0 or m < 1 or m > Result.months_in_year or
 				d < 1 or d > Result.days_in_i_th_month (m, y)
 			then
