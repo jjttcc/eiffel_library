@@ -6,7 +6,7 @@ indexing
 
 class
 
-	PAIR [X, H]
+	PAIR [G, H]
 
 creation
 
