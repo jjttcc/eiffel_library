@@ -10,8 +10,18 @@ class MATH_CONSTANTS inherit
 
 	SINGLE_MATH
 
-feature
+feature -- Access
 
 	epsilon: REAL is 0.00001
+
+feature -- Utility
+
+	reals_equal (r1, r2: REAL): BOOLEAN is
+			-- Is `r1' equal to `r2' within a tolerance of `epsilon'?
+		do
+			Result := rabs (r1 - r2) < epsilon
+		ensure
+			definition: Result = (rabs (r1 - r2) < epsilon)
+		end
 
 end -- class MATH_CONSTANTS
