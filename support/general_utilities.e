@@ -30,6 +30,8 @@ feature -- Basic operations
 				end
 				i := i + 1
 			end
+		ensure
+			not_void: Result /= Void
 		end
 
 	print_list (l: ARRAY [ANY]) is
