@@ -9,6 +9,9 @@ class DIVISION
 inherit
 
 	BINARY_OPERATOR [REAL, REAL]
+		redefine
+			set_value_to_default
+		end
 
 creation
 
@@ -19,6 +22,11 @@ feature {NONE} -- Hook routine implementation
 	operate (v1, v2: REAL) is
 		do
 			value := v1 / v2
+		end
+
+	set_value_to_default is
+		do
+			value := 0
 		end
 
 end -- class DIVISION

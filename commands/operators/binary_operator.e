@@ -14,6 +14,11 @@ deferred class BINARY_OPERATOR [G, H] inherit
 			initialize
 		end
 
+	EXCEPTIONS
+		export {NONE}
+			all
+		end
+
 feature -- Initialization
 
 	set_operands, make (op1: like operand1; op2: like operand2) is
@@ -53,15 +58,29 @@ feature -- Status report
 feature -- Basic operations
 
 	execute (arg: ANY) is
+			-- A system exception may occur (most likely caused by division
+			-- by 0) during execution of this feature.  In this case,
+			-- the exception is caught and `value' is set to a default.
 		local
 			result1: H
+			exception_occurred: BOOLEAN
 		do
-			operand1.execute (arg)
-			-- Save result to avoid possible side effects from executing
-			-- operand2.
-			result1 := operand1.value
-			operand2.execute (arg)
-			operate (result1, operand2.value)
+			if not exception_occurred then
+				operand1.execute (arg)
+				-- Save result to avoid possible side effects from executing
+				-- operand2.
+				result1 := operand1.value
+				operand2.execute (arg)
+				operate (result1, operand2.value)
+			else
+				set_value_to_default
+			end
+		rescue
+			-- The most likely (perhaps only possible) exception is
+			-- division by 0 in the operate feature, when the run-time
+			-- type is DIVISION.
+			exception_occurred := true
+			retry
 		end
 
 feature {NONE} -- Hook routines
@@ -72,6 +91,11 @@ feature {NONE} -- Hook routines
 		deferred
 		ensure
 			value_not_void: value /= Void
+		end
+
+	set_value_to_default is
+			-- Set `value' to a default value to handle exception condition.
+		do
 		end
 
 end -- class BINARY_OPERATOR
