@@ -34,4 +34,8 @@ feature -- Access
 	type: EVENT_TYPE
 			-- The type of the event
 
+invariant
+
+	type /= Void
+
 end -- class TYPED_EVENT
