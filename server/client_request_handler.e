@@ -132,9 +132,9 @@ feature {NONE} -- Implementation
 				not is_login_request (request_id) and
 				not request_error implies session /= Void
 		ensure
-			definition: sessions_used and
+			definition: Result = (sessions_used and
 				not is_login_request (request_id) and
-				not request_error implies session /= Void
+				not request_error implies session /= Void)
 		end
 
 	request_handlers: HASH_TABLE [CLIENT_REQUEST_COMMAND, HASHABLE]
