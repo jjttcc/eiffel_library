@@ -21,6 +21,7 @@ feature -- Basic operations
 			end
 			client_actions.extend (p)
 		ensure
+			client_actions_exist: client_actions /= Void
 			p_added: client_actions.has (p)
 		end
 
