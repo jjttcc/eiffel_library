@@ -9,7 +9,7 @@ class INPUT_FILE inherit
 	PLAIN_TEXT_FILE
 		export
 			{NONE} all
-			{ANY} close, after
+			{ANY} close, after, exists, open_read
 		redefine
 			start
 		end
@@ -25,7 +25,7 @@ class INPUT_FILE inherit
 
 creation
 
-	make_open_read, make_create_read_write, make_open_read_write
+	make_open_read, make_create_read_write, make_open_read_write, make
 
 feature -- Access
 
