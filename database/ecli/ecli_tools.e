@@ -27,11 +27,11 @@ feature -- Basic operations
 			stmt: ECLI_STATEMENT
 		do
 			from
-				error_occurred := False
 				cmdlist.start
 			until
 				cmdlist.exhausted
 			loop
+				error_occurred := False
 				if stmt = Void then
 					create stmt.make (session)
 				else
@@ -40,7 +40,9 @@ feature -- Basic operations
 				stmt.set_immediate_execution_mode
 				stmt.set_sql (cmdlist.item)
 				session.begin_transaction
-print ("Executing '" + stmt.sql + "'%N")
+				debug ("database")
+					print ("Executing '" + stmt.sql + "'%N")
+				end
 				execute_statement (stmt)
 				stmt.close
 				if error_occurred then
