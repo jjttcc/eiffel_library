@@ -13,6 +13,9 @@ indexing
 class INDEX_EXTRACTOR inherit
 
 	RESULT_COMMAND [REAL]
+		redefine
+			initialize
+		end
 
 creation
 
@@ -25,6 +28,7 @@ feature -- Initialization
 			indexable := i
 		ensure
 			indexable_set: indexable = i
+			not_initialized: not initialized
 		end
 
 	set_indexable (arg: INDEXED) is
@@ -35,6 +39,23 @@ feature -- Initialization
 			indexable := arg
 		ensure
 			indexable_set: indexable = arg and indexable /= Void
+		end
+
+	initialize (arg: ANY) is
+		local
+			cmd: COMMAND
+		do
+			-- Prevent infinite recursion if there a cycle - if one of
+			-- indexable's descendants is Current.  (INDEX_EXTRACTOR 
+			-- tends to be used such that it causes a cycle.)
+			if not initialized then
+				initialized := True
+				cmd ?= indexable
+				if cmd /= Void then
+					cmd.initialize (arg)
+				end
+				initialized := False
+			end
 		end
 
 feature -- Access
@@ -63,5 +84,10 @@ feature -- Basic operations
 			-- extremely so.)  Investigate further.
 			value := indexable.index
 		end
+
+feature {NONE} -- Implementation
+
+	initialized: BOOLEAN
+			-- Implementation state to prevent infinite initialization cycle
 
 end -- class INDEX_EXTRACTOR
