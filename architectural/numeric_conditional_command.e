@@ -11,7 +11,7 @@ indexing
 
 class BOOLEAN_CLIENT inherit
 
-	NUMERIC_COMMAND -- ???!!!
+	NUMERIC_COMMAND
 
 creation
 
@@ -19,39 +19,26 @@ creation
 
 feature -- Initialization
 
-	make (bool_oper: like boolean_operator; bool_opnd1, bool_opnd2:
-			like bool_operand1; true_command, false_command: like true_cmd) is
+	make (bool_oper: like boolean_operator; true_command, false_command:
+			like true_cmd) is
 		require
 			args_not_void: bool_oper /= Void and true_command /= Void and
-				false_command /= Void and bool_opnd1 /= Void and
-				bool_opnd2 /= Void
+				false_command /= Void
 		do
 			boolean_operator := bool_oper
 			true_cmd := true_command
 			false_cmd := false_command
-			bool_operand1 := bool_opnd1
-			bool_operand2 := bool_opnd2
 		ensure
 			bool_op_set:
 					boolean_operator = bool_oper and boolean_operator /= Void
 			true_cmd_set: true_cmd = true_command and true_cmd /= Void
 			false_cmd_set: false_cmd = false_command and false_cmd /= Void
-			operands_set: bool_operand1 = bool_opnd1 and
-							bool_operand2 = bool_opnd2
 		end
 
 feature -- Access
 
-	boolean_operator: BOOLEAN_OPERATOR [COMPARABLE]
+	boolean_operator: BOOLEAN_OPERATOR
 			-- Operator used to compare two values
-
-	bool_operand1: NUMERIC_COMMAND
-			-- Command whose (COMPARABLE) value will be used as
-			-- `boolean_operator's first operand
-
-	bool_operand2: NUMERIC_COMMAND
-			-- Command whose (COMPARABLE) value will be used as
-			-- `boolean_operator's second operand
 
 	true_cmd: NUMERIC_COMMAND
 			-- Command that extracts the value to use if boolean_operator
@@ -66,13 +53,12 @@ feature -- Status report
 	arg_mandatory: BOOLEAN is
 		do
 			Result := boolean_operator.arg_mandatory or
-				true_cmd.arg_mandatory or false_cmd.arg_mandatory or
-				bool_operand1.arg_mandatory or bool_operand2.arg_mandatory
+				true_cmd.arg_mandatory or false_cmd.arg_mandatory
 		end
 
 feature -- Status setting
 
-	set_boolean_operator (arg: BOOLEAN_OPERATOR [COMPARABLE]) is
+	set_boolean_operator (arg: BOOLEAN_OPERATOR) is
 			-- Set boolean_operator to `arg'.
 		require
 			arg /= Void
@@ -109,10 +95,6 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 		do
-			bool_operand1.execute (arg)
-			bool_operand2.execute (arg)
-			boolean_operator.set_operands (bool_operand1.value,
-											bool_operand2.value)
 			boolean_operator.execute (arg)
 			if boolean_operator.value then
 				true_cmd.execute (arg)
@@ -126,8 +108,6 @@ feature -- Basic operations
 invariant
 
 	boolean_operator_not_void: boolean_operator /= Void
-	bool_operand1_not_void: bool_operand1 /= Void
-	bool_operand2_not_void: bool_operand2 /= Void
 	true_cmd_not_void: true_cmd /= Void
 	false_cmd_not_void: false_cmd /= Void
 
