@@ -50,6 +50,33 @@ feature -- String manipulation
 			target.replace_substring_all (replacement, new_value)
 		end
 
+	merged (l: LIST [STRING]; separator: STRING): STRING is
+			-- Concatenation of `l' into a string whose elements are
+			-- separated with `separator'
+		require
+			args_exist: l /= Void and separator /= Void
+		do
+			if not l.is_empty then
+				from
+					l.start
+					Result := clone (l.item)
+					l.forth
+				until
+					l.exhausted
+				loop
+					Result.append (separator + l.item)
+					l.forth
+				end
+			else
+				Result := ""
+			end
+		ensure
+			exists: Result /= Void
+			empty_if_l_empty: l.is_empty implies Result.is_empty
+			no_separator_at_end: not Result.is_empty implies
+				Result.item (Result.count) = l.last.item (l.last.count)
+		end
+
 feature -- Logging
 
 	print_list (l: ARRAY [ANY]) is
