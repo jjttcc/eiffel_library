@@ -45,6 +45,7 @@ feature -- Basic operations
 				put_session_state
 				put (eom)
 				add_session (session_id)
+				post_process_session
 			end
 		ensure then
 			one_more_session: not error_occurred implies
@@ -54,20 +55,23 @@ feature -- Basic operations
 		end
 
 	add_session (session_id: INTEGER) is
-			-- Add `session' to `sessions' and preform any needed
-			-- post-processing.
+			-- Add `session' to `sessions'.
 		require
 			session_exists: session /= Void
 		do
 			sessions.extend (session, session_id)
-			post_process_session
+		ensure
+			one_more_session: not error_occurred implies
+				sessions.count = old sessions.count + 1
+			new_session: not error_occurred implies
+				session /= Void and sessions.has_item (session)
 		end
 
 feature {NONE} -- Hook routines
 
 	pre_process_session is
-			-- Perform any needed processing on `session' before adding
-			-- it to `sessions'.
+			-- Perform any needed processing before adding `session'
+			-- to `sessions'.
 		require
 			session_exists: session /= Void
 		do
@@ -87,8 +91,7 @@ feature {NONE} -- Hook routines
 			-- Process `message' received from the client.
 		require
 			message_exists: message /= Void and not message.is_empty
-		do
-			-- Null routine - redefine if needed.
+		deferred
 		end
 
 	put_session_state is
