@@ -31,7 +31,7 @@ feature -- Status report
 		do
 			Result := true
 		ensure
-			Result = true
+			Result implies true
 		end
 
 end -- class FACTORY
