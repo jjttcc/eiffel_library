@@ -644,9 +644,9 @@ CXXPROJECT_DEFINES =
 
 INCLUDES = -I.
 
-SRCS = mas_utilities.c
+SRCS = utilities.c
 
-OBJS = mas_utilities.o
+OBJS = utilities.o
 
 LIB = ../../lib/utilities.o
 
