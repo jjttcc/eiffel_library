@@ -12,7 +12,7 @@ class INPUT_FILE inherit
 		export
 			{NONE} all
 			{ANY} close, after, exists, open_read, is_closed, date, count,
-			position
+			position, is_open_read
 		redefine
 			start
 		end
@@ -44,13 +44,15 @@ feature -- Access
 
 	record_index: INTEGER
 
+--!!!:
 	field_count: INTEGER is
 		local
-			saved_position: INTEGER
+			saved_position, fcount: INTEGER
 			s: STRING
 			end_of_record: BOOLEAN
 			su: expanded STRING_UTILITIES
 		do
+print ("IF.field_count called" + "%N")
 			saved_position := position
 			check
 				readable: readable
@@ -84,15 +86,28 @@ feature -- Access
 			go (saved_position)
 			if not s.is_empty then
 				su.set_target (s)
-				Result := su.tokens (field_separator).count
+				fcount := su.tokens (field_separator).count
+				if field_index = 0 or else fcount = field_index then
+					Result := fcount
+				else
+					Result := fcount + field_index - 1
+				end
+print ("fc - fcount, field_index, result: " + fcount.out + ", " +
+field_index.out + ", " + Result.out + "%N")
 			end
+if Result > 6 then print ("OH-OHHHHHHHHHHHHHHH!!!" + "%N") end
 		end
 
 feature -- Status report
 
-	after_last_record: BOOLEAN is
+	after_last_record: BOOLEAN
+
+--!!!!!!:
+	after_last_record_old_remove_me_please: BOOLEAN is
 		do
 			Result := after and then field_index = 1
+print ("IF.after last record, field_index: " + Result.out +
+", " + field_index.out + "%N")
 		end
 
 	last_error_fatal: BOOLEAN
@@ -105,6 +120,8 @@ feature -- Cursor movement
 		local
 			i: INTEGER
 		do
+--!!!:
+--print ("IF.field_count: " + field_count.out + "%N")
 			last_error_fatal := False
 			error_occurred := False
 			from
@@ -138,12 +155,15 @@ feature -- Cursor movement
 			field_index := field_index + 1
 		end
 
+--!!!:
 	advance_to_next_record is
 			-- Advance the cursor to the next record.
 			-- Set error_occurred and error_string if an error is encountered.
 		local
 			i: INTEGER
 		do
+if record_index = 249 then print ("STOP!" + "%N") end
+print ("[1] IF.advnrec - eof: " + end_of_file.out + "%N")
 			last_error_fatal := False
 			error_occurred := False
 			from
@@ -159,6 +179,8 @@ feature -- Cursor movement
 				if
 					not is_tab_space_or_newline (record_separator @ i)
 				then
+print ("[1] anr - read_char" + "%N")
+io.output.flush
 					read_character
 					if
 						last_character /= record_separator @ i
@@ -175,6 +197,26 @@ feature -- Cursor movement
 			end
 			field_index := 1
 			record_index := record_index + 1
+			-- If just before the end-of-file, force EOF.
+print ("[2] anr - read_char" + "%N")
+io.output.flush
+			if not end_of_file then
+				check
+					is_readable: readable
+				end
+				read_character
+				check
+					not_closed_or_empty: count > 0 and not is_closed
+				end
+				if not end_of_file then
+					back
+				else
+					after_last_record := True
+				end
+			else
+				after_last_record := True
+			end
+print ("[2] IF.advnrec - eof: " + end_of_file.out + "%N")
 		end
 
 	discard_current_record is
@@ -208,8 +250,13 @@ feature -- Cursor movement
 			end
 			-- If just before the end-of-file, force EOF.
 			read_character
+			check
+				not_closed_or_empty: count > 0 and not is_closed
+			end
 			if not after then
 				back
+			else
+				after_last_record := True
 			end
 		end
 
@@ -218,6 +265,26 @@ feature -- Cursor movement
 			Precursor
 			field_index := 1
 			record_index := 1
+			after_last_record := count = 0
+		end
+
+--!!!:
+	position_cursor (p: INTEGER) is
+			-- Move the file cursor to the absolute position `p' and
+			-- initialize `' and `' to 1.
+			-- (The first cursor position is 0.)
+		require
+			is_open: not is_closed
+			p_valid: p >= 0 and p < count
+		do
+			go (p)
+			field_index := 1
+			record_index := 1
+			after_last_record := count = position
+if after_last_record then print ("ODD: poscurs - count = position" + "%N") end
+		ensure
+			position_set: position = p
+			indexes_set_to_1: field_index = 1 and record_index = 1
 		end
 
 feature -- Element change
@@ -242,17 +309,6 @@ feature -- Element change
 		ensure
 			record_separator_set: record_separator = arg and
 				record_separator /= Void
-		end
-
-	position_cursor (p: INTEGER) is
-			-- Move the file cursor to the absolute position `p'.
-			-- (The first cursor position is 0.)
-		require
-			p_valid: p >= 0 and p < count
-		do
-			go (p)
-		ensure
-			position_set: position = p
 		end
 
 feature -- Input
