@@ -80,6 +80,33 @@ feature -- Access
 			Result := clone (last_string)
 		end
 
+	list_selection (l: LIST [STRING]; general_msg: STRING): INTEGER is
+			-- User's selection from an element of `l'
+		local
+			i, startnum: INTEGER
+		do
+			print_list (<<general_msg, "%N">>)
+			from
+			until
+				Result /= 0
+			loop
+				print_names_in_1_column (l, 1)
+				print (eom)
+				read_integer
+				if
+					last_integer < 1 or
+						last_integer > l.count
+				then
+					print_list (<<"Selection must be between 1 and ",
+								l.count, "%N">>)
+				else
+					Result := last_integer
+				end
+			end
+		ensure
+			in_range: Result >= 1 and result <= l.count
+		end
+
 	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
 				general_msg: STRING): INTEGER is
 			-- User's selection of one element from one of the `lists'.
