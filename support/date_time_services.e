@@ -30,7 +30,7 @@ feature -- Access
 			then
 				Result := Void
 			else
-				Result.make (y, m, d)
+				create Result.make (y, m, d)
 			end
 		end
 
