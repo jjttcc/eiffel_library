@@ -203,6 +203,8 @@ feature {NONE} -- Implementation - utilities
 			-- Replace in `target' all occurrences of
 			-- `start_delimiter' + `token' + `end_delimiter'
 			-- with `new_value'.
+		require
+			args_exist: target /= Void and token /= Void and new_value /= Void
 		local
 			replacement: STRING
 		do
