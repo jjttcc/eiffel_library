@@ -52,6 +52,15 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 		do
+			-- @@ Check if indexable.execute should be called here - Since
+			-- the indexable's index is being used instead of its value,
+			-- it may not be necessary to execute the indexable (and it
+			-- could even cause problems: e.g., if the indexable is shared,
+			-- it would be executed twice, which could cause unwanted side
+			-- effects.  On the other hand, sometimes the value of
+			-- indexable may depend for its correctness on execute being
+			-- called first.  (This circumstance seems unusual, but not
+			-- extremely so.)  Investigate further.
 			value := indexable.index
 		end
 
