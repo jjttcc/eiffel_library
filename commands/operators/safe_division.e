@@ -45,7 +45,7 @@ feature -- Initialization
 			are_set: operand1 = op1 and operand2 = op2
 			not_void: operand1 /= Void and operand2 /= Void
 			epsilon_initialized: epsilon = initial_epsilon
-			no_exceptions: raise_exception_on_div_by_0
+			no_exceptions: not raise_exception_on_div_by_0
 			default_result_0: div_by_0_result = 0
 		end
 
