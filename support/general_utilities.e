@@ -134,6 +134,12 @@ feature -- Basic operations
 			end
 		end
 
+	is_not_void (o: ANY): BOOLEAN is
+			-- Is `o' Void?  (Candidate `ok' function for `check_objects')
+		do
+			Result := o /= Void
+		end
+
 	is_void (o: ANY): BOOLEAN is
 			-- Is `o' Void?  (Candidate `ok' function for `check_objects')
 		do
