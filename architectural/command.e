@@ -34,7 +34,11 @@ feature -- Status report
 
 	execute_precondition: BOOLEAN is
 			-- Precondition for execute function
-		deferred
+			-- Descendants redefine as needed.
+		do
+			Result := true
+		ensure
+			Result implies true
 		end
 
 end -- class COMMAND

@@ -5,16 +5,17 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class 
-	FACTORY
+deferred class FACTORY inherit
+
+	COMMAND
 
 feature -- Basic operations
 
 	execute (arg: ANY) is
 			-- Produce a result, stored in `product'.
-		require
-			exec_precondition: execute_precondition
 		deferred
+		ensure then
+			product /= Void
 		end
 
 feature -- Access
@@ -25,13 +26,5 @@ feature -- Access
 		end
 
 feature -- Status report
-
-	execute_precondition: BOOLEAN is
-			-- Precondition for execute function
-		do
-			Result := true
-		ensure
-			Result implies true
-		end
 
 end -- class FACTORY
