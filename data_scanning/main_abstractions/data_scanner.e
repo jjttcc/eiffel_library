@@ -21,22 +21,16 @@ deferred class DATA_SCANNER inherit
 
 feature -- Initialization
 
-	make (in: like input; tm: like tuple_maker;
-			vs: like value_setters; field_sep, record_sep: STRING) is
+	make (in: like input; tm: like tuple_maker; vs: like value_setters) is
 		require
-			args_not_void: in /= Void and tm /= Void and vs /= Void and
-				field_sep /= Void and record_sep /= Void
+			args_not_void: in /= Void and tm /= Void and vs /= Void
 			vs_not_empty: not vs.empty
 		do
 			input := in
 			tuple_maker := tm
 			value_setters := vs
-			field_separator := field_sep
-			record_separator := record_sep
 		ensure
-			set: input = in and tuple_maker = tm and
-				value_setters = vs and field_separator = field_sep and
-				record_separator = record_sep
+			set: input = in and tuple_maker = tm and value_setters = vs
 		end
 
 feature -- Access
@@ -57,12 +51,6 @@ feature -- Access
 
 	value_setters: LIST [VALUE_SETTER]
 			-- Used to scan input and set the appropriate tuple fields
-
-	field_separator: STRING
-			-- Character(s) that separate each field in the input
-
-	record_separator: STRING
-			-- Character(s) that separate each record in the input
 
 	input: INPUT_SEQUENCE
 			-- Sequence used for input
@@ -87,28 +75,6 @@ feature -- Element change
 			value_setters := arg
 		ensure
 			value_setters_set: value_setters = arg and value_setters /= Void
-		end
-
-	set_field_separator (arg: STRING) is
-			-- Set field_separator to `arg'.
-		require
-			arg /= Void
-		do
-			field_separator := arg
-		ensure
-			field_separator_set: field_separator = arg and
-				field_separator /= Void
-		end
-
-	set_record_separator (arg: STRING) is
-			-- Set record_separator to `arg'.
-		require
-			arg /= Void
-		do
-			record_separator := arg
-		ensure
-			record_separator_set: record_separator = arg and
-				record_separator /= Void
 		end
 
 	set_input (arg: like input) is
@@ -263,8 +229,7 @@ feature {NONE}
 invariant
 
 	properties_not_void:
-		tuple_maker /= Void and value_setters /= Void and
-		field_separator /= Void and record_separator /= Void
+		tuple_maker /= Void and value_setters /= Void
 	value_setters_not_empty: not value_setters.empty
 
 end -- class DATA_SCANNER
