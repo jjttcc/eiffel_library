@@ -40,4 +40,14 @@ feature -- Status setting
 			fatal_set: fatal = arg
 		end
 
+	set_description (arg: STRING) is
+			-- Set description to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			description := arg
+		ensure
+			description_set: description = arg and description /= Void
+		end
+
 end -- class EXCEPTION_STATUS
