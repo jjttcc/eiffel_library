@@ -1,5 +1,6 @@
 indexing
-	description: "Basic abstraction for an executable command";
+	description:
+		"Basic abstraction for an executable command"
 	date: "$Date$";
 	revision: "$Revision$"
 
