@@ -1,31 +1,62 @@
 indexing
-	description: "An input sequence for a database implementation"
+	description: "An input record sequence for a database implementation"
 	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
-	note: "Note: Shouldn't this inherit from INPUT_SEQUENCE?"
 
 class DB_INPUT_SEQUENCE inherit
 
-	INPUT_SEQUENCE
+	INPUT_RECORD_SEQUENCE
 
-feature -- Change
+creation
 
-	set_tuple_sequence(ts: LINKED_LIST[DB_RESULT]) is
+	make
+
+feature -- Initialization
+
+	make (ts: LINKED_LIST[DB_RESULT]) is
 		require
-			valid_sequence: ts /= void
+			ts_not_void: ts /= Void
 		do
-			tuple_sequence := ts
-			if ts.count > 0 then
-				tuple_sequence.start
-				tuple ?= tuple_sequence.item.data
-				field_index := 1	
-			end
+			set_tuple_sequence (ts)
 		ensure
 			tuple_sequence = ts
 		end
 
-feature --
+feature -- Access
+
+	last_double: DOUBLE
+
+	last_real: REAL
+
+	last_integer: INTEGER
+
+	last_character: CHARACTER
+
+	name: STRING is "database input sequence"
+
+	field_index: INTEGER
+
+	record_index: INTEGER is
+		do
+			Result := tuple_sequence.index
+		end
+
+	tuple_sequence: LINKED_LIST[DB_RESULT]
+
+feature -- Status report
+
+	after_last_record: BOOLEAN is
+		do
+			Result := tuple_sequence.after
+		end
+
+	readable: BOOLEAN is
+		do
+			Result := not tuple_sequence.off
+		end
+
+feature -- Cursor movement
 
 	advance_to_next_field is
 		do
@@ -34,32 +65,41 @@ feature --
 
 	advance_to_next_record is
 		do
-			forth
-			if not after then
+			tuple_sequence.forth
+			if not after_last_record then
 				tuple ?= tuple_sequence.item.data			
 			end
 			field_index := 1
 		end
 
-	back is
-		do
-			tuple_sequence.back
-		end
-
-	forth is
-		do
-			tuple_sequence.forth
-		end
-
-	finish is
-		do
-			tuple_sequence.finish
-		end
-
 	start is
 		do
 			tuple_sequence.start
+			field_index := 1
 		end
+
+	discard_current_record is
+		do
+			advance_to_next_record
+		end
+
+feature -- Element change
+
+	set_tuple_sequence(ts: LINKED_LIST[DB_RESULT]) is
+		require
+			valid_sequence: ts /= Void
+		do
+			tuple_sequence := ts
+			if ts.count > 0 then
+				tuple_sequence.start
+				check field_index = 1 end
+				tuple ?= tuple_sequence.item.data
+			end
+		ensure
+			tuple_sequence = ts
+		end
+
+feature -- Input
 
 	read_integer is
 		local
@@ -68,15 +108,17 @@ feature --
 		do
 			create i_ref
 			create dt.make_now
-			if tuple.item(field_index).conforms_to(dt) then -- dates must be converted to integers
+			if tuple.item(field_index).conforms_to(dt) then
+				-- Dates must be converted to integers.
 				dt ?= tuple.item(field_index)
-				last_integer := ((dt.date.year * 10000) + (dt.date.month * 100) + dt.date.day)
+				last_integer := ((dt.date.year * 10000) +
+					(dt.date.month * 100) + dt.date.day)
 			elseif tuple.item(field_index).conforms_to(i_ref) then
 				i_ref ?= tuple.item(field_index)
 				last_integer := i_ref.item
 			end
 		end
-	
+
 	read_character is
 		local
 			c_ref: CHARACTER_REF
@@ -98,60 +140,21 @@ feature --
 				last_double := d_ref.item
 			end
 		end
-	
+
 	read_real is
 		do
-			read_double -- data from database is of type double (is this always true regardless of RDBMS?)
+			-- Data from database is of type double (is this always
+			-- true regardless of RDBMS?).
+			read_double
 			last_real := last_double.truncated_to_real
 		end
 
-feature -- Access
-
-	after: BOOLEAN is
-		do
-			Result := tuple_sequence.after
-		end
-
-	before: BOOLEAN is
-		do
-			Result := tuple_sequence.before
-		end
-
-	empty: BOOLEAN is
-		do
-			Result := tuple_sequence.empty
-		end
-
-
-	readable: BOOLEAN is
-		do
-			Result := not tuple_sequence.off
-		end
-
-	last_double: DOUBLE
-
-	last_real: REAL
-
-	last_integer: INTEGER
-
-	last_character: CHARACTER
-
-	index: INTEGER is
-		do
-			Result := tuple_sequence.index
-		end
-
-	count: INTEGER is
-		do
-			Result := tuple_sequence.count
-		end
-
-	name: STRING is "database input sequence"
-
 feature {NONE} -- Implementation
 
-	tuple_sequence: LINKED_LIST[DB_RESULT]
 	tuple: DATABASE_DATA[DATABASE]
-	field_index: INTEGER
+
+invariant
+
+	tuple_sequence /= Void
 
 end -- class DB_INPUT_SEQUENCE
