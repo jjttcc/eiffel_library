@@ -45,126 +45,116 @@ feature -- Status report
 			if debug_socket = Void then
 				debug_socket := target_socket
 			end
-			print ("<<<BEGIN SOCKET REPORT>>>" + "%N")
-			print ("address_in_use: " +
-				 target_socket.address_in_use.out + "%N")
-			print ("address_not_readable: " +
-				 target_socket.address_not_readable.out + "%N")
-			print ("already_bound: " +
-				 target_socket.already_bound.out + "%N")
-			print ("bad_socket_handle: " +
-				 target_socket.bad_socket_handle.out + "%N")
-			print ("connect_in_progress: " +
-				 target_socket.connect_in_progress.out + "%N")
-			print ("connection_refused: " +
-				 target_socket.connection_refused.out + "%N")
-			print ("dtable_full: " +
-				 target_socket.dtable_full.out + "%N")
-			print ("error: " +
-				 target_socket.error.out + "%N")
-			print ("error_number: " +
-				 target_socket.error_number.out + "%N")
-			print ("expired_socket: " +
-				 target_socket.expired_socket.out + "%N")
-			print ("invalid_address: " +
-				 target_socket.invalid_address.out + "%N")
-			print ("invalid_socket_handle: " +
-				 target_socket.invalid_socket_handle.out + "%N")
-			print ("is_plain_text: " +
-				 target_socket.is_plain_text.out + "%N")
-			print ("last_character: " +
-				 target_socket.last_character.out + "%N")
-			print ("last_double: " +
-				 target_socket.last_double.out + "%N")
-			print ("last_integer: " +
-				 target_socket.last_integer.out + "%N")
-			print ("last_real: " +
-				 target_socket.last_real.out + "%N")
-			print ("last_string: " +
-				 target_socket.last_string.out + "%N")
-			print ("network: " +
-				 target_socket.network.out + "%N")
-			print ("no_buffers: " +
-				 target_socket.no_buffers.out + "%N")
-			print ("no_permission: " +
-				 target_socket.no_permission.out + "%N")
-			print ("not_connected: " +
-				 target_socket.not_connected.out + "%N")
-			print ("protected_address: " +
-				 target_socket.protected_address.out + "%N")
-			print ("protocol_not_supported: " +
-				 target_socket.protocol_not_supported.out + "%N")
-			print ("socket_family_not_supported: " +
-				 target_socket.socket_family_not_supported.out + "%N")
-			print ("socket_in_use: " +
-				 target_socket.socket_in_use.out + "%N")
-			print ("socket_ok: " +
-				 target_socket.socket_ok.out + "%N")
-			print ("socket_would_block: " +
-				 target_socket.socket_would_block.out + "%N")
-			print ("support_storable: " +
-				 target_socket.support_storable.out + "%N")
-			print ("zero_option: " +
-				 target_socket.zero_option.out + "%N")
-			print ("name: " +
-				 target_socket.name.out + "%N")
-			print ("descriptor: " +
-				 target_socket.descriptor.out + "%N")
-			print ("descriptor_available: " +
-				 target_socket.descriptor_available.out + "%N")
-			print ("family: " +
-				 target_socket.family.out + "%N")
-			print ("is_closed: " +
-				 target_socket.is_closed.out + "%N")
-			print ("peer_address: " +
-				 target_socket.peer_address.out + "%N")
-			print ("protocol: " +
-				 target_socket.protocol.out + "%N")
-			print ("type: " +
-				 target_socket.type.out + "%N")
-			print ("c_msgdontroute: " +
-				 target_socket.c_msgdontroute.out + "%N")
-			print ("c_oobmsg: " +
-				 target_socket.c_oobmsg.out + "%N")
-			print ("c_peekmsg: " +
-				 target_socket.c_peekmsg.out + "%N")
-			print ("exists: " +
-				 target_socket.exists.out + "%N")
-			print ("extendible: " +
-				 target_socket.extendible.out + "%N")
-			print ("is_executable: " +
-				 target_socket.is_executable.out + "%N")
-			print ("is_open_read: " +
-				 target_socket.is_open_read.out + "%N")
-			print ("is_open_write: " +
-				 target_socket.is_open_write.out + "%N")
-			print ("is_readable: " +
-				 target_socket.is_readable.out + "%N")
-			print ("is_writable: " +
-				 target_socket.is_writable.out + "%N")
-			print ("readable: " +
-				 target_socket.readable.out + "%N")
-			print ("debug_enabled: " +
-				 target_socket.debug_enabled.out + "%N")
-			print ("group_id: " +
-				 target_socket.group_id.out + "%N")
-			print ("is_blocking: " +
-				 target_socket.is_blocking.out + "%N")
-			print ("is_group_id: " +
-				 target_socket.is_group_id.out + "%N")
-			print ("is_process_id: " +
-				 target_socket.is_process_id.out + "%N")
-			print ("is_socket_stream: " +
-				 target_socket.is_socket_stream.out + "%N")
-			print ("process_id: " +
-				 target_socket.process_id.out + "%N")
-			print ("receive_buf_size: " +
-				 target_socket.receive_buf_size.out + "%N")
-			print ("route_enabled: " +
-				 target_socket.route_enabled.out + "%N")
-			print ("send_buf_size: " +
-				 target_socket.send_buf_size.out + "%N")
-			print ("<<<END SOCKET REPORT>>>" + "%N")
+			Result := "<<<BEGIN SOCKET REPORT>>>" + "%N" +
+				"address_in_use: " +
+				 debug_socket.address_in_use.out + "%N" +
+				"address_not_readable: " +
+				 debug_socket.address_not_readable.out + "%N" +
+				"already_bound: " +
+				 debug_socket.already_bound.out + "%N" +
+				"bad_socket_handle: " +
+				 debug_socket.bad_socket_handle.out + "%N" +
+				"connect_in_progress: " +
+				 debug_socket.connect_in_progress.out + "%N" +
+				"connection_refused: " +
+				 debug_socket.connection_refused.out + "%N" +
+				"dtable_full: " +
+				 debug_socket.dtable_full.out + "%N" +
+				"error: " +
+				 debug_socket.error.out + "%N" +
+				"error_number: " +
+				 debug_socket.error_number.out + "%N" +
+				"expired_socket: " +
+				 debug_socket.expired_socket.out + "%N" +
+				"invalid_address: " +
+				 debug_socket.invalid_address.out + "%N" +
+				"invalid_socket_handle: " +
+				 debug_socket.invalid_socket_handle.out + "%N" +
+				"is_plain_text: " +
+				 debug_socket.is_plain_text.out + "%N" +
+				"network: " +
+				 debug_socket.network.out + "%N" +
+				"no_buffers: " +
+				 debug_socket.no_buffers.out + "%N" +
+				"no_permission: " +
+				 debug_socket.no_permission.out + "%N" +
+				"not_connected: " +
+				 debug_socket.not_connected.out + "%N" +
+				"protected_address: " +
+				 debug_socket.protected_address.out + "%N" +
+				"protocol_not_supported: " +
+				 debug_socket.protocol_not_supported.out + "%N" +
+				"socket_family_not_supported: " +
+				 debug_socket.socket_family_not_supported.out + "%N" +
+				"socket_in_use: " +
+				 debug_socket.socket_in_use.out + "%N" +
+				"socket_ok: " +
+				 debug_socket.socket_ok.out + "%N" +
+				"socket_would_block: " +
+				 debug_socket.socket_would_block.out + "%N" +
+				"support_storable: " +
+				 debug_socket.support_storable.out + "%N" +
+				"zero_option: " +
+				 debug_socket.zero_option.out + "%N" +
+				"name: " +
+				 debug_socket.name.out + "%N" +
+				"descriptor: " +
+				 debug_socket.descriptor.out + "%N" +
+				"descriptor_available: " +
+				 debug_socket.descriptor_available.out + "%N" +
+				"family: " +
+				 debug_socket.family.out + "%N" +
+				"is_closed: " +
+				 debug_socket.is_closed.out + "%N" +
+				"peer_address: " +
+				 debug_socket.peer_address.out + "%N" +
+				"protocol: " +
+				 debug_socket.protocol.out + "%N" +
+				"type: " +
+				 debug_socket.type.out + "%N" +
+				"c_msgdontroute: " +
+				 debug_socket.c_msgdontroute.out + "%N" +
+				"c_oobmsg: " +
+				 debug_socket.c_oobmsg.out + "%N" +
+				"c_peekmsg: " +
+				 debug_socket.c_peekmsg.out + "%N" +
+				"exists: " +
+				 debug_socket.exists.out + "%N" +
+				"extendible: " +
+				 debug_socket.extendible.out + "%N" +
+				"is_executable: " +
+				 debug_socket.is_executable.out + "%N" +
+				"is_open_read: " +
+				 debug_socket.is_open_read.out + "%N" +
+				"is_open_write: " +
+				 debug_socket.is_open_write.out + "%N" +
+				"is_readable: " +
+				 debug_socket.is_readable.out + "%N" +
+				"is_writable: " +
+				 debug_socket.is_writable.out + "%N" +
+				"readable: " +
+				 debug_socket.readable.out + "%N" +
+				"debug_enabled: " +
+				 debug_socket.debug_enabled.out + "%N" +
+				"group_id: " +
+				 debug_socket.group_id.out + "%N" +
+				"is_blocking: " +
+				 debug_socket.is_blocking.out + "%N" +
+				"is_group_id: " +
+				 debug_socket.is_group_id.out + "%N" +
+				"is_process_id: " +
+				 debug_socket.is_process_id.out + "%N" +
+				"is_socket_stream: " +
+				 debug_socket.is_socket_stream.out + "%N" +
+				"process_id: " +
+				 debug_socket.process_id.out + "%N" +
+				"receive_buf_size: " +
+				 debug_socket.receive_buf_size.out + "%N" +
+				"route_enabled: " +
+				 debug_socket.route_enabled.out + "%N" +
+				"send_buf_size: " +
+				 debug_socket.send_buf_size.out + "%N" +
+				"<<<END SOCKET REPORT>>>" + "%N"
 		end
 
 end -- class TIMER
