@@ -37,7 +37,7 @@ feature -- Access
 			-- result will be Void.
 		do
 			!!Result.make_now
-			if Result.time_valid (value) then
+			if not Result.time_valid (value) then
 				Result := Void
 			else
 				Result.make_from_string (value)
