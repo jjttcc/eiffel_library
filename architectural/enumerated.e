@@ -37,8 +37,6 @@ feature {NONE} -- Initialization
 	new_instance (value: G): like Current is
 			-- A new instance of this 'ENUMERATED' with the specified `value'
 		do
-print ("new instance called for " + Current.generator + " with '" +
-value.out + "%N")
 			Result := clone (Current)
 			Result.make (value)
 		end
