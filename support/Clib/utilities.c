@@ -34,8 +34,10 @@ void loop_sleep (int seconds, int microseconds) {
 /* Sleep for `seconds' seconds plus `microseconds' millionths of a seconds.
 *  Precondition: microseconds < 1000000 */
 void microsleep (int seconds, int microseconds) {
-#ifdef NO_NANOSLEEP
+#if defined(NO_NANOSLEEP)
 	loop_sleep (seconds, microseconds);
+#elif defined(POO)
+	bing();
 #else
 	struct timespec timespec;
 	timespec.tv_sec = seconds;
