@@ -42,7 +42,7 @@ feature -- Initialization
 
 feature -- Access
 
-	product: LIST [ANY]
+	product: COLLECTION [ANY]
 			-- Tuples produced by scanning the input
 
 	error_list: LINKED_LIST [STRING]
@@ -126,6 +126,7 @@ feature -- Basic operations
 
 	execute is
 			-- Scan input and create tuples from it.
+			-- `input_file' must not be Void.
 		do
 			if error_list = Void then
 				!!error_list.make
@@ -173,7 +174,7 @@ feature {NONE} -- Hook methods
 			tuple_maker.execute
 			tuple := tuple_maker.product
 			open_tuple (tuple)
-			product.extend (tuple)
+			add_tuple (tuple)
 			from
 				value_setters.start
 				check not value_setters.after end
@@ -199,8 +200,8 @@ feature {NONE} -- Hook methods
 			end
 			close_tuple (tuple)
 		ensure
-			one_more: product.count = old product.count + 1 or
-					scanning_error_occurred
+			--one_more: product.count = old product.count + 1 or
+			--		scanning_error_occurred
 		end
 
 	open_tuple (t: ANY) is
@@ -217,6 +218,12 @@ feature {NONE} -- Hook methods
 		require
 			t /= Void
 		do
+		end
+
+	add_tuple (t: ANY) is
+			-- Add tuple to product - redefine if not needed.
+		do
+			product.extend (t)
 		end
 
 	handle_fatal_error is
@@ -302,9 +309,9 @@ invariant
 
 	properties_not_void:
 		tuple_maker /= Void and value_setters /= Void and
-		field_separator /= Void and record_separator /= Void and
-		input_file /= Void
-	input_file_open_for_read: input_file.exists and input_file.is_open_read
+		field_separator /= Void and record_separator /= Void
+	input_file_open_for_read_if_not_void: input_file /= Void implies
+		input_file.exists and input_file.is_open_read
 	value_setters_not_empty: not value_setters.empty
 
 end -- class DATA_SCANNER
