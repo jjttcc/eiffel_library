@@ -27,8 +27,9 @@ feature -- Basic operations
 				end
 			else
 				check
-					valid_request_id: not is_logout_request (request_id) and
-					request_handlers.has (request_id)
+					valid_request_id: (is_logout_request (request_id) implies
+						not handle_logout_separately) and
+						request_handlers.has (request_id)
 				end
 				cmd := request_handlers @ request_id
 				setup_command (cmd)
