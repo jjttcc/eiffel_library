@@ -118,7 +118,7 @@ feature -- Element change
 		do
 			name_implementation := clone (arg)
 		ensure
-			name_set: name.is_equal (arg) and name /= Void
+			name_set: name_implementation.is_equal (arg) and name /= Void
 		end
 
 feature -- Basic operations
