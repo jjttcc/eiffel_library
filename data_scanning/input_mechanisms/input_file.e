@@ -5,14 +5,15 @@ indexing
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
+	note: "This version reads one line/record at a time and 'split's it into %
+		%its component fields."
 
---!!!Version that reads one line/record at a time and 'split's it into
---into its component fields - may want to become a descendant of the
---original INPUT_FILE or, possibly, the line-at-a-time/split features
---can be moved up to the planned INPUT_MEDIUM and redefined in a
---descendant of INPUT_FILE
+--!!!!Note: This file should be used exclusively for file-based input for the
+--Windows version because a bug (apparently in ISE's library) causes
+--OPTIMIZED_INPUT_FILE to not work correctly on Windows.
 
---!!!REminders: record_separator is no longer needed for line-at-a-time ...
+--!!!REminders: record_separator is may no longer be needed
+--for line-at-a-time ...
 class INPUT_FILE inherit
 
 	PLAIN_TEXT_FILE
