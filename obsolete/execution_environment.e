@@ -5,7 +5,6 @@ indexing
 class MAS_EXECUTION_ENVIRONMENT inherit
 
 	EXECUTION_ENVIRONMENT
-
 		redefine
 			get, eif_getenv
 		end
