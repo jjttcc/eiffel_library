@@ -15,8 +15,6 @@ feature -- Basic operations
 		require
 			exec_precondition: execute_precondition
 		deferred
-		ensure
-			exec_postcondition: execute_postcondition
 		end
 
 feature -- Access
@@ -30,14 +28,6 @@ feature -- Status report
 
 	execute_precondition: BOOLEAN is
 			-- Precondition for execute function
-		do
-			Result := true
-		ensure
-			Result = true
-		end
-
-	execute_postcondition: BOOLEAN is
-			-- Postcondition for execute function
 		do
 			Result := true
 		ensure

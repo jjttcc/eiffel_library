@@ -24,8 +24,6 @@ feature -- Basic operations
 			arg_not_void_if_used: arg_used implies arg /= Void
 			execute_precondition: execute_precondition
 		deferred
-		ensure
-			execute_postcondition: execute_postcondition
 		end
 
 feature -- Status report
@@ -36,11 +34,6 @@ feature -- Status report
 
 	execute_precondition: BOOLEAN is
 			-- Precondition for execute function
-		deferred
-		end
-
-	execute_postcondition: BOOLEAN is
-			-- Postcondition for execute function
 		deferred
 		end
 

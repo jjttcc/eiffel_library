@@ -17,18 +17,9 @@ feature
 			operand1.execute (arg)
 			operand2.execute (arg)
 			value := operand1.value / operand2.value
-		end
-
-feature -- Status report
-
-	execute_postcondition: BOOLEAN is
-		do
-			Result :=
-				rabs (value - (operand1.value / operand2.value)) < epsilon
 		ensure then
 			division_result_correct:
-				Result =
-				(rabs (value - (operand1.value / operand2.value)) < epsilon)
+				rabs (value - (operand1.value / operand2.value)) < epsilon
 		end
 
 end -- class DIVISION
