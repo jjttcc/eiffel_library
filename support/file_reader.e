@@ -23,7 +23,7 @@ feature
 		require
 			file_name /= Void
 		do
-			create pf.make (file_name)
+			create target.make (file_name)
 		end
 
 feature -- Access
@@ -36,14 +36,24 @@ feature -- Access
 		do
 			error := false
 			if file_contents = Void then
-				if pf.exists then
-					pf.open_read
-					pf.read_stream (pf.count)
-					file_contents := pf.last_string
+				if target.exists and then target.is_readable then
+					target.open_read
+					if not target.is_empty then
+						target.read_stream (target.count)
+						file_contents := target.last_string
+					else
+						file_contents := ""
+					end
 				else
-					error_string := concatenation (<<"File ", pf.name,
-						" does not exist.">>)
-					error := true
+					if not target.exists then
+						error_string := concatenation (<<"File ", target.name,
+							" does not exist.">>)
+						error := True
+					else
+						error_string := concatenation (<<"File ", target.name,
+							" is not readable.">>)
+						error := True
+					end
 				end
 			end
 			Result := file_contents
@@ -72,7 +82,7 @@ feature -- Cursor movement
 			if not tokens.exhausted then
 				item := tokens.item
 			else
-				exhausted := true
+				exhausted := True
 				item := Void
 			end
 		ensure
@@ -100,7 +110,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-	pf: PLAIN_TEXT_FILE
+	target: PLAIN_TEXT_FILE
 
 	su: expanded STRING_UTILITIES
 
