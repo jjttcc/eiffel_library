@@ -5,7 +5,7 @@ indexing
 	detailed_description:
 		"Each descendant class will, in the set procedure, set the %
 		%appropriate field of the tuple according to the type of the class. %
-		%For example, a CLOSE_SETTER in a financial analysis application %
+		%For example, a CLOSE_PRICE_SETTER in a financial analysis application %
 		%will set the close field of the tuple.	Or, an application that %
 		%deals with people or other objects that have names would use a %
 		%NAME_SETTER to set the name field of a tuple."
