@@ -31,9 +31,10 @@ feature {NONE} -- Initialization
 				i := i + 1
 			end
 			check_for_ambiguous_options
-			set_help
-			set_version_request
-			process_remaining_arguments
+			process_arguments (initial_setup_procedures)
+			prepare_for_argument_processing
+			process_arguments (main_setup_procedures)
+			finish_argument_processing
 			check_for_invalid_flags
 		end
 
@@ -96,10 +97,57 @@ feature -- Basic operations
 			end
 		end
 
+feature {NONE} -- Implementation - argument processing
+
+	process_arguments (setup_procedures: LINEAR [PROCEDURE [ANY, TUPLE []]]) is
+		do
+			from
+				setup_procedures.start
+			until
+				setup_procedures.exhausted
+			loop
+				-- Continue running setup_procedures.item until no more
+				-- arguments for that procedure are found.
+				from
+					last_argument_found := False
+					setup_procedures.item.call ([])
+				until
+					not last_argument_found
+				loop
+					last_argument_found := False
+					setup_procedures.item.call ([])
+				end
+				setup_procedures.forth
+			end
+		end
+
+	initial_setup_procedures: LINEAR [PROCEDURE [ANY, TUPLE []]] is
+			-- Setup procedures used to process arguments
+		local
+			a: ARRAY [PROCEDURE [ANY, TUPLE []]]
+		do
+			a := <<agent set_help, agent set_version_request>>
+			Result := a.linear_representation
+		end
+
+	last_argument_found: BOOLEAN
+			-- Was the last argument processed by a 'setup procedure' found
+			-- in the argument list?
+
 feature {NONE} -- Implementation - Hook routines
 
-	process_remaining_arguments is
-			-- Process remaining application-specific arguments.
+	prepare_for_argument_processing is
+			-- Do any needed preparations before processing arguments.
+		deferred
+		end
+
+	finish_argument_processing is
+			-- Do any needed cleanup after processing arguments.
+		deferred
+		end
+
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+			-- Setup procedures used to process arguments
 		deferred
 		end
 
@@ -133,13 +181,15 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents (Help_character) then
 				help := True
+				last_argument_found := True
 				contents.remove
 			elseif
 				Help_character /= Question_mark and
 				option_in_contents (Question_mark)
 			then
-					help := True
-					contents.remove
+				help := True
+				last_argument_found := True
+				contents.remove
 			end
 		end
 
@@ -147,6 +197,7 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('v') then
 				version_request := True
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -164,6 +215,7 @@ feature {NONE} -- Implementation
 					contents.item.substring_index ("--" + Debug_string, 1) = 1
 				then
 					is_debug := True
+					last_argument_found := True
 					contents.remove
 				end
 			end
