@@ -20,6 +20,7 @@ feature {NONE} -- Initialization
 		local
 			i: INTEGER
 		do
+			error_description := ""
 			create contents.make
 			from
 				i := 1
@@ -29,6 +30,7 @@ feature {NONE} -- Initialization
 				contents.extend (argument (i))
 				i := i + 1
 			end
+			check_for_ambiguous_options
 			set_help
 			set_version_request
 		end
@@ -63,6 +65,23 @@ feature -- Basic operations
 	usage: STRING is
 			-- Message: how to invoke the program from the command-line
 		deferred
+		end
+
+feature {NONE} -- Implementation - Hook routines
+
+	ambiguous_characters: LINEAR [CHARACTER] is
+		once
+			-- Default to an empty list.
+			create {LINKED_LIST [CHARACTER]} Result.make
+		end
+
+	handle_ambiguous_option is
+			-- Handle the ambiguous option in `contents.item'.
+		do
+			-- Redefine if different behavior is needed.
+			error_occurred := True
+			error_description := Ambiguous_option_message + ": %"" +
+				contents.item + "%"%N"
 		end
 
 feature {NONE} -- Implementation
@@ -183,9 +202,44 @@ feature {NONE} -- Implementation
 				contents.item.substring (3, s.count + 2).is_equal (s))
 		end
 
+	one_character_option (c: CHARACTER): BOOLEAN is
+			-- Does `c' occur in `contents' as a one-character option
+			-- (e.g., "-x")?
+		do
+			Result := option_in_contents (c)
+			if Result then
+				Result := contents.item.is_equal ("-" + c.out) or
+					contents.item.is_equal ("--" + c.out)
+			end
+		end
+
+	check_for_ambiguous_options is
+			-- Check for ambiguous options
+		do
+			from
+				ambiguous_characters.start
+			until
+				ambiguous_characters.exhausted
+			loop
+				if one_character_option (ambiguous_characters.item) then
+					handle_ambiguous_option
+					contents.remove
+				end
+				ambiguous_characters.forth
+			end
+		end
+
 feature {NONE} -- Implementation - Constants
 
-	Debug_string: STRING is "debug"
+	Debug_string: STRING is
+		once
+			Result := "debug"
+		end
+
+	Ambiguous_option_message: STRING is
+		once
+			Result := "Ambiguous option"
+		end
 
 invariant
 
