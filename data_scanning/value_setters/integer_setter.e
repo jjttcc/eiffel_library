@@ -12,7 +12,7 @@ deferred class INTEGER_SETTER inherit
 
 feature {NONE}
 
-	read_value (stream: IO_MEDIUM) is
+	read_value (stream: BILINEAR_INPUT_SEQUENCE) is
 		do
 			stream.read_integer
 		end
