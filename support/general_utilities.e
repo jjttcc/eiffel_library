@@ -188,7 +188,36 @@ feature -- String manipulation
 				(Result.count = 1)
 		end
 
-feature -- Logging
+	n_spaces (n: INTEGER): STRING is
+			-- `n' spaces - Empty string if n < 0
+		do
+			if n < 0 then
+				create Result.make (0)
+			else
+				create Result.make (n)
+			end
+			Result.fill_blank
+		end
+
+	longest_string (l: LIST [STRING]): INTEGER is
+			-- Longest string in `l'
+		require
+			l_exists: l /= Void
+		do
+			Result := 0
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item.count > Result then
+					Result := l.item.count
+				end
+				l.forth
+			end
+		end
+
+feature -- Text formatting
 
 	print_list (l: ARRAY [ANY]) is
 			-- Print all members of `l'.
@@ -227,6 +256,95 @@ feature -- Logging
 				l.forth
 			end
 		end
+
+	print_row (names: LIST [STRING]; row, rows, cols, namecount,
+			column_pivot, row_width, first_row_label: INTEGER) is
+		local
+			column, i, item_label: INTEGER
+			math: expanded SINGLE_MATH
+		do
+			from column := 1 until
+				column = cols or
+				(row = rows and column_pivot > 0 and column > column_pivot)
+			loop
+				if column_pivot > 0 and column - 1 > column_pivot then
+					i := row + rows * column_pivot +
+						(rows - 1) * (column - 1 - column_pivot)
+				else
+					i := row + rows * (column - 1)
+				end
+				if i <= namecount then
+					item_label := i + first_row_label - 1
+					print_list (<<item_label, ") ", names @ i,
+						n_spaces ((row_width / cols - (math.floor (math.log10 (
+						item_label)) + cols - 1 +
+						names.i_th(i).count)).ceiling)>>)
+				end
+				column := column + 1
+			end
+			if
+				not (row = rows and column_pivot > 0 and column > column_pivot)
+			then
+				if column_pivot > 0 and column - 1 > column_pivot then
+					i := row + rows * column_pivot +
+						(rows - 1) * (column - 1 - column_pivot)
+				else
+					i := row + rows * (column - 1)
+				end
+				if i <= namecount then
+					item_label := i + first_row_label - 1
+					print_list (<<item_label, ") ", names @ i>>)
+				end
+			end
+			print ("%N")
+		end
+
+	print_names_in_n_columns (names: LIST [STRING];
+		cols, first_number: INTEGER) is
+			-- Print each element of `names' as a numbered item
+			-- to the screen in `cols' columns.  Numbering is from
+			-- first_number to first_number + names.count - 1.
+		local
+			rows, row, end_index, namecount, col_pivot: INTEGER
+		do
+			namecount := names.count
+			rows := (namecount + cols - 1) // cols
+			col_pivot := namecount \\ cols
+			end_index := rows * cols
+			row := 1
+			from
+			until
+				row = rows + 1
+			loop
+				print_row (names, row, rows, cols, namecount, col_pivot,
+					Maximum_screen_width, first_number)
+				row := row + 1
+			end
+		end
+
+	print_names_in_1_column (names: LIST [STRING]; first_number: INTEGER) is
+			-- Print each element of `names' as a numbered item to the
+			-- screen in 1 column.  Numbering is from first_number to
+			-- first_number + names.count - 1.
+		local
+			i: INTEGER
+		do
+			from
+				i := first_number
+				names.start
+			until
+				names.exhausted
+			loop
+				print_list (<<i, ") ", names.item, "%N">>)
+				names.forth
+				i := i + 1
+			end
+			check
+				i = first_number + names.count
+			end
+		end
+
+feature -- Logging
 
 	log_error (msg: STRING) is
 			-- Log `msg' as an error.
@@ -392,6 +510,12 @@ feature -- Constants
 			-- Maximum length of messages to be logged
 		once
 			Result := 1000
+		end
+
+	Maximum_screen_width: INTEGER is
+			-- Maximum width for the text-based display screen
+		once
+			Result := 76
 		end
 
 end -- class GENERAL_UTILITIES

@@ -24,13 +24,6 @@ class COMMAND_LINE_UTILITIES inherit
 			print
 		end
 
-	SINGLE_MATH
-		export {NONE}
-			all
-		undefine
-			print
-		end
-
 	EXCEPTIONS
 		export
 			{NONE} all
@@ -177,7 +170,7 @@ feature {NONE} -- Access
 			-- if the first list has a count of 5 and the 2nd item in the
 			-- 2nd list is selected, return a value of 7 (5 + 2).
 		local
-			i, startnum: INTEGER
+			i, startnum, columns: INTEGER
 		do
 			current_lines_read := 0
 			print (general_msg)
@@ -191,8 +184,17 @@ feature {NONE} -- Access
 					i = lists.count + 1
 				loop
 					if lists.item (i).left.count > 0 then
+						if
+							longest_string (lists.item (i).left) >
+							Maximum_screen_width / 2
+						then
+							columns := 1
+						else
+							columns := 2
+						end
 						print (lists.item (i).right)
-						print_names_in_1_column (lists.item (i).left, startnum)
+						print_names_in_n_columns (lists.item (i).left, columns,
+							startnum)
 					end
 					startnum := startnum + lists.item (i).left.count
 					i := i + 1
@@ -216,15 +218,6 @@ feature {NONE} -- Access
 			check
 				Result < startnum
 			end
-		end
-
-	spaces (i: INTEGER): STRING is
-			-- `i' spaces
-		require
-			not_negative: i >= 0
-		do
-			create Result.make (i)
-			Result.fill_blank
 		end
 
 	input_device, output_device: IO_MEDIUM
@@ -290,87 +283,6 @@ feature {NONE} -- Miscellaneous
 			-- Print `msg' to standard out, appending a newline.
 		do
 			print_list (<<msg, "%N">>)
-		end
-
-	print_row (names: LIST [STRING]; row, rows, cols, namecount,
-			column_pivot, row_width: INTEGER) is
-		local
-			column, i: INTEGER
-		do
-			from column := 1 until
-				column = cols or
-				(row = rows and column_pivot > 0 and column > column_pivot)
-			loop
-				if column_pivot > 0 and column - 1 > column_pivot then
-					i := row + rows * column_pivot +
-						(rows - 1) * (column - 1 - column_pivot)
-				else
-					i := row + rows * (column - 1)
-				end
-				if i <= namecount then
-					print_list (<<i, ") ", names @ i,
-						spaces ((row_width / cols - (floor (log10 (i)) +
-						cols - 1 + names.i_th(i).count)).ceiling)>>)
-				end
-				column := column + 1
-			end
-			if
-				not (row = rows and column_pivot > 0 and column > column_pivot)
-			then
-				if column_pivot > 0 and column - 1 > column_pivot then
-					i := row + rows * column_pivot +
-						(rows - 1) * (column - 1 - column_pivot)
-				else
-					i := row + rows * (column - 1)
-				end
-				if i <= namecount then
-					print_list (<<i, ") ", names @ i>>)
-				end
-			end
-			print ("%N")
-		end
-
-	print_names_in_n_columns (names: LIST [STRING]; cols: INTEGER) is
-			-- Print each element of `names' as a numbered item
-			-- to the screen in `cols' columns.
-		local
-			width, rows, row, end_index, namecount, col_pivot: INTEGER
-		do
-			width := 76
-			namecount := names.count
-			rows := (namecount + cols - 1) // cols
-			col_pivot := namecount \\ cols
-			end_index := rows * cols
-			row := 1
-			from
-			until
-				row = rows + 1
-			loop
-				print_row(names, row, rows, cols, namecount, col_pivot, width)
-				row := row + 1
-			end
-		end
-
-	print_names_in_1_column (names: LIST [STRING]; first_number: INTEGER) is
-			-- Print each element of `names' as a numbered item to the
-			-- screen in 1 column.  Numbering is from first_number to
-			-- first_number + names.count - 1.
-		local
-			i: INTEGER
-		do
-			from
-				i := first_number
-				names.start
-			until
-				names.exhausted
-			loop
-				print_list (<<i, ") ", names.item, "%N">>)
-				names.forth
-				i := i + 1
-			end
-			check
-				i = first_number + names.count
-			end
 		end
 
 	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
