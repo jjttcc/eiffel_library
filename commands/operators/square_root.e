@@ -36,7 +36,6 @@ feature -- Initialization
 feature {NONE} -- Basic operations
 
 	operate (v: REAL) is
-			-- Null action by default
 		do
 			value := sqrt (v)
 		end
