@@ -21,9 +21,9 @@ feature -- String manipulation
 		do
 			create Result.make (0)
 			from
-				i := 1
+				i := a.lower
 			until
-				i = a.count + 1
+				i = a.upper + 1
 			loop
 				if a @ i /= Void then
 					Result.append ((a @ i).out)
@@ -167,9 +167,9 @@ feature -- Logging
 			i: INTEGER
 		do
 			from
-				i := 1
+				i := l.lower
 			until
-				i = l.count + 1
+				i = l.upper + 1
 			loop
 				if l @ i /= Void then
 					print (l @ i)
@@ -225,9 +225,9 @@ feature -- Logging
 			i: INTEGER
 		do
 			from
-				i := 1
+				i := list.lower
 			until
-				i = list.count + 1
+				i = list.upper + 1
 			loop
 				if list @ i /= Void then
 					log_error ((list @ i).out)
