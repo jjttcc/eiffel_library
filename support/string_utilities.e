@@ -39,7 +39,7 @@ feature -- Access
 		local
 			i, last_index: INTEGER
 		do
-			!!Result.make (0)
+			create Result.make (0)
 			last_index := target.substring_index (s, 1)
 			if last_index = 0 then
 				Result.extend (target)

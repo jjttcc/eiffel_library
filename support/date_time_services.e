@@ -17,7 +17,7 @@ feature -- Access
 		local
 			y, m, d: INTEGER
 		do
-			!!Result.make_now
+			create Result.make_now
 			y := value // 10000
 			m := value \\ 10000 // 100
 			d := value \\ 100
@@ -41,14 +41,14 @@ feature -- Access
 			sutil: STRING_UTILITIES
 			components: ARRAY [STRING]
 		do
-			!!sutil.make (d)
+			create sutil.make (d)
 			components := sutil.tokens (separator)
 			if
 				components.count = 3 and components.item(1).is_integer and
 						components.item(2).is_integer and
 						components.item(3).is_integer
 			then
-				!!Result.make (components.item(1).to_integer,
+				create Result.make (components.item(1).to_integer,
 								components.item(2).to_integer, 
 								components.item(3).to_integer)
 			end
@@ -90,12 +90,12 @@ feature -- Access
 
 	current_date: DATE is
 		do
-			!!Result.make_now
+			create Result.make_now
 		end
 
 	current_time: TIME is
 		do
-			!!Result.make_now
+			create Result.make_now
 		end
 
 feature -- Status report

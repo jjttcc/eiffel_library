@@ -17,13 +17,15 @@ feature -- Basic operations
 		local
 			i: INTEGER
 		do
-			!!Result.make (0)
+			create Result.make (0)
 			from
 				i := 1
 			until
 				i = a.count + 1
 			loop
-				Result.append ((a @ i).out)
+				if a @ i /= Void then
+					Result.append ((a @ i).out)
+				end
 				i := i + 1
 			end
 		end
