@@ -2,9 +2,11 @@ indexing
 	description:
 		"Value setter with read_value procedure defined to read the next %
 		%real value from the input"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class REAL_SETTER inherit
 
