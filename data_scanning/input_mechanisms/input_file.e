@@ -11,7 +11,7 @@ class INPUT_FILE inherit
 	PLAIN_TEXT_FILE
 		export
 			{NONE} all
-			{ANY} close, after, exists, open_read, is_closed
+			{ANY} close, after, exists, open_read, is_closed, date, count, go
 		redefine
 			start
 		end
@@ -51,9 +51,13 @@ feature -- Access
 			su: expanded STRING_UTILITIES
 		do
 			saved_position := position
+			check
+				readable: readable
+			end
+print ("fldcnt - saved pos: " + saved_position.out + "%N")
 			from
 				s := ""
-				start
+--!!!! Remove?: start
 			until
 				end_of_record
 			loop
@@ -78,11 +82,15 @@ feature -- Access
 					end
 				end
 			end
+print ("fldcnt - pos: " + position.out + "%N")
 			go (saved_position)
+print ("fldcnt - pos (after go): " + position.out + "%N")
 			if not s.is_empty then
+print ("fldcnt - s: " + s + "%N")
 				su.set_target (s)
 				Result := su.tokens (field_separator).count
 			end
+print ("fldcnt - Result: " + Result.out + "%N")
 		end
 
 feature -- Status report

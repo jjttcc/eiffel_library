@@ -20,6 +20,9 @@ indexing
 deferred class DATA_SCANNER inherit
 
 	FACTORY
+		redefine
+			execute_precondition
+		end
 
 feature -- Initialization
 
@@ -61,6 +64,13 @@ feature -- Status report
 
 	strict_error_checking: BOOLEAN
 			-- Should all records with errors be unconditionally discarded?
+
+	execute_precondition: BOOLEAN is
+		do
+			Result := input /= Void and then input.readable
+		ensure then
+			Result = (input /= Void and then input.readable)
+		end
 
 feature -- Element change
 
@@ -114,7 +124,8 @@ feature -- Basic operations
 			from
 				create_product
 				check product /= Void end
-				input.start
+-- !!!!Remove?: input.start
+print ("ds execute - input.record_index: " + input.record_index.out + "%N")
 				if
 					value_setters_used and
 					input.field_count /= value_setters.count
@@ -140,6 +151,7 @@ feature -- Basic operations
 			if last_error_fatal then
 				handle_fatal_error
 			end
+print ("ending ds execute - input.record_index: " + input.record_index.out + "%N")
 		ensure then
 			-- product.count = number of records in input
 			errlist_not_void: error_list /= Void

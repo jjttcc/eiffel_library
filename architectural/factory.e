@@ -12,20 +12,32 @@ deferred class
 
 	FACTORY
 
-feature -- Basic operations
-
-	execute is
-			-- Produce a result, stored in `product'.
-		deferred
-		ensure then
-			product_not_void: product /= Void
-		end
-
 feature -- Access
 
 	product: ANY is
 			-- The object manufactured by calling execute
 		deferred
+		end
+
+feature -- Status report
+
+	execute_precondition: BOOLEAN is
+			-- Precondition for `execute'
+		do
+			-- Satisfied by all states - redefine if a stronger precondition
+			-- is needed.
+			Result := True
+		end
+
+feature -- Basic operations
+
+	execute is
+			-- Produce a result, stored in `product'.
+		require
+			execute_precondition: execute_precondition
+		deferred
+		ensure then
+			product_not_void: product /= Void
 		end
 
 end -- class FACTORY
