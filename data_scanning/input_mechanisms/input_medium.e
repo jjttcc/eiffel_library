@@ -41,13 +41,14 @@ feature -- Access
 
 	field_count: INTEGER is
 		do
-			check --!!!!Can this be asserted?:
-				readable: readable
-			end
 			if current_record = Void then
 				split_current_record
 			end
-			Result := current_record.count
+			if current_record /= Void then
+				Result := current_record.count
+			else
+				Result := 0
+			end
 		end
 
 feature -- Status report
@@ -251,7 +252,8 @@ feature {NONE} -- Implementation
 print ("OH-OH!!!: " + error_string + "%N")
 			end
 		ensure
-			current_record_exists: current_record /= Void
+			current_record_exists: not error_occurred implies
+				current_record /= Void
 		end
 
 --!!!This feature needs to be moved to a utility class:
@@ -262,14 +264,6 @@ print ("OH-OH!!!: " + error_string + "%N")
 		end
 
 feature {NONE} -- Implementation - error messages
-
---!!!!Not used - remove?
-	incorrect_field_separator_msg: STRING is "Incorrect field separator %
-		%character detected"
-
---!!!!Not used - remove?
-	incorrect_record_separator_msg: STRING is "Incorrect record separator %
-		%character detected"
 
 	too_few_fields_msg: STRING is
 		do
