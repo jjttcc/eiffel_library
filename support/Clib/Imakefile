@@ -4,12 +4,12 @@ SRCS = mas_utilities.c
 
 OBJS = mas_utilities.o
 
-LIB = ../../lib/mas_utilities.o
+LIB = ../../lib/utilities.o
 
 AllTarget ($(LIB))
 
 $(LIB): $(OBJS)
 
-all:: $(OBJS)
-	cp $(OBJS) ../../lib
+all:: $(LIB)
+	cp $(OBJS) $(LIB)
 
