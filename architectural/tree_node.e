@@ -194,9 +194,6 @@ feature {TREE_NODE} -- Implementation
 			end
 			-- Ensure that Current is the target for the call
 			-- of `report_function'.
---@@!!!!!			create tuple.make; tuple.make_from_array (<<Current>>)
---@@!!!!Note: The above line has been replaced by the line below, to allow
---compilation with estudio 5.4; it's likely equivalent, but check!!! it.
 			create tuple.make; tuple.force (Current, 1)
 			report_function.set_operands (tuple)
 			report_function.apply
