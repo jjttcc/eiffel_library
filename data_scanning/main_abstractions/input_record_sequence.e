@@ -47,7 +47,8 @@ feature -- Cursor movement
 			-- Place cursor on the first record.
 		deferred
 		ensure
-			indices_at_1: field_index = 1 and record_index = 1
+			indices_at_1: readable implies
+				(field_index = 1 and record_index = 1)
 		end
 
 	advance_to_next_record is
@@ -56,7 +57,8 @@ feature -- Cursor movement
 			not_after: not after_last_record
 		deferred
 		ensure
-			record_index_incremented: record_index = old record_index + 1
+			record_index_incremented: readable implies
+				(record_index = old record_index + 1)
 		end
 
 	advance_to_next_field is
@@ -66,7 +68,8 @@ feature -- Cursor movement
 			field_index_valid: field_index <= field_count
 		deferred
 		ensure
-			field_index_incremented: field_index = old field_index + 1
+			field_index_incremented: readable implies
+				(field_index = old field_index + 1)
 		end
 
 	discard_current_record is
@@ -76,7 +79,8 @@ feature -- Cursor movement
 			not_after: not after_last_record
 		deferred
 		ensure
-			record_index_incremented: record_index = old record_index + 1
+			record_index_incremented: readable implies
+				(record_index = old record_index + 1)
 		end
 
 end -- class INPUT_RECORD_SEQUENCE
