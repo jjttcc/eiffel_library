@@ -98,12 +98,12 @@ feature {NONE} -- Hook routines
 		do
 		end
 
-	is_logout_request (id: INTEGER): BOOLEAN is
+	is_logout_request (id: like request_id): BOOLEAN is
 			-- Is `id' the request_id for a logout request?
 		deferred
 		end
 
-	is_login_request (id: INTEGER): BOOLEAN is
+	is_login_request (id: like request_id): BOOLEAN is
 			-- Is `id' the request_id for a login request?
 		deferred
 		end
@@ -122,10 +122,10 @@ feature {NONE} -- Implementation
 				not request_error implies session /= Void
 		end
 
-	request_handlers: HASH_TABLE [CLIENT_REQUEST_COMMAND, INTEGER]
+	request_handlers: HASH_TABLE [CLIENT_REQUEST_COMMAND, HASHABLE]
 			-- Handlers of client requests, keyed by `request_id'
 
-	request_id: INTEGER
+	request_id: HASHABLE
 			-- ID of last client request, extracted
 			-- by `process_request'
 
