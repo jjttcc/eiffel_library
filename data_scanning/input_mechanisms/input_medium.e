@@ -41,7 +41,7 @@ feature -- Access
 
 	field_count: INTEGER is
 		do
-			check
+			check --!!!!Can this be asserted?:
 				readable: readable
 			end
 			if current_record = Void then
@@ -82,7 +82,7 @@ feature -- Cursor movement
 			if data_available then
 				split_current_record
 				current_record.start
-				if current_record.count <= 1 then
+				if at_end_of_input then
 					after_last_record := True
 				end
 			else
@@ -104,7 +104,9 @@ print ("discard current record called" + "%N")
 			record_index := 1
 			after_last_record := not data_available
 			if not after_last_record then
-				split_current_record
+				if split_current_record_on_start then
+					split_current_record
+				end
 				current_record.start
 			end
 		ensure then
@@ -216,6 +218,18 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
+	at_end_of_input: BOOLEAN is
+			-- Has the end of the input stream been reached?
+		do
+				Result := current_record.count <= 1
+		end
+
+	split_current_record_on_start: BOOLEAN is
+			-- Should `split_current_record' be called by `start'?
+		once
+			Result := True	-- Redefine if needed.
+		end
+
 feature {NONE} -- Implementation
 
 	current_record: LIST [STRING]
@@ -228,8 +242,23 @@ feature {NONE} -- Implementation
 		require
 			not_at_end: not after_last_record
 		do
-			read_line
-			current_record := last_string.split (field_separator @ 1)
+print (generating_type + ": split currec" + "%N")
+print ("a - am I readable?: " + readable.out + "%N")
+			if readable then
+print ("b" + "%N")
+				read_line
+print ("c" + "%N")
+				current_record := last_string.split (field_separator @ 1)
+print ("d" + "%N")
+			else
+print ("e" + "%N")
+				error_occurred := True
+				error_string := medium_not_readable_msg
+print ("OH-OH!!!: " + error_string + "%N")
+			end
+print ("f" + "%N")
+print ("curr rec, field 1: " + current_record @ 1 + "%N")
+print (generating_type + ": split currec ended" + "%N")
 		ensure
 			current_record_exists: current_record /= Void
 		end
@@ -271,6 +300,11 @@ feature {NONE} -- Implementation - error messages
 				not current_record.exhausted
 		do
 			Result := "Integer value expected, got" + current_record.item
+		end
+
+	medium_not_readable_msg: STRING is
+		do
+			Result := "Input medium (" + generating_type + ") is not readable"
 		end
 
 invariant
