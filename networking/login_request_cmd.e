@@ -18,7 +18,7 @@ feature -- Status report
 	last_error: STRING
 			-- Description of last error
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
 	do_execute (msg: STRING) is
 			-- Create a new session and add it to `sessions', process `msg',
