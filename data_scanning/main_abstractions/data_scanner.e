@@ -64,7 +64,7 @@ feature -- Access
 	record_separator: STRING
 			-- Character(s) that separate each record in the input
 
-	input: BILINEAR_INPUT_SEQUENCE
+	input: INPUT_SEQUENCE
 			-- Sequence used for input
 
 feature -- Element change
@@ -144,7 +144,7 @@ feature -- Basic operations
 			loop
 				make_tuple
 				if not last_error_fatal then
-					skip_record_separator
+					advance_to_next_record
 				end
 			end
 			if last_error_fatal then
@@ -190,7 +190,7 @@ feature {NONE} -- Hook methods
 			until
 				value_setters.after
 			loop
-				skip_field_separator
+				advance_to_next_field
 				value_setters.item.set (input, tuple)
 				if value_setters.item.error_occurred then
 					error_list.extend (value_setters.item.last_error)
@@ -234,70 +234,26 @@ feature {NONE} -- Hook methods
 
 feature {NONE}
 
-	skip_field_separator is
-			-- Skip over the field separator in the input.
-			-- Can be overridden in a descendant for more sophisticated
-			-- behavior.
+	advance_to_next_field is
+			-- Advance to the next field in the input.
+			-- Call `input.advance_to_next_field' by default.  Can be
+			-- overridden in a descendant if different behavior is needed.
 		local
-			i: INTEGER
 		do
-			from
-				i := 1
-			variant
-				field_separator.count + 1 - i
-			until
-				i > field_separator.count
-			loop
-				-- If field_separator @ i is a tab or space, it will have
-				-- been eaten in the last read_x call.  If it's something
-				-- else, then the character still needs to be eaten.
-				if
-					not (field_separator @ i = '%T' or
-						field_separator @ i = ' ')
-				then
-					input.read_character
-					if
-						input.last_character /= field_separator @ i
-					then
-						error_list.extend (
-								"Incorrect field separator detected.")
-					end
-				end
-				i := i + 1
+			input.advance_to_next_field
+			if input.error_occurred then
+				error_list.extend (input.error_string)
 			end
 		end
 
-	skip_record_separator is
-			-- Skip over the record separator in the input.
-			-- Can be overridden in a descendant for more sophisticated
-			-- behavior.
-		local
-			i: INTEGER
+	advance_to_next_record is
+			-- Advance to the next record in the input.
+			-- Call `input.advance_to_next_record' by default.  Can be
+			-- overridden in a descendant if different behavior is needed.
 		do
-			from
-				i := 1
-			variant
-				record_separator.count + 1 - i
-			until
-				i > record_separator.count
-			loop
-				-- If record_separator @ i is a tab or space or newline,
-				-- it will have been eaten in the last read_x call.  If it's
-				-- something else, then the character still needs to be eaten.
-				if
-					not (record_separator @ i = '%T' or
-						record_separator @ i = ' ' or
-						record_separator @ i = '%N')
-				then
-					input.read_character
-					if
-						input.last_character /= record_separator @ i
-					then
-						error_list.extend (
-								"Incorrect record separator detected.")
-					end
-				end
-				i := i + 1
+			input.advance_to_next_record
+			if input.error_occurred then
+				error_list.extend (input.error_string)
 			end
 		end
 
