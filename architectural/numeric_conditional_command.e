@@ -12,6 +12,9 @@ indexing
 class BOOLEAN_NUMERIC_CLIENT inherit
 
 	RESULT_COMMAND [REAL]
+		redefine
+			initialize
+		end
 
 creation
 
@@ -33,6 +36,13 @@ feature -- Initialization
 					boolean_operator = bool_oper and boolean_operator /= Void
 			true_cmd_set: true_cmd = true_command and true_cmd /= Void
 			false_cmd_set: false_cmd = false_command and false_cmd /= Void
+		end
+
+	initialize (arg: ANY) is
+		do
+			boolean_operator.initialize (arg)
+			true_cmd.initialize (arg)
+			false_cmd.initialize (arg)
 		end
 
 feature -- Access
