@@ -104,17 +104,17 @@ feature -- Access
 			definition: Result = month_table @ m
 		end
 
-	weekday_from_3_letter_abbreviation (d: STRING): INTEGER is
+	day_of_week_from_3_letter_abbreviation (d: STRING): INTEGER is
 			-- Weekday as an integer from the 3-letter abbreviation specified
-			-- by `d'
+			-- by `d', where 1 is Sunday .. 7 is Saturday
 		require
-			valid_weekday: d /= Void and d.count = 3 and
-				weekday_table.has (d)
+			valid_day_of_week: d /= Void and d.count = 3 and
+				day_of_week_table.has (d)
 		do
-			Result := weekday_table @ d
+			Result := day_of_week_table @ d
 		ensure
 			valid_result: Result >= 1 and Result <= 7
-			definition: Result = weekday_table @ d
+			definition: Result = day_of_week_table @ d
 		end
 
 	current_date: DATE is
@@ -239,17 +239,22 @@ feature -- Access
 			end
 		end
 
-	weekday_table: HASH_TABLE [INTEGER, STRING] is
-			-- Table of 3-letter weekday abbreviations mapped to the
-			-- respective integer value for the weekday
+	day_of_week_table: HASH_TABLE [INTEGER, STRING] is
+			-- Table of 3-letter day-of-week abbreviations mapped to the
+			-- respective integer value for the days of the week
 		local
-			weekdays: ARRAY [STRING]
+			days_of_the_week: ARRAY [STRING]
 			i: INTEGER
 		once
 			create Result.make (12)
-			weekdays := <<"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat">>
-			from i := weekdays.lower until i = weekdays.upper + 1 loop
-				Result.extend (i, weekdays @ i)
+			days_of_the_week :=
+				<<"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat">>
+			from
+				i := days_of_the_week.lower
+			until
+				i = days_of_the_week.upper + 1
+			loop
+				Result.extend (i, days_of_the_week @ i)
 				i := i + 1
 			end
 		end
