@@ -129,20 +129,20 @@ feature -- Access
 				m_index = d_index) implies Result = Void
 		end
 
-	time_from_string (value, separator: STRING): TIME is
-			-- Time produced from `value', which must be in the form
+	time_from_string (t, separator: STRING): TIME is
+			-- Time produced from `t', which must be in the form
 			-- hhXmm[Xss], where X denotes the character specified by
 			-- `separator' and [Xss] means that the seconds component is
-			-- optional.  If `value' specifies an invalid time, the
+			-- optional.  If `t' specifies an invalid time, the
 			-- result will be Void.
 		require
-			value_not_void: value /= Void
+			t_not_void: t /= Void
 			separator_valid: separator /= Void and separator.count = 1
 		local
 			h, m, s, count: INTEGER
 			tokens: LIST [STRING]
 		do
-			string_tool.set_target (value)
+			string_tool.set_target (t)
 			tokens := string_tool.tokens (separator)
 			count := tokens.count
 			if count = 2 or count = 3 then
