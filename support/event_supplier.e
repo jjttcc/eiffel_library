@@ -1,5 +1,4 @@
 indexing
---!!!!!!!!!!!!!!Move this to eiffel_library.
 	description: "Suppliers for EVENT_CLIENTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
