@@ -93,8 +93,13 @@ feature -- Element change
 feature {NONE} -- Implementation
 
 	current_field: ANY is
+		local
+			v: ECLI_VALUE
 		do
-			Result := tuple_sequence.cursor.item (field_index).item
+			v := tuple_sequence.cursor.item (field_index)
+			if v /= Void and then not v.is_null then
+				Result := v.item
+			end
 		end
 
 invariant
