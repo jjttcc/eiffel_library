@@ -6,9 +6,14 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class 
+deferred class TREE_NODE inherit
 
-	TREE_NODE
+	ANY
+
+	STATE_SET
+		export
+			{NONE} all
+		end
 
 feature -- Access
 
@@ -27,17 +32,21 @@ feature -- Access
 			node_set: LINKED_SET [like Current]
 		do
 			create {LINKED_LIST [TREE_NODE]} Result.make
-			l := copy_of_children
-			create node_set.make
-			if descendant_comparison_is_by_objects then
-				node_set.compare_objects
+			if not descendants_locked then
+				lock_descendants
+				l := copy_of_children
+				create node_set.make
+				if descendant_comparison_is_by_objects then
+					node_set.compare_objects
+				end
+				from l.start until l.exhausted loop
+					node_set.extend (l.item)
+					node_set.append (l.item.descendants)
+					l.forth
+				end
+				Result.append (node_set)
+				unlock_descendants
 			end
-			from l.start until l.exhausted loop
-				node_set.extend (l.item)
-				node_set.append (l.item.descendants)
-				l.forth
-			end
-			Result.append (node_set)
 		ensure
 			exists: Result /= Void
 			current_excluded: not Result.has (Current)
@@ -72,6 +81,11 @@ feature -- Status report
 			-- according to the current tree hierarchy
 		do
 			Result := report (0, agent {TREE_NODE}.name)
+		end
+
+	descendants_contain_cycle: BOOLEAN is
+			-- Is there a cycle in `descendants'?
+		do
 		end
 
 feature {NONE} -- Implementation - Hook routines
@@ -168,14 +182,48 @@ feature {TREE_NODE} -- Implementation
 			end
 		end
 
+	descendants_locked: BOOLEAN is
+			-- Implementation state to prevent infinite calls to descendants
+			-- when Current is part of a -time cycle.
+		do
+			Result := state_at (Descendants_locked_index)
+		end
+
+	lock_descendants is
+		do
+			set_descendants_locked (True)
+		end
+
+	unlock_descendants is
+		do
+			set_descendants_locked (False)
+		end
+
+	set_descendants_locked (arg: BOOLEAN) is
+			-- Set `descendants_locked' according to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			put_state (arg, Descendants_locked_index)
+		ensure
+			descendants_locked_set: descendants_locked = arg and
+				descendants_locked /= Void
+		end
+
+feature {NONE} -- Implementation - constants
+
+	Descendants_locked_index: INTEGER is 32
+
+	Descendants_have_cycle_index: INTEGER is 31
+
 	Indent_increment: INTEGER is 3
 
 invariant
 
 	children_exist: children /= Void
 	descendants_exist: descendants /= Void
-	children_and_descendants_correspond: children.is_empty =
-		descendants.is_empty
+	children_and_descendants_correspond: not descendants_locked implies
+		children.is_empty = descendants.is_empty
 	name_not_void: name /= Void
 
 end
