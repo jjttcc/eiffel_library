@@ -387,7 +387,7 @@ feature {NONE} -- Implementation
 
 	eot: STRING is
 			-- End of transmission indicator - "<Ctl>G" for stream socket,
-			-- "" (empty string) for files and other types
+			-- "" (empty string) for files (including stdin) and other types
 		local
 			file: FILE
 			stream_socket: STREAM_SOCKET
