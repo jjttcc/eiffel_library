@@ -129,6 +129,34 @@ feature -- String manipulation
 				Result.item (Result.count) = l.last.item (l.last.count)
 		end
 
+	split_in_two (s: STRING; separator: CHARACTER): CHAIN [STRING] is
+			-- The result of splitting `s' in two at the point of the
+			-- first occurrence in `s' of `separator', where the component
+			-- in `s' to the left of `separator' is placed in Result @ 1
+			-- and the component in `s' to the right of `separator' is
+			-- placed in Result @ 2
+		local
+			i: INTEGER
+			l: LINKED_LIST [STRING]
+		do
+			create l.make
+			if s.has (separator) then
+				i := s.index_of (separator, 1)
+				l.extend (s.substring (1, i - 1))
+				l.extend (s.substring (i + 1, s.count))
+			else
+				l.extend (clone (s))
+			end
+			Result := l
+		ensure
+			result_exists: Result /= Void
+			no_more_than_2: Result.count <= 2
+			no_less_than_1: Result.count >= 1
+			two_if_s_has_separator: s.has (separator) = (Result.count = 2)
+			one_if_not_s_has_separator: not s.has (separator) =
+				(Result.count = 1)
+		end
+
 feature -- Logging
 
 	print_list (l: ARRAY [ANY]) is
