@@ -30,6 +30,11 @@ feature -- Status report
 		deferred
 		end
 
+	last_error_fatal: BOOLEAN is
+			-- Was the last error unrecoverable?
+		deferred
+		end
+
 feature -- Cursor movement
 
 	start is
