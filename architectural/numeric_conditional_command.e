@@ -2,16 +2,16 @@ indexing
 	description:
 		"A command that plays the role of client of a BOOLEAN_OPERATOR by, %
 		%in its execute routine, providing two operands for the %
-		%BOOLEAN_OPERATOR and, when the operator evaluates to true, %
+		%BINARY_OPERATOR [BOOLEAN] and, when the operator evaluates to true, %
 		%executing a 'true command', and when false, executing a 'false %
 		%command'."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class BOOLEAN_CLIENT inherit
+class BOOLEAN_NUMERIC_CLIENT inherit
 
-	NUMERIC_COMMAND
+	RESULT_COMMAND [REAL]
 
 creation
 
@@ -37,14 +37,14 @@ feature -- Initialization
 
 feature -- Access
 
-	boolean_operator: BOOLEAN_OPERATOR
+	boolean_operator: BINARY_OPERATOR [BOOLEAN, REAL]
 			-- Operator used to compare two values
 
-	true_cmd: NUMERIC_COMMAND
+	true_cmd: RESULT_COMMAND [REAL]
 			-- Command that extracts the value to use if boolean_operator
 			-- evaluates as true
 
-	false_cmd: NUMERIC_COMMAND
+	false_cmd: RESULT_COMMAND [REAL]
 			-- Command that extracts the value to use if boolean_operator
 			-- evaluates as false
 
@@ -58,7 +58,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_boolean_operator (arg: BOOLEAN_OPERATOR) is
+	set_boolean_operator (arg: like boolean_operator) is
 			-- Set boolean_operator to `arg'.
 		require
 			arg /= Void
@@ -69,7 +69,7 @@ feature -- Status setting
 									boolean_operator /= Void
 		end
 
-	set_true_cmd (arg: BASIC_NUMERIC_COMMAND) is
+	set_true_cmd (arg: like true_cmd) is
 			-- Set true_cmd to `arg'.
 		require
 			arg /= Void
@@ -80,7 +80,7 @@ feature -- Status setting
 								true_cmd /= Void
 		end
 
-	set_false_cmd (arg: BASIC_NUMERIC_COMMAND) is
+	set_false_cmd (arg: like false_cmd) is
 			-- Set false_cmd to `arg'.
 		require
 			arg /= Void
@@ -111,4 +111,4 @@ invariant
 	true_cmd_not_void: true_cmd /= Void
 	false_cmd_not_void: false_cmd /= Void
 
-end -- class BOOLEAN_CLIENT
+end -- class BOOLEAN_NUMERIC_CLIENT
