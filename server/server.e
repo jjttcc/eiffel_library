@@ -29,7 +29,7 @@ feature -- Initialization
 					"exiting ...%N">>)
 				exit (Error_exit_status)
 			elseif command_line_options.help then
-				command_line_options.usage
+				command_line_options.print_usage
 			elseif command_line_options.version_request then
 				print_list (<<version.name, ", Version ", version.number, ", ",
 					version.informal_date, "%N">>)

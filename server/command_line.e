@@ -48,7 +48,13 @@ feature -- Access
 
 feature -- Basic operations
 
-	usage is
+	print_usage is
+			-- Print `usage' message.
+		do
+			print (usage)
+		end
+
+	usage: STRING is
 			-- Message: how to invoke the program from the command-line
 		deferred
 		end
