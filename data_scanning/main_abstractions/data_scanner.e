@@ -115,6 +115,11 @@ feature -- Basic operations
 				create_product
 				check product /= Void end
 				input.start
+				if input.field_count /= value_setters.count then
+					last_error_fatal := True
+					error_in_current_tuple := True
+					error_list.extend (Wrong_field_count_message)
+				end
 			invariant
 				-- product.count = number_of_records_in (
 				--	input @ 1 .. input @ (input.record_index - 1))
@@ -307,6 +312,14 @@ feature {NONE}
 	discard_current_tuple: BOOLEAN
 			-- Should the current tuple be discarded due to incorrect or
 			-- corrupted data?
+
+feature {NONE} -- Implementation constants
+
+	Wrong_field_count_message: STRING is
+			-- Error message for initial field count check - redefine if needed
+		once
+			Result := "Wrong number of fields in first record."
+		end
 
 invariant
 
