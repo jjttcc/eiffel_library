@@ -81,7 +81,6 @@ feature {NONE} -- Implementation - Hook routines
 			msg_exists: msg /= Void
 		local
 			ex_srv: expanded EXCEPTION_SERVICES
-			ex: expanded EXCEPTIONS
 		do
 			ex_srv.last_exception_status.set_fatal (True)
 			ex_srv.handle_exception (msg)
