@@ -10,7 +10,7 @@ deferred class
 
 	ERROR_SUBSCRIBER
 
-feature -- Basic operations
+feature {ERROR_PUBLISHER} -- Basic operations
 
 	notify (s: STRING) is
 			-- Notify Current of error message `s'.
