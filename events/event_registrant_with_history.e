@@ -19,7 +19,7 @@ feature {NONE} -- Initialization
 		do
 			!LINKED_SET [EVENT_TYPE]!event_types.make
 			!!event_cache.make
-			!!event_history.make
+			!!event_history.make (0)
 		ensure
 			not_void: event_types /= Void and event_cache /= Void
 		end
@@ -35,7 +35,8 @@ feature -- Status report
 	is_interested_in (e: TYPED_EVENT): BOOLEAN is
 			-- Is this registrant interested in `e'?
 		do
-			Result := not event_history.has (e) and event_types.has (e.type)
+			Result := event_types.has (e.type) and then
+						not event_history.has (e.unique_id)
 		end
 
 feature -- Element change
@@ -65,7 +66,7 @@ feature -- Basic operations
 	notify (e: TYPED_EVENT) is
 		do
 			event_cache.extend (e)
-			event_history.extend (e)
+			event_history.extend (e, e.unique_id)
 		end
 
 	end_notification is
@@ -92,7 +93,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	event_history: LINKED_LIST [TYPED_EVENT]
+	event_history: HASH_TABLE [TYPED_EVENT, STRING]
 			-- All events received in the past
 
 	event_cache: LINKED_LIST [TYPED_EVENT]

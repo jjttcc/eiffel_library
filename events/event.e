@@ -25,6 +25,21 @@ feature -- Access
 		deferred
 		end
 
+	date: DATE is
+			-- Date to use for reporting
+		deferred
+		end
+
+	time: TIME is
+			-- Time to use for reporting
+		deferred
+		end
+
+	unique_id: STRING is
+			-- String that uniquely identifies the current instance
+		deferred
+		end
+
 invariant
 
 	name_time_not_void: name /= Void and time_stamp /= Void
