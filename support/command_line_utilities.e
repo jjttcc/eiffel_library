@@ -110,19 +110,25 @@ feature
 			end
 		end
 
-	print_names_in_1_column (names: LIST [STRING]) is
+	print_names_in_1_column (names: LIST [STRING]; first_number: INTEGER) is
 			-- Print each element of `names' as a numbered item to the
-			-- screen in 1 column.
+			-- screen in 1 column.  Numbering is from first_number to
+			-- first_number + names.count - 1.
 		local
 			i: INTEGER
 		do
 			from
-				i := 1
+				i := first_number
+				names.start
 			until
-				i = names.count + 1
+				names.exhausted
 			loop
-				print_list (<<i, ") ", names @ i, "%N">>)
+				print_list (<<i, ") ", names.item, "%N">>)
+				names.forth
 				i := i + 1
+			end
+			check
+				i = first_number + names.count
 			end
 		end
 
