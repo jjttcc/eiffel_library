@@ -43,9 +43,9 @@ feature -- Access
 			-- element whose contents equal `target'.
 		require
 			s_not_void: s /= Void
-			s_not_empty: not s.empty
+			s_not_empty: not s.is_empty
 			target_not_void: target /= Void
-			target_not_empty: not target.empty
+			target_not_empty: not target.is_empty
 		local
 			i, last_index: INTEGER
 		do

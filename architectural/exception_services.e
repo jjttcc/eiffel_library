@@ -140,7 +140,7 @@ feature {NONE} -- Implementation
 	exception_routine_string: STRING is
 		do
 			Result := recipient_name
-			if Result /= Void and not Result.empty then
+			if Result /= Void and not Result.is_empty then
 				Result := concatenation (<<"in ", "routine `", Result, "' ">>)
 			else
 				Result := ""
@@ -150,7 +150,7 @@ feature {NONE} -- Implementation
 	tag_string: STRING is
 		do
 			Result := tag_name
-			if Result /= Void and not Result.empty then
+			if Result /= Void and not Result.is_empty then
 				Result := concatenation (<<"with tag:%N%"", Result, "%"%N">>)
 			else
 				Result := ""
@@ -160,7 +160,7 @@ feature {NONE} -- Implementation
 	class_name_string: STRING is
 		do
 			Result := class_name
-			if Result /= Void and not Result.empty then
+			if Result /= Void and not Result.is_empty then
 				Result := concatenation (<<"from class %"", Result, "%".%N">>)
 			else
 				Result := ""
@@ -170,8 +170,8 @@ feature {NONE} -- Implementation
 	exception_meaning_string (errname: STRING): STRING is
 		do
 			Result := meaning (exception)
-			if Result /= Void and not Result.empty then
-				if errname /= Void and not errname.empty then
+			if Result /= Void and not Result.is_empty then
+				if errname /= Void and not errname.is_empty then
 					Result := concatenation (<<"Type of ", errname, ": ",
 						Result>>)
 				else

@@ -31,7 +31,7 @@ feature -- Basic operations
 			if event_generators /= Void and dispatcher /= Void then
 				create_queue
 				generate_events
-				if not event_queue.empty then
+				if not event_queue.is_empty then
 					dispatcher.set_event_queue (event_queue)
 					dispatcher.execute
 				end

@@ -130,10 +130,10 @@ feature {NONE} -- Implementation
 		do
 			create last_error.make (0)
 			last_error.from_c (last_c_error)
-			if pre_fix /= Void and not pre_fix.empty then
+			if pre_fix /= Void and not pre_fix.is_empty then
 				last_error.prepend (pre_fix)
 			end
-			if suffix /= Void and not suffix.empty then
+			if suffix /= Void and not suffix.is_empty then
 				last_error.append (suffix)
 			end
 		end
@@ -154,7 +154,6 @@ feature {NONE} -- Implementation
 	set_lock_file_name is
 		local
 			oe: expanded OPERATING_ENVIRONMENT
-			i: INTEGER
 		do
 			lock_file_name := clone (file_path)
 			lock_file_name.insert (".", lock_file_name.last_index_of (

@@ -67,7 +67,7 @@ feature -- Basic operations
 			until
 				finished_processing
 			loop
-				if not event_queue.empty then
+				if not event_queue.is_empty then
 					e := event_queue.item
 					event_queue.remove
 					dispatch (e)
@@ -85,7 +85,7 @@ feature {NONE} -- Hook methods
 			-- Answer: true if event_queue is empty - redefine in
 			-- descendants for specialized behavior.
 		do
-			Result := event_queue.empty
+			Result := event_queue.is_empty
 		end
 
 	dispatch (e: EVENT) is

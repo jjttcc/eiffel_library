@@ -26,7 +26,7 @@ feature -- Initialization
 	make (in: like input; tm: like tuple_maker; vs: like value_setters) is
 		require
 			args_not_void: in /= Void and tm /= Void and vs /= Void
-			vs_not_empty: not vs.empty
+			vs_not_empty: not vs.is_empty
 		do
 			input := in
 			tuple_maker := tm
@@ -312,6 +312,6 @@ invariant
 
 	properties_not_void:
 		tuple_maker /= Void and value_setters /= Void
-	value_setters_not_empty: not value_setters.empty
+	value_setters_not_empty: not value_setters.is_empty
 
 end -- class DATA_SCANNER

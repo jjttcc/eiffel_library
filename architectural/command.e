@@ -65,6 +65,6 @@ feature -- Status report
 
 invariant
 
-	children_and_descendants_correspond: children.empty = descendants.empty
+	children_and_descendants_correspond: children.is_empty = descendants.is_empty
 
 end -- class COMMAND
