@@ -72,16 +72,17 @@ feature {NONE} -- Implementation - Hook routines
 		deferred
 		end
 
-	handle_file_read_error is
+	handle_file_read_error (msg: STRING) is
 			-- Handle failure to read the configuration file - defaults
 			-- to throwing and exception - redefine if needed.
+		require
+			msg_exists: msg /= Void
 		local
 			gs: expanded EXCEPTION_SERVICES
 			ex: expanded EXCEPTIONS
 		do
 			gs.last_exception_status.set_fatal (true)
-			ex.raise ("Fatal error reading " + configuration_type +
-				" configuration file")
+			ex.raise (msg)
 		end
 
 	use_customized_setting (key, value: STRING): BOOLEAN is
@@ -156,7 +157,7 @@ feature {NONE} -- Implementation
 		local
 			tokens: LIST [STRING]
 			file_reader: FILE_READER
-			key_token, value_token: STRING
+			key_token, value_token, errmsg: STRING
 		do
 			create file_reader.make (configuration_file_name)
 			file_reader.tokenize (Record_separator)
@@ -198,9 +199,10 @@ feature {NONE} -- Implementation
 					current_line := current_line + 1
 				end
 			else
-				log_errors (<<"Error reading ", configuration_type,
-					" configuration file: ", file_reader.error_string, "%N">>)
-				handle_file_read_error
+				errmsg := "Fatal error reading " + configuration_type +
+					" configuration file:%N" + file_reader.error_string + "%N"
+				log_error (errmsg)
+				handle_file_read_error (errmsg)
 			end
 			post_process_settings
 			check_results
