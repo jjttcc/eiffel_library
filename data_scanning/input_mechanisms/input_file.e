@@ -11,7 +11,8 @@ class INPUT_FILE inherit
 	PLAIN_TEXT_FILE
 		export
 			{NONE} all
-			{ANY} close, after, exists, open_read, is_closed, date, count, go
+			{ANY} close, after, exists, open_read, is_closed, date, count,
+			position
 		redefine
 			start
 		end
@@ -101,6 +102,21 @@ feature -- Status report
 		end
 
 	last_error_fatal: BOOLEAN
+
+--Remove:
+-- !!!Not sure if this ns needed.
+	all_field_counts_valid: BOOLEAN is
+			-- Are all field counts valid?
+		do
+			from
+				Result := True
+			until
+				not Result or else after_last_record
+			loop
+--				Result := field_count /= expected_field_count
+				advance_to_next_record
+			end
+		end
 
 feature -- Cursor movement
 
@@ -247,6 +263,17 @@ feature -- Element change
 		ensure
 			record_separator_set: record_separator = arg and
 				record_separator /= Void
+		end
+
+	position_cursor (p: INTEGER) is
+			-- Move the file cursor to the absolute position `p'.
+			-- (The first cursor position is 0.)
+		require
+			p_valid: p >= 0 and p < count
+		do
+			go (p)
+		ensure
+			position_set: position = p
 		end
 
 feature -- Input
