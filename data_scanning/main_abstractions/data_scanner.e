@@ -72,9 +72,6 @@ feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
 					end
 					value_setters.forth
 				end
-				--debug
-				print_tuple_values (tuple)
-				--end
 				tuple.end_editing
 				skip_record_separator
 			end
@@ -225,7 +222,6 @@ feature {NONE}
 			t: VOLUME_TUPLE
 		do
 			t ?= tuple
-			io.put_string ("%No, h, l, c:%N")
 			io.put_string (t.date_time.date.out)
 			io.put_string (", ")
 			io.put_real (t.open.value)
