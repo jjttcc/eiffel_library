@@ -21,13 +21,14 @@ feature -- Basic operations
 	execute (arg: ANY) is
 			-- Execute the command with the specified argument.
 		require
-			arg_not_void_if_used: arg_used implies arg /= Void
+			arg_not_void_if_mandatory: arg_mandatory implies arg /= Void
 		deferred
 		end
 
 feature -- Status report
 
-	arg_used: BOOLEAN is
+	arg_mandatory: BOOLEAN is
+			-- Is the argument to execute mandatory?
 		deferred
 		end
 
