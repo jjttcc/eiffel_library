@@ -56,14 +56,16 @@ feature {NONE} -- Initialization
 				splitter.set_target (records.item)
 				contents.extend (splitter.tokens (field_separator))
 				field_count := contents.last.count
+				records.forth
 			until
-				records.exhausted
+				-- The last item will be empty, so skip it.
+				records.islast
 			loop
 				splitter.set_target (records.item)
 				fields := splitter.tokens (field_separator)
 				if fields.count /= field_count then
 					append_error ("Wrong field count at record " +
-						records.count.out + " - skipping current record%N")
+						records.index.out + " - skipping current record%N")
 				else
 					contents.extend (fields)
 				end
@@ -103,9 +105,7 @@ feature -- Access
 
 	record_index: INTEGER is
 		do
-			if not contents.off then
-				Result := contents.index
-			end
+			Result := contents.index
 		end
 
 	field_count: INTEGER
@@ -139,6 +139,9 @@ feature -- Cursor movement
 	advance_to_next_record is
 		do
 			contents.forth
+			if not contents.exhausted then
+				contents.item.start
+			end
 		end
 
 	discard_current_record is
@@ -176,8 +179,11 @@ feature -- Input
 	read_character is
 		do
 			error_occurred := False
+			last_character := '%U'
 			if not contents.item.item.is_empty then
 				last_character := contents.item.item @ 1
+			else
+				append_error ("Empty character field value")
 			end
 		end
 
@@ -230,13 +236,17 @@ feature -- Input
 			y, m, d: INTEGER
 		do
 			error_occurred := False
-			splitter.set_target (contents.item.item)
-			ymd := splitter.tokens (date_field_separator)
-			if ymd.count /= 3 then
+			if not contents.item.item.is_empty then
+				splitter.set_target (contents.item.item)
+				ymd := splitter.tokens (date_field_separator)
+			end
+			if ymd = Void then
+				append_error ("Empty date field")
+			elseif ymd.count /= 3 then
 				append_error ("Wrong number of sub-fields in date %
 					%field: " + ymd.count.out + "%NUsing default %
 					%setting of current date%N")
-				create last_date.make_now
+				create last_date.make_by_days (0)
 			else
 				if
 					ymd.item (1).is_integer and
@@ -272,11 +282,23 @@ feature {NONE} -- Implementation
 			if error_string = Void then
 				create error_string.make (0)
 			end
-			error_string.append (s)
+			error_string.append (s + "%N" + index_info)
 			error_occurred := True
 		ensure
 			error_occurred: error_occurred
 			error_string_exists: error_string /= Void
+		end
+
+	index_info: STRING is
+		do
+			if contents.valid_index (contents.index) then
+				Result := "record " + contents.index.out
+				if contents.item.valid_index (contents.item.index) then
+					Result.append (", field " + contents.item.index.out)
+				end
+			else
+				Result := ""
+			end
 		end
 
 invariant
