@@ -131,9 +131,10 @@ feature -- Basic operations
 		end
 
 	prepare_for_editing (editor: ANY) is
-			-- Prepare editor for editing Current.
+			-- Prepare `editor' for editing Current.
 		require
 			editable: is_editable
+			editor_exists: editor /= Void
 		do
 			-- Default to null action - Redefine if needed.
 		end
