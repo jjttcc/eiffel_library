@@ -1,5 +1,5 @@
 indexing
-	description: "Binary numeric operator that implements subtraction"
+	description: "Binary operator that implements subtraction"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"

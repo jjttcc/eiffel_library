@@ -14,6 +14,8 @@ feature -- Initialization
 	initialize (arg: ANY) is
 			-- Perform initialization, obtaining any needed values from arg.
 			-- Null action by default - descendants redefine as needed.
+		require
+			arg_not_void: arg /= Void
 		do
 		end
 
