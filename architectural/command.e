@@ -91,6 +91,9 @@ feature -- Access
 			-- Current's name
 		do
 			Result := name_implementation
+			if Result = Void then
+				Result := ""
+			end
 		end
 
 feature -- Status report
@@ -100,23 +103,14 @@ feature -- Status report
 		deferred
 		end
 
-	name_is_assignable: BOOLEAN is
-			-- Can `name' be assigned?
-		do
-			-- Default to False - Redefine if needed.
-		end
-
 feature -- Element change
 
 	set_name (arg: STRING) is
 			-- Set `name' to `arg'.
 		require
-			name_is_assignable: name_is_assignable
 			arg_not_void: arg /= Void
 		do
-			-- Default to null action for the default case of
-			-- "not name_is_assignable".  Needs to be redefined
-			-- if "name_is_assignable".
+			name_implementation := clone (arg)
 		ensure
 			name_set: name.is_equal (arg) and name /= Void
 		end
@@ -132,16 +126,12 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	name_implementation: STRING is
-		do
-			-- This can be made into an attribute for descendants
-			-- whose "name_is_assignable".
-			Result := Current.generator
-		end
+	name_implementation: STRING
 
 invariant
 
 	children_and_descendants_correspond: children.is_empty =
 		descendants.is_empty
+	name_not_void: name /= Void
 
 end -- class COMMAND
