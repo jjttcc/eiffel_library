@@ -9,14 +9,18 @@ indexing
 deferred class EVENT_REGISTRANT_WITH_HISTORY inherit
 
 	EVENT_REGISTRANT
+		redefine
+			end_notification
+		end
 
 feature -- Initialization
 
 	make is
 		do
 			!!event_history.make
-			event_history.object_comparison
+			event_history.compare_objects
 			!!event_types.make
+			!!event_cache.make
 		end
 
 feature -- Status report
@@ -49,13 +53,21 @@ feature -- Basic operations
 
 	notify (e: TYPED_EVENT) is
 		do
-			perform_notify (e)
+			event_cache.extend (e)
 			event_history.extend (e)
+		end
+
+	end_notification is
+		do
+			if not event_cache.empty then
+				perform_notify (event_cache)
+				event_cache.wipe_out
+			end
 		end
 
 feature {NONE} -- Hook routines
 
-	perform_notify (e: TYPED_EVENT) is
+	perform_notify (elist: LIST [TYPED_EVENT]) is
 		deferred
 		end
 
@@ -63,6 +75,9 @@ feature {NONE} -- Implementation
 
 	event_history: LINKED_LIST [TYPED_EVENT]
 			-- All events received in the past
+
+	event_cache: LINKED_LIST [TYPED_EVENT]
+			-- Cache of events not yet dealt with
 
 invariant
 

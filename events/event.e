@@ -15,11 +15,6 @@ class EVENT inherit
 
 feature -- Access
 
-	ID: INTEGER
-			-- Unique identifier of the event
-			--!!!Is this ID needed?  Or can it be ID'd from the
-			--!!!time stamp or time stamp and name?
-
 	name: STRING
 			-- Name of the event
 
@@ -31,9 +26,7 @@ feature -- Access
 
 	out: STRING is
 		do
-			Result := clone (ID.out)
-			Result.extend (' ')
-			Result.append (name)
+			Result := clone (name)
 			Result.extend (' ')
 			Result.append (time_stamp.out)
 			Result.extend (' ')

@@ -24,4 +24,11 @@ feature -- Basic operations
 		deferred
 		end
 
+	end_notification is
+			-- In case the event notifications are being cached, send
+			-- a message that the there are no more events for the
+			-- current processing session.
+		do
+		end
+
 end -- class EVENT_REGISTRANT

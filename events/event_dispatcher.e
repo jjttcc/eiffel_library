@@ -73,6 +73,7 @@ feature -- Basic operations
 					empty_queue_action
 				end
 			end
+			cleanup
 		end
 
 feature {NONE} -- Hook methods
@@ -98,6 +99,20 @@ feature {NONE} -- Hook methods
 				if registrants.item.is_interested_in (e) then
 					registrants.item.notify (e)
 				end
+				registrants.forth
+			end
+		end
+
+	cleanup is
+			-- Perform any needed cleanup operations.
+			-- Default: Send end_notification messages to all registrants
+		do
+			from
+				registrants.start
+			until
+				registrants.exhausted
+			loop
+				registrants.item.end_notification
 				registrants.forth
 			end
 		end

@@ -11,7 +11,7 @@ class TYPED_EVENT inherit
 		export {ANY}
 			set_description
 		redefine
-			out
+			out, is_equal
 		end
 
 creation
@@ -41,6 +41,14 @@ feature -- Access
 			Result := Precursor
 			Result.extend (' ')
 			Result.append (type.out)
+		end
+
+feature -- Status report
+
+	is_equal (other: like Current): BOOLEAN is
+		do
+			Result := other.type = type and
+						other.time_stamp.is_equal (time_stamp)
 		end
 
 invariant
