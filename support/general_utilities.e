@@ -258,6 +258,9 @@ feature -- Logging
 feature -- Miscellaneous
 
 	microsleep (seconds, microseconds: INTEGER) is
+			-- Sleep for the specified number of `seconds' and `microseconds'.
+		require
+			less_than_one_millions: microseconds < 1000000
 		external
 			 "C"
 		end
