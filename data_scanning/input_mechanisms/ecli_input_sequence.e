@@ -19,7 +19,7 @@ feature -- Initialization
 
 	make (ts: ECLI_STATEMENT) is
 		require
-			ts_valid: ts /= Void and not ts.unattached
+			ts_valid: ts /= Void and not ts.is_closed
 		do
 			set_tuple_sequence (ts)
 		ensure
@@ -52,14 +52,14 @@ feature -- Status report
 
 	is_open: BOOLEAN is
 		do
-			Result := not tuple_sequence.unattached
+			Result := not tuple_sequence.is_closed
 		end
 
 feature -- Status setting
 
 	close is
 		do
-			tuple_sequence.release
+			tuple_sequence.close
 		end
 
 feature -- Cursor movement
