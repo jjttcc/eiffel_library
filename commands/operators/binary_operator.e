@@ -8,6 +8,18 @@ deferred class BINARY_OPERATOR
 inherit
 
 	NUMERIC_COMMAND
+		redefine
+			initialize
+		end
+
+feature -- Initialization
+
+	initialize (arg: ANY) is
+		do
+			check operand1 /= Void and operand2 /= Void end
+			operand1.initialize (arg)
+			operand2.initialize (arg)
+		end
 
 feature -- Access
 
@@ -17,7 +29,7 @@ feature -- Access
 	operand2: NUMERIC_COMMAND
 			-- the second operand to be operated on
 
-feature {TEST_FUNCTION_FACTORY} -- Export to test factory class for now.
+feature {TEST_FUNCTION_FACTORY, MARKET_FUNCTION} -- !!!Check export clause
 
 	set_operands (op1: NUMERIC_COMMAND; op2: NUMERIC_COMMAND) is
 			-- Set the operands to the specified values.
