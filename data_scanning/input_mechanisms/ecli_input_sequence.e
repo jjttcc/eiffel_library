@@ -79,6 +79,6 @@ feature {NONE} -- Implementation
 
 invariant
 
-	tuple_sequence /= Void
+	tuples_not_void: tuple_sequence /= Void
 
 end -- class ECLI_INPUT_SEQUENCE
