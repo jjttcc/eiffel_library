@@ -48,65 +48,6 @@ feature -- Access
 			-- Errors that occurred during scanning
 			-- errror_list.count = number of errors that occurred
 
-feature -- Basic operations
-
-	execute (arg: NONE) is
-			-- Scan input and create tuples from it.
-		local
-			tuple: ANY
-		do
-			if error_list = Void then
-				!!error_list.make
-			end
-			from
-				create_product
-				check product /= Void end
-				input_file.start
-			invariant
-				-- product.count = number_of_records_in (
-				--	input_file @ 1 .. input_file @ (input_file.index - 1))
-			variant
-				input_file.count - input_file.index
-			until
-				input_file.after
-			loop
-				from
-					tuple_maker.execute (Void)
-					tuple := tuple_maker.product
-					open_tuple (tuple)
-					product.extend (tuple)
-					value_setters.start
-					check not value_setters.after end
-					-- Set first field of tuple:
-					value_setters.item.set (input_file, tuple)
-					if value_setters.item.error_occurred then
-						error_list.extend (value_setters.item.last_error)
-					end
-					value_setters.forth
-				invariant
-					-- tuple.number_of_fields_set = value_setters.index - 1
-				variant
-					value_setters.count - value_setters.index
-				until
-					value_setters.after
-				loop
-					skip_field_separator
-					value_setters.item.set (input_file, tuple)
-					if value_setters.item.error_occurred then
-						error_list.extend (value_setters.item.last_error)
-					end
-					value_setters.forth
-				end
-				close_tuple (tuple)
-				skip_record_separator
-			end
-		ensure then
-			-- product.count = number of records in input_file
-			errlist_not_void: error_list /= Void
-		end
-
-feature -- Access
-
 	tuple_maker: FACTORY
 			-- Tuple manufacturer
 
@@ -178,6 +119,63 @@ feature -- Element change
 			input_file := arg
 		ensure
 			input_file_set: input_file = arg and input_file /= Void
+		end
+
+feature -- Basic operations
+
+	execute (arg: NONE) is
+			-- Scan input and create tuples from it.
+		local
+			tuple: ANY
+		do
+			if error_list = Void then
+				!!error_list.make
+			end
+			from
+				create_product
+				check product /= Void end
+				input_file.start
+			invariant
+				-- product.count = number_of_records_in (
+				--	input_file @ 1 .. input_file @ (input_file.index - 1))
+			variant
+				input_file.count - input_file.index
+			until
+				input_file.after
+			loop
+				from
+					tuple_maker.execute (Void)
+					tuple := tuple_maker.product
+					open_tuple (tuple)
+					product.extend (tuple)
+					value_setters.start
+					check not value_setters.after end
+					-- Set first field of tuple:
+					value_setters.item.set (input_file, tuple)
+					if value_setters.item.error_occurred then
+						error_list.extend (value_setters.item.last_error)
+					end
+					value_setters.forth
+				invariant
+					-- tuple.number_of_fields_set = value_setters.index - 1
+				variant
+					value_setters.count - value_setters.index
+				until
+					value_setters.after
+				loop
+					skip_field_separator
+					value_setters.item.set (input_file, tuple)
+					if value_setters.item.error_occurred then
+						error_list.extend (value_setters.item.last_error)
+					end
+					value_setters.forth
+				end
+				close_tuple (tuple)
+				skip_record_separator
+			end
+		ensure then
+			-- product.count = number of records in input_file
+			errlist_not_void: error_list /= Void
 		end
 
 feature {NONE} -- Hook methods
