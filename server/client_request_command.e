@@ -44,8 +44,12 @@ feature -- Basic operations
 			else
 				execution_retries := 0
 				prepare_for_execution (arg)
-				do_execute (arg)
-				do_post_processing (arg)
+				if do_execute_precondition then
+					do_execute (arg)
+					do_post_processing (arg)
+				else
+					failure_cleanup (arg)
+				end
 			end
 		rescue
 			handle_exception ("responding to client request")
@@ -73,9 +77,13 @@ feature {NONE} -- Hook routines
 		do
 		end
 
-	exception_cleanup (arg: ANY) is
-			-- Perform any needed cleanup after an exception has occurred.
+	exception_cleanup, failure_cleanup (arg: ANY) is
+			-- Perform any needed cleanup after an exception or failer
+			-- has occurred.
 		do
+			-- Default to null action - redefine as needed.
+			-- If these two routines need to do different things,
+			-- redefine them separately.
 		end
 
 	do_post_processing (arg: ANY) is
