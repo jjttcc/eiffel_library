@@ -46,6 +46,9 @@ feature -- Access
 	error_occurred: BOOLEAN
 			-- Did an error occur while processing options?
 
+	error_description: STRING
+			-- Description of error, if available
+
 feature -- Basic operations
 
 	print_usage is
