@@ -40,15 +40,12 @@ feature -- Basic operations
 			exception_occurred: BOOLEAN
 		do
 			if exception_occurred then
-				exception_cleanup
-				-- If `handle_exception' in the rescue clause didn't exit,
-				-- the exception was non-fatal.
-				warn_client (<<"Error occurred ", error_context (arg), ".">>)
+				exception_cleanup (arg)
 			else
 				execution_retries := 0
-				prepare_for_execution
+				prepare_for_execution (arg)
 				do_execute (arg)
-				do_post_processing
+				do_post_processing (arg)
 			end
 		rescue
 			handle_exception ("responding to client request")
@@ -70,28 +67,17 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
-	error_context (arg: ANY): STRING is
-			-- Context for the current error - redefine as appropriate.
-		do
-			Result := ""
-		end
-
-	warn_client (slist: ARRAY [STRING]) is
-			-- Report `slist' to the client as an error message.
-		deferred
-		end
-
-	prepare_for_execution is
+	prepare_for_execution (arg: ANY) is
 			-- Perform any needed preparation before `do_execute' is called.
 		do
 		end
 
-	exception_cleanup is
+	exception_cleanup (arg: ANY) is
 			-- Perform any needed cleanup after an exception has occurred.
 		do
 		end
 
-	do_post_processing is
+	do_post_processing (arg: ANY) is
 			-- Perform any needed processing after `do_execute' is called.
 		do
 		end
