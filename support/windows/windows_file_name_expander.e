@@ -1,23 +1,19 @@
 indexing
-	description: "Abstraction that provides file name expansion"
+	description: "File name expansion for Windows systems"
 	status: "Copyright 1998 - 2000: Jim Cochrane and others -%
 		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class FILE_NAME_EXPANDER inherit
+class WINDOWS_FILE_NAME_EXPANDER inherit
 
-creation
+	FILE_NAME_EXPANDER
 
-	make
+feature -- Basic operations
 
-feature -- Initialization
-
-	make (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
+	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
 			-- Expand all arguments that to not start with `option_sign'
 			-- and remove each expanded argument from `args'.
-		require
-			args /= Void
 		do
 			from
 				create {LINKED_LIST [STRING]} results.make
@@ -40,9 +36,9 @@ feature -- Initialization
 					args.forth
 				end
 			end
-		ensure
-			names_in_results: results /= Void
 		end
+
+feature {NONE} -- Implemetation
 
 	expand_file_names (s: STRING) is
 		local
@@ -50,7 +46,7 @@ feature -- Initialization
 			b : STRING
 			c : STRING
 		do
-			!!e
+			create e
 			b := clone(e.get("ComSpec"))
 			if b /= Void then
 				b.append(dir_cmd)
@@ -63,7 +59,7 @@ feature -- Initialization
 			local
 				f: PLAIN_TEXT_FILE
 		do
-			!!f.make(markets_file)
+			create f.make(markets_file)
 			if f.exists then
 				f.open_read
 				from
@@ -80,19 +76,11 @@ feature -- Initialization
 			end
 		end
 
-		markets_file: STRING is
-			"markets.mas"
+		markets_file: STRING is "markets.mas"
 
-		dir_cmd: STRING is
-			" /C DIR /B "
-				
-		pipe: STRING IS 
-			" > "
+		dir_cmd: STRING is " /C DIR /B "
+
+		pipe: STRING IS " > "
 
 
-feature -- Access
-
-	results: LIST [STRING]
-			-- Expanded file names
-
-end -- class FILE_NAME_EXPANDER
+end -- class WINDOWS_FILE_NAME_EXPANDER
