@@ -14,7 +14,14 @@ class INDEX_EXTRACTOR inherit
 
 	RESULT_COMMAND [REAL]
 		redefine
-			initialize
+			initialize, children
+		end
+
+	STATE_SET
+		rename
+			status as state_set_status, item as state_at
+		export
+			{NONE} all
 		end
 
 creation
@@ -49,18 +56,29 @@ feature -- Initialization
 			-- indexable's descendants is Current.  (INDEX_EXTRACTOR 
 			-- tends to be used such that it causes a cycle.)
 			if not initialized then
-				initialized := True
+				set_initialized (True)
 				cmd ?= indexable
 				if cmd /= Void then
 					cmd.initialize (arg)
 				end
-				initialized := False
+				set_initialized (False)
 			end
 		end
 
 feature -- Access
 
 	indexable: INDEXED
+
+	children: LIST [COMMAND] is
+		local
+			cmd: COMMAND
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			cmd ?= indexable
+			if cmd /= Void then
+				Result.extend (cmd)
+			end
+		end
 
 feature -- Status report
 
@@ -87,7 +105,24 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	initialized: BOOLEAN
+	initialized: BOOLEAN is
 			-- Implementation state to prevent infinite initialization cycle
+		do
+			Result := state_at (Initialized_state_index)
+		end
+
+	set_initialized (arg: BOOLEAN) is
+			-- Set `initialized' according to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			put (arg, Initialized_state_index)
+		ensure
+			initialized_set: initialized = arg and initialized /= Void
+		end
+
+feature {NONE} -- Implementation - constants
+
+	Initialized_state_index: INTEGER is 1
 
 end -- class INDEX_EXTRACTOR
