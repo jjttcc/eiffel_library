@@ -344,6 +344,32 @@ feature -- Text formatting
 			end
 		end
 
+feature -- Time/date utilities
+
+	now_date: DATE is
+			-- A new object with the current date
+		do
+			create Result.make_now
+		ensure
+			exists: Result /= Void
+		end
+
+	now_date_time: DATE_TIME is
+			-- A new object with the current date/time
+		do
+			create Result.make_now
+		ensure
+			exists: Result /= Void
+		end
+
+	now_time: TIME is
+			-- A new object with the current time
+		do
+			create Result.make_now
+		ensure
+			exists: Result /= Void
+		end
+
 feature -- Logging
 
 	log_error (msg: STRING) is
