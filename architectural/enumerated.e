@@ -13,7 +13,7 @@ deferred class ENUMERATED [G -> HASHABLE] inherit
 			out
 		end
 
-feature {NONE} -- Initialization
+feature {ENUMERATED} -- Initialization
 
 	make (value: G) is
 		require
@@ -32,14 +32,15 @@ feature {NONE} -- Initialization
 			item_set: item = value
 		end
 
-	new_instance (value: G): ENUMERATED [G] is
+feature {NONE} -- Initialization
+
+	new_instance (value: G): like Current is
 			-- A new instance of this 'ENUMERATED' with the specified `value'
-		require
-			valid_value: valid_value (value)
-		deferred
-		ensure
-			item_exists: Result.item /= Void
-			item_set: equal (Result.item, value)
+		do
+print ("new instance called for " + Current.generator + " with '" +
+value.out + "%N")
+			Result := clone (Current)
+			Result.make (value)
 		end
 
 feature -- Access
