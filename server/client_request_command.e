@@ -59,6 +59,8 @@ feature {NONE} -- Hook routines
 
 	do_execute (arg: ANY) is
 			-- Produce response from `arg'.
+		require
+			do_execute_precondition: do_execute_precondition
 		deferred
 		end
 
@@ -86,6 +88,12 @@ feature {NONE} -- Hook routines
 	do_post_processing is
 			-- Perform any needed processing after `do_execute' is called.
 		do
+		end
+
+	do_execute_precondition: BOOLEAN is
+			-- Precondition for `do_execute'
+		once
+			Result := True
 		end
 
 end -- class CLIENT_REQUEST_COMMAND
