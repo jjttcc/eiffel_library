@@ -15,7 +15,7 @@ class BOOLEAN_NUMERIC_CLIENT inherit
 
 	RESULT_COMMAND [REAL]
 		redefine
-			initialize
+			initialize, children
 		end
 
 creation
@@ -59,6 +59,14 @@ feature -- Access
 	false_cmd: RESULT_COMMAND [REAL]
 			-- Command that extracts the value to use if boolean_operator
 			-- evaluates as false
+
+	children: LIST [COMMAND] is
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			Result.extend (boolean_operator)
+			Result.extend (true_cmd)
+			Result.extend (false_cmd)
+		end
 
 feature -- Status report
 
