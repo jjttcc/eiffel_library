@@ -36,6 +36,7 @@ feature -- Initialization
 			value_setters := vs
 		ensure
 			set: input = in and tuple_maker = tm and value_setters = vs
+			start_input: start_input
 		end
 
 feature -- Access
@@ -70,6 +71,31 @@ feature -- Status report
 			Result := input /= Void and then input.readable
 		ensure then
 			Result = (input /= Void and then input.readable)
+		end
+
+	start_input: BOOLEAN is
+			-- Is 'input.start' to be called by `execute' before
+			-- scanning the data?
+		do
+			Result := not do_not_start_input_before_scanning
+		end
+
+feature -- Status setting
+
+	turn_start_input_off is
+			-- Set `start_input' to False.
+		do
+			do_not_start_input_before_scanning := True
+		ensure
+			not_start_input: not start_input
+		end
+
+	turn_start_input_on is
+			-- Set `start_input' to True.
+		do
+			do_not_start_input_before_scanning := False
+		ensure
+			start_input: start_input
 		end
 
 feature -- Element change
@@ -115,8 +141,8 @@ feature -- Element change
 feature -- Basic operations
 
 	execute is
-			-- Scan input and create tuples from it.
-			-- `input' must not be Void.
+			-- Scan input and create tuples from it.  If `start_input',
+			-- call 'input.start' before scanning.
 		do
 			if error_list = Void then
 				create error_list.make
@@ -124,8 +150,16 @@ feature -- Basic operations
 			from
 				create_product
 				check product /= Void end
--- !!!!Remove?: input.start
-print ("ds execute - input.record_index: " + input.record_index.out + "%N")
+				if start_input then
+					input.start
+print ("DS.execute called input.start%N")
+else
+print ("DS.execute did NOT call input.start%N")
+				end
+				check
+					input_valid: input /= Void and then
+					(input.readable or else input.after_last_record)
+				end
 				if
 					value_setters_used and
 					input.field_count /= value_setters.count
@@ -151,7 +185,6 @@ print ("ds execute - input.record_index: " + input.record_index.out + "%N")
 			if last_error_fatal then
 				handle_fatal_error
 			end
-print ("ending ds execute - input.record_index: " + input.record_index.out + "%N")
 		ensure then
 			-- product.count = number of records in input
 			errlist_not_void: error_list /= Void
@@ -334,6 +367,11 @@ feature {NONE}
 	discard_current_tuple: BOOLEAN
 			-- Should the current tuple be discarded due to incorrect or
 			-- corrupted data?
+
+feature {NONE} -- Implementation
+
+	do_not_start_input_before_scanning: BOOLEAN
+			-- Do not call input.start before calling scanner.execute?
 
 feature {NONE} -- Implementation constants
 
