@@ -225,6 +225,10 @@ feature -- Access
 			Result.fill_blank
 		end
 
+	input_device, output_device: IO_MEDIUM
+			-- Input/output media to which all input will be sent and
+			-- from which output will be received, respectively
+
 feature -- Input
 
 	read_integer is
@@ -445,10 +449,6 @@ feature {NONE} -- Implementation - Hook methods
 		end
 
 feature {NONE} -- Implementation
-
-	input_device, output_device: IO_MEDIUM
-			-- Input/output media to which all input will be sent and
-			-- from which output will be received, respectively
 
 	last_integer: INTEGER
 			-- Last integer input with `read_integer'
