@@ -58,8 +58,6 @@ feature -- Basic operations
 			-- If `newlines' a new line is printed after each element.
 		require
 			not_void: l /= Void
-		local
-			i: INTEGER
 		do
 			from
 				l.start
