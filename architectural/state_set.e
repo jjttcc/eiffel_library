@@ -23,7 +23,6 @@ feature -- Access
 		local
 			x: INTEGER
 		do
---			Result := bits.bit_test (i)
 			Result := x.one.bit_shift_left (i - 1) & bits /= 0
 		end
 
@@ -41,8 +40,6 @@ feature -- Access
 			else
 				bits := bits & x.bit_not
 			end
-print ("bits is : " + bits.out + "%N")
-print ("status is : " + status + "%N")
 		end
 
 	status: STRING is
