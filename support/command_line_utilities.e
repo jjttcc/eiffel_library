@@ -487,13 +487,14 @@ feature {NONE} -- Implementation - date-related routines
 			from
 				read_line
 			until
-				last_string.empty or Result.date_valid (last_string)
+				last_string.empty or Result.date_valid (
+					last_string, Result.date_default_format_string)
 			loop
 				print_list (<<"Date format invalid, try again: ", eom>>)
 				read_line
 			end
 			if not last_string.empty then
-				!!Result.make_from_string (last_string)
+				!!Result.make_from_string_default (last_string)
 			end
 			print_list (<<"Using date of ", Result, ".%N">>)
 		end
