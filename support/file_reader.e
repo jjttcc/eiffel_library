@@ -29,7 +29,7 @@ feature
 feature -- Access
 
 	item: STRING
-			-- Current tokenized field
+			-- Current field
 
 	contents: STRING is
 			-- Contents of the entire file
@@ -91,18 +91,18 @@ feature -- Cursor movement
 
 feature -- Basic operations
 
-	tokenize (field_separator: STRING) is
-			-- Tokenize the file contents based on `field_separator'.
+	tokenize (separator: STRING) is
+			-- Tokenize the file contents based on `separator'.
 		do
 			if contents /= Void then
-				if field_separator.is_equal ("%N") then
+				if separator.is_equal ("%N") then
 					-- Tokenizing a file with DOS carriage returns and with
-					-- a newline as the field separator will not work, so
+					-- a newline as the separator will not work, so
 					-- remove the DOS carriage returns.
 					contents.prune_all ('%R')
 				end
 				su.set_target (contents)
-				tokens := su.tokens (field_separator)
+				tokens := su.tokens (separator)
 				tokens.start
 				item := tokens.item
 			end
@@ -114,8 +114,10 @@ feature {NONE}
 
 	su: expanded STRING_UTILITIES
 
-	tokens: LIST [STRING]
+	tokens: DYNAMIC_LIST [STRING]
 
 	file_contents: STRING
+
+invariant
 
 end

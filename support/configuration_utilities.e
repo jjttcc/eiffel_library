@@ -21,14 +21,16 @@ feature -- Initialization
 			-- If an error occurs reading the file, all query values
 			-- will be empty strings.
 		do
-			initialize_settings_table
+			file_reader := new_file_reader
+			initialize
 			process_configuration_file
 		end
 
 feature {NONE} -- Implementation - Hook routines
 
-	initialize_settings_table is
-			-- Initialize the `settings' table
+	initialize is
+			-- Initialize the `settings' table and any other items needing
+			-- initialization.
 		deferred
 		ensure
 			settings_created: settings /= Void
@@ -55,7 +57,7 @@ feature {NONE} -- Implementation - Hook routines
 		deferred
 		end
 
-	configuration_file_name: STRING is
+	new_file_reader: FILE_READER is
 		deferred
 		end
 
@@ -125,13 +127,7 @@ feature {NONE} -- Implementation
 			Result := '\'
 		end
 
-	settings: HASH_TABLE [STRING, STRING]
-
-	current_line: INTEGER
-
-	su: expanded STRING_UTILITIES
-
-	current_tokens (file_reader: FILE_READER): LIST [STRING] is
+	current_tokens: LIST [STRING] is
 			-- Tokens for the current "line" of `file_reader'
 		local
 			s: STRING
@@ -156,10 +152,8 @@ feature {NONE} -- Implementation
 	process_configuration_file is
 		local
 			tokens: LIST [STRING]
-			file_reader: FILE_READER
 			key_token, value_token, errmsg: STRING
 		do
-			create file_reader.make (configuration_file_name)
 			file_reader.tokenize (Record_separator)
 			if not file_reader.error then
 				from
@@ -171,7 +165,7 @@ feature {NONE} -- Implementation
 						not (file_reader.item.count = 0 or else
 							file_reader.item @ 1 = comment_character)
 					then
-						tokens := current_tokens (file_reader)
+						tokens := current_tokens
 						if tokens.count >= 2 then
 							key_token := tokens @ key_index
 							value_token := tokens @ value_index
@@ -249,8 +243,19 @@ feature {NONE} -- Implementation
 			end
 		end
 
+feature {NONE} -- Implementation - attributes
+
+	settings: HASH_TABLE [STRING, STRING]
+
+	current_line: INTEGER
+
+	su: expanded STRING_UTILITIES
+
+	file_reader: FILE_READER
+
 invariant
 
 	settings_initialized: settings /= Void
+	file_reader_initialized: file_reader /= Void
 
 end
