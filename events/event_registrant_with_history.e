@@ -17,8 +17,6 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-			!!event_history.make
-			event_history.compare_objects
 			!LINKED_SET [EVENT_TYPE]!event_types.make
 			!!event_cache.make
 			load_history
@@ -85,6 +83,8 @@ feature {NONE} -- Hook routines
 	load_history is
 			-- Load the `event_history' from persistent store.
 		deferred
+		ensure
+			eh_not_void: event_history /= Void
 		end
 
 feature {NONE} -- Implementation
