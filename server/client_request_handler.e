@@ -16,7 +16,9 @@ feature -- Basic operations
 		local
 			cmd: CLIENT_REQUEST_COMMAND
 		do
-			request_id := Void; command_argument := Void
+			if initialization_needed then
+				request_id := Void; command_argument := Void
+			end
 			process_request
 			if handle_logout_separately and is_logout_request (request_id) then
 				handle_logout
@@ -63,7 +65,8 @@ feature {NONE} -- Hook routines
 			-- it to set `request_id', `command_argument', and, if
 			-- `sessions_used', `session'.
 		require
-			components_unset: request_id = -1 and command_argument = Void
+			components_initialized_if_needed: initialization_needed implies
+				request_id = Void and command_argument = Void
 		deferred
 		ensure
 			reqid_legal: not is_logout_request (request_id) implies
@@ -75,6 +78,12 @@ feature {NONE} -- Hook routines
 		end
 
 	handle_logout_separately: BOOLEAN is
+		once
+			Result := True
+		end
+
+	initialization_needed: BOOLEAN is
+			-- Is initialization needed before calling `process_request'?
 		once
 			Result := True
 		end
