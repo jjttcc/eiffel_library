@@ -6,9 +6,12 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class 
+deferred class COMMAND inherit
 
-	COMMAND
+	TREE_NODE
+		redefine
+			name, alternate_status_tag, status_contents
+		end
 
 feature -- Initialization
 
@@ -25,24 +28,8 @@ feature -- Access
 	children: LIST [COMMAND] is
 			-- This command's children, if this is a composite command
 		do
+			-- Empty by default - redefine if needed.
 			create {LINKED_LIST [COMMAND]} Result.make
-		ensure
-			not_void: Result /= Void
-		end
-
-	descendants: LIST [COMMAND] is
-			-- All of this command's descendants, if this is a composite
-			-- command - children, children's children, etc.
-		local
-			l: LIST [COMMAND]
-		do
-			create {LINKED_LIST [COMMAND]} Result.make
-			l := children
-			from l.start until l.exhausted loop
-				Result.extend (l.item)
-				Result.append (l.item.descendants)
-				l.forth
-			end
 		ensure
 			not_void: Result /= Void
 		end
@@ -143,6 +130,18 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	name_implementation: STRING
+
+feature {NONE} -- Implementation - Hook routine implementations
+
+	alternate_status_tag: STRING is
+		do
+			Result := Current.generator + ": "
+		end
+
+	status_contents: STRING is
+		do
+			Result := "[no value]"
+		end
 
 invariant
 

@@ -9,10 +9,20 @@ indexing
 deferred class RESULT_COMMAND [G] inherit
 
 	COMMAND
+		redefine
+			status_contents
+		end
 
 feature -- Access
 
 	value: G
 			-- The result of execution
+
+feature {NONE} -- Implementation - Hook routine implementations
+
+	status_contents: STRING is
+		do
+			Result := "value: " + value.out
+		end
 
 end -- class RESULT_COMMAND
