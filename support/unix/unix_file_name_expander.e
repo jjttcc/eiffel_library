@@ -1,23 +1,17 @@
 indexing
-	description: "Abstraction that provides file name expansion"
+	description: "File name expansion for UNIX systems"
 	status: "Copyright 1998 - 2000: Jim Cochrane and others -%
 		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class FILE_NAME_EXPANDER inherit
+class UNIX_FILE_NAME_EXPANDER inherit
 
-creation
+	FILE_NAME_EXPANDER
 
-	make
+feature -- Basic operations
 
-feature -- Initialization
-
-	make (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
-			-- Expand all arguments that to not start with `option_sign'
-			-- and remove each expanded argument from `args'.
-		require
-			args /= Void
+	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
 		do
 			from
 				create {LINKED_LIST [STRING]} results.make
@@ -32,13 +26,6 @@ feature -- Initialization
 					args.forth
 				end
 			end
-		ensure
-			names_in_results: results /= Void
 		end
 
-feature -- Access
-
-	results: LIST [STRING]
-			-- Expanded file names
-
-end -- class FILE_NAME_EXPANDER
+end -- class UNIX_FILE_NAME_EXPANDER
