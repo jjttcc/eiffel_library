@@ -34,11 +34,7 @@ feature {NONE} -- Basic operations
 	operate (v: REAL) is
 			-- Null action by default
 		do
-			if v < 0 then
-				value := -v
-			else
-				value := v
-			end
+			value := v.abs
 		end
 
 end -- class ABSOLUTE_VALUE
