@@ -298,8 +298,4 @@ feature {NONE} -- Implementation
 			end
 		end
 
-invariant
-
-	exists_and_is_open_read: exists and not is_closed implies is_open_read
-
 end
