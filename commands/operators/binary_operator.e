@@ -28,6 +28,7 @@ feature {TEST_FUNCTION_FACTORY} -- Export to test factory class for now.
 		    operand2 := op2
 		ensure
 			are_set: operand1 = op1 and operand2 = op2
+			not_void: operand1 /= Void and operand2 /= Void
 		end
 
 end -- class BINARY_OPERATOR
