@@ -15,7 +15,7 @@ feature -- Access
 	state_count: INTEGER is 32
 			-- Total number of states
 
-	item, infix "@" (i: INTEGER): BOOLEAN is
+	state_at (i: INTEGER): BOOLEAN is
 			-- The state at position `i'
 		require
 			index_large_enough: i >= 1
@@ -26,7 +26,7 @@ feature -- Access
 			Result := x.one.bit_shift_left (i - 1) & bits /= 0
 		end
 
-	put (value: BOOLEAN; i: INTEGER) is
+	put_state (value: BOOLEAN; i: INTEGER) is
 			-- Set the `i'th bit: 1 if `value' = True, 0 if `value' = False.
 		require
 			index_large_enough: i >= 1
@@ -42,11 +42,11 @@ feature -- Access
 			end
 		end
 
-	status: STRING is
+	state_set_status: STRING is
 			-- Report of all states as a string ordered from right to left,
 			-- where 0 represents false and 1 represents True - e.g.:
-			-- "00000000000000000000000000001010" shows item (2) and
-			-- item (4) as True and the rest as False.
+			-- "00000000000000000000000000001010" shows state_at (2) and
+			-- state_at (4) as True and the rest as False.
 		local
 			i: INTEGER
 		do
@@ -56,7 +56,7 @@ feature -- Access
 			until
 				i > state_count
 			loop
-				if item (i) then
+				if state_at (i) then
 					Result.put ('1', state_count - i + 1)
 				end
 				i := i + 1
