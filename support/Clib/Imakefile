@@ -11,5 +11,5 @@ AllTarget ($(LIB))
 $(LIB): $(OBJS)
 
 all:: $(OBJS)
-	mv $(OBJS) ../../lib
+	cp $(OBJS) ../../lib
 

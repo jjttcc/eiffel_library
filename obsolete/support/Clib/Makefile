@@ -655,7 +655,7 @@ all:: $(LIB)
 $(LIB): $(OBJS)
 
 all:: $(OBJS)
-	mv $(OBJS) ../../lib
+	cp $(OBJS) ../../lib
 
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit
