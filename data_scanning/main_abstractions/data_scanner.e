@@ -122,6 +122,10 @@ feature -- Access
 	input_file: FILE
 			-- Input file or stream
 
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is false
+
 feature -- Element change
 
 	set_tuple_maker (arg: FACTORY) is

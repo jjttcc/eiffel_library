@@ -12,7 +12,9 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class VALUE_SETTER inherit
+deferred class
+
+	VALUE_SETTER
 
 feature {FACTORY} -- Basic operations
 
