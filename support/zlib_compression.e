@@ -97,13 +97,15 @@ feature {NONE} -- Implementation
 			else
 				product_count := buffcount
 			end
-			print ("Compression took ");
-			print (timer.elapsed_time.fine_seconds_count); print ("%N")
-			print ("target size: ");
-			print (target.count)
-			print (", product size: ");
-			print (product_count)
-			print ("%N");
+			debug ("compression")
+				print ("Compression took ");
+				print (timer.elapsed_time.fine_seconds_count); print ("%N")
+				print ("target size: ");
+				print (target.count)
+				print (", product size: ");
+				print (product_count)
+				print ("%N");
+			end
 		end
 
 	product_implementation: STRING
