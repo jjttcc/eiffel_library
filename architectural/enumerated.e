@@ -170,5 +170,6 @@ invariant
 	item_valid: valid_value (item)
 	name_set_object_comparison: name_set.object_comparison
 	allowable_values_exist: allowable_values /= Void
+	map_exists: value_name_map /= Void
 
 end
