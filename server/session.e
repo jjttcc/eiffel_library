@@ -20,4 +20,16 @@ feature -- Access
 		deferred
 		end
 
+feature -- Status report
+
+	logged_in: BOOLEAN is
+			-- Is the session still in progress?
+		do
+			Result := logoff_date = Void
+		end
+
+invariant
+
+	logged_in_constraint: logged_in = (logoff_date = Void)
+
 end -- class SESSION
