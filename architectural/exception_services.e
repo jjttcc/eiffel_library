@@ -127,13 +127,8 @@ feature -- Basic operations
 	fatal_exception (e: INTEGER): BOOLEAN is
 			-- Is `e' an exception that is considered fatal?
 		do
-			Result := true
-			if
-				e = external_exception or e = floating_point_exception or
-				e = routine_failure
-			then
-				Result := false
-			end
+			Result := exception_list.has (e) and not (e = External_exception
+				or e = Floating_point_exception or e = Routine_failure)
 		end
 
 feature {NONE} -- Implementation
@@ -226,11 +221,14 @@ feature {NONE} -- Implementation
 				end
 			end
 			if not last_exception_status.description.is_empty then
-				if Result /= Void and not Result.is_empty then
+				if
+					Result /= Void and not Result.is_empty and
+					exception_list.has (exception)
+				then
 					Result := last_exception_status.description +
 						" - " + Result
 				else
-					Result := last_exception_status.description
+					Result := last_exception_status.description + "%N"
 				end
 			end
 		end
@@ -239,6 +237,19 @@ feature {NONE} -- Implementation
 		do
 			log_error (error_information ("Assertion violation", true))
 			exit (Error_exit_status)
+		end
+
+	exception_list: ARRAY [INTEGER] is
+			-- List of all known exception types
+		once
+			Result := <<Void_call_target, No_more_memory, Precondition,
+				Postcondition, Floating_point_exception, Class_invariant,
+				Check_instruction, Routine_failure, Incorrect_inspect_value,
+				Loop_variant, Loop_invariant, Signal_exception,
+				Rescue_exception, External_exception,
+				Void_assigned_to_expanded, Io_exception,
+				Operating_system_exception, Retrieve_exception,
+				Developer_exception, Runtime_io_exception, Com_exception>>
 		end
 
 end -- EXCEPTION_SERVICES
