@@ -61,7 +61,9 @@ feature {NONE} -- Implementation
 			timer: TIMER
 			buffer: TO_SPECIAL [CHARACTER]
 		do
-			create timer.make
+			debug ("compression")
+				create timer.make
+			end
 			product_implementation := Void
 			buffcount := (target.count + target.count * .0015 + 25).ceiling
 			create buffer.make_area (buffcount)
