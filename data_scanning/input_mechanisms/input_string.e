@@ -64,8 +64,8 @@ feature {NONE} -- Initialization
 				splitter.set_target (records.item)
 				fields := splitter.tokens (field_separator)
 				if fields.count /= field_count then
-					append_error ("Wrong field count at record " +
-						records.index.out + " - skipping current record%N")
+					make_error ("Wrong field count at record " +
+						records.index.out + " - skipping current record")
 				else
 					contents.extend (fields)
 				end
@@ -133,11 +133,15 @@ feature -- Cursor movement
 
 	advance_to_next_field is
 		do
+			last_error_fatal := False
+			error_occurred := False
 			contents.item.forth
 		end
 
 	advance_to_next_record is
 		do
+			last_error_fatal := False
+			error_occurred := False
 			contents.forth
 			if not contents.exhausted then
 				contents.item.start
@@ -183,7 +187,7 @@ feature -- Input
 			if not contents.item.item.is_empty then
 				last_character := contents.item.item @ 1
 			else
-				append_error ("Empty character field value")
+				make_error ("Empty character field value%N")
 			end
 		end
 
@@ -196,7 +200,7 @@ feature -- Input
 			if s.is_integer then
 				last_integer := s.to_integer
 			else
-				append_error ("Invalid field value - integer expected, %
+				make_error ("Invalid field value - integer expected, %
 					%got: " + s + "%N")
 			end
 		end
@@ -210,7 +214,7 @@ feature -- Input
 			if s.is_real then
 				last_real := s.to_real
 			else
-				append_error ("Invalid field value - real expected, %
+				make_error ("Invalid field value - real expected, %
 					%got: " + s + "%N")
 			end
 		end
@@ -224,7 +228,7 @@ feature -- Input
 			if s.is_double then
 				last_double := s.to_double
 			else
-				append_error ("Invalid field value - double expected, %
+				make_error ("Invalid field value - double expected, %
 					%got: " + s + "%N")
 			end
 		end
@@ -241,11 +245,12 @@ feature -- Input
 				ymd := splitter.tokens (date_field_separator)
 			end
 			if ymd = Void then
-				append_error ("Empty date field")
+				make_error ("Empty date field%N")
 			elseif ymd.count /= 3 then
-				append_error ("Wrong number of sub-fields in date %
-					%field: " + ymd.count.out + "%NUsing default %
-					%setting of current date%N")
+				make_error ("Wrong number of sub-fields in date %
+					%field (" + contents.item.item +
+					"): " + ymd.count.out + "%NUsing default %
+					%date setting%N")
 				create last_date.make_by_days (0)
 			else
 				if
@@ -261,10 +266,10 @@ feature -- Input
 					then
 						create last_date.make (y, m, d)
 					else
-						append_error ("Incorrect date field")
+						make_error ("Incorrect date field")
 					end
 				else
-					append_error ("Date field has illegal non-integer value")
+					make_error ("Date field has illegal non-integer value")
 				end
 			end
 		end
@@ -276,14 +281,13 @@ feature {NONE} -- Implementation
 			create Result.make_now
 		end
 
-	append_error (s: STRING) is
+	make_error (s: STRING) is
 			-- Append `s' to end of `error_string'.
 		do
-			if error_string = Void then
 				create error_string.make (0)
-			end
-			error_string.append (s + "%N" + index_info)
+			error_string.append (s +  index_info + "%N")
 			error_occurred := True
+--print ("make_error called - es: <" + error_string + ">%N")
 		ensure
 			error_occurred: error_occurred
 			error_string_exists: error_string /= Void
