@@ -1,7 +1,7 @@
 indexing
 	description: "Equal-to operator.  Returns true if the absolute value of %
 	%the difference of the two operands is less than epsilon."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

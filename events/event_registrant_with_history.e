@@ -2,7 +2,7 @@ indexing
 	description:
 		"An event registrant that keeps a record of past events received %
 		%and that keeps track of what types of events it is interested in"
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,6 +1,6 @@
 indexing
 	description: "STRING manipulation utility routines";
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

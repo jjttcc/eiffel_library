@@ -2,7 +2,7 @@ indexing
 	description:
 		"Event dispatcher - accepts event registrants and dispatches events %
 		%from an event queue to all registrants."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

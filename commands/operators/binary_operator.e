@@ -3,7 +3,7 @@ indexing
 		"Abstraction for a command that operates on two operands.  G is the %
 		%type of the 'value' query and H is the type of the 'value' query %
 		%for the two operands."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

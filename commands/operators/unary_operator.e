@@ -3,7 +3,7 @@ indexing
 		"A RESULT_COMMAND that takes an operand (also of type RESULT_COMMAND) %
 		%and operates on its result.  G is the type of the 'value' feature %
 		%and H is the type of the operand's 'value' feature."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
