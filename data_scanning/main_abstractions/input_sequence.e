@@ -1,24 +1,14 @@
 indexing
 
 	description:
-		"A readable (and read-only), iterable sequence of CHARACTERs";
+		"A read-only sequence of CHARACTERs";
 	status: "Copyright 1999 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
 deferred class INPUT_SEQUENCE inherit
 
-	BILINEAR [CHARACTER]
-		export {NONE}
-			has, index_of, search, occurrences, linear_representation, item
-		end
-
 feature -- Access
-
-	name: STRING is
-			-- Name of the sequence
-		deferred
-		end
 
 	last_character: CHARACTER is
 			-- Last character read by `read_character'
@@ -43,24 +33,22 @@ feature -- Access
 	error_string: STRING
 			-- Description of last error
 
+	name: STRING is
+			-- Name of the sequence
+		deferred
+		end
+
 feature -- Status report
 
 	error_occurred: BOOLEAN
 			-- Did an error occur in the last operation?
-
-feature -- Measurement
-
-	count: INTEGER is
-			-- Number of items
-		deferred
-		end
 
 feature -- Status report
 
 	readable: BOOLEAN is
 			-- Is there a current item that may be read?
 		deferred
-		end;
+		end
 
 feature -- Input
 
@@ -70,7 +58,7 @@ feature -- Input
 		require
 			is_readable: readable
 		deferred
-		end;
+		end
 
 	read_double is
 			-- Read a new double.
@@ -78,7 +66,7 @@ feature -- Input
 		require
 			is_readable: readable
 		deferred
-		end;
+		end
 
 	read_character is
 			-- Read a new character.
@@ -86,7 +74,7 @@ feature -- Input
 		require
 			is_readable: readable
 		deferred
-		end;
+		end
 
 	read_integer is
 			-- Read a new integer.
@@ -94,24 +82,6 @@ feature -- Input
 		require
 			is_readable: readable
 		deferred
-		end;
-
-feature -- Basic operations
-
-	advance_to_next_record is
-			-- Advance the cursor to the next record.
-		deferred
-		end
-
-	advance_to_next_field is
-			-- Advance the cursor to the next field.
-		deferred
-		end
-
-feature {NONE} -- Inapplicable
-
-	item: CHARACTER is
-		do
 		end
 
 end -- class INPUT_SEQUENCE
