@@ -122,10 +122,14 @@ feature -- Basic operations
 			-- Exit the application with the specified status.  If `no_cleanup'
 			-- is false, call `termination_cleanup'.
 		do
-			if status /= 0 then
-				log_information ("Aborting the " + application_name + ".%N")
-			else
-				log_information ("Terminating the " + application_name + ".%N")
+			if verbose_reporting then
+				if status /= 0 then
+					log_information ("Aborting the " +
+						application_name + ".%N")
+				else
+					log_information ("Terminating the " +
+						application_name + ".%N")
+				end
 			end
 			if not no_cleanup then
 				debug ("persist")
