@@ -16,7 +16,7 @@ feature -- Basic operations
 			-- and remove each expanded argument from `args'.
 		do
 			from
-				create {LINKED_LIST [STRING]} results.make
+				create {ARRAYED_LIST [STRING]} results.make (args.count)
 				args.start
 			until
 				args.exhausted
@@ -69,7 +69,7 @@ feature {NONE} -- Implemetation
 				loop
 					f.read_line
 					if not f.end_of_file then
-						results.extend(clone(f.last_string))
+						results.extend (clone (f.last_string))
 					end
 				end
 				f.close

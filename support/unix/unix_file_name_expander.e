@@ -14,7 +14,7 @@ feature -- Basic operations
 	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
 		do
 			from
-				create {LINKED_LIST [STRING]} results.make
+				create {ARRAYED_LIST [STRING]} results.make (args.count)
 				args.start
 			until
 				args.exhausted
