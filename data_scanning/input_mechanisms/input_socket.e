@@ -19,6 +19,8 @@ class INPUT_SOCKET inherit
 			{NONE} all
 		undefine
 			read_integer, read_real, read_double, read_line, readline
+		redefine
+			make_client_by_port
 		end
 
 	INPUT_MEDIUM
@@ -30,16 +32,14 @@ class INPUT_SOCKET inherit
 
 creation
 
-	make_with_connection_tool
+	make_client_by_port
 
 feature -- Initialization
 
-	make_with_connection_tool (port_num: INTEGER; host: STRING;
-		connection: like communication_tool) is
+	make_client_by_port (port_num: INTEGER; host: STRING) is
 			-- Create the socket with `port_num', `host', and `connection'.
 		do
-			make_client_by_port (port_num, host)
-			communication_tool := connection
+			Precursor (port_num, host)
 			current_record := Void
 			field_separator := " "
 		end
@@ -72,9 +72,5 @@ feature {NONE} -- Hook routine implementations
 		do
 			Result := current_record = Void
 		end
-
-feature {NONE} -- Implementation
-
-	communication_tool: INPUT_DATA_CONNECTION
 
 end

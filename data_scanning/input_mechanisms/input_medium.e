@@ -242,23 +242,14 @@ feature {NONE} -- Implementation
 		require
 			not_at_end: not after_last_record
 		do
-print (generating_type + ": split currec" + "%N")
-print ("a - am I readable?: " + readable.out + "%N")
 			if readable then
-print ("b" + "%N")
 				read_line
-print ("c" + "%N")
 				current_record := last_string.split (field_separator @ 1)
-print ("d" + "%N")
 			else
-print ("e" + "%N")
 				error_occurred := True
 				error_string := medium_not_readable_msg
 print ("OH-OH!!!: " + error_string + "%N")
 			end
-print ("f" + "%N")
-print ("curr rec, field 1: " + current_record @ 1 + "%N")
-print (generating_type + ": split currec ended" + "%N")
 		ensure
 			current_record_exists: current_record /= Void
 		end
