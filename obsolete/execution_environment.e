@@ -1,5 +1,4 @@
 indexing
-x
 	description: "Work-around for ISE Eiffel 4.4 bug"
 	date: "$Date$"
 
