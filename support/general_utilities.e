@@ -10,7 +10,7 @@ class
 
 	GENERAL_UTILITIES
 
-feature -- Basic operations
+feature -- String manipulation
 
 	concatenation (a: ARRAY [ANY]): STRING is
 			-- A string containing a concatenation of all elements of `a'
@@ -33,6 +33,24 @@ feature -- Basic operations
 		ensure
 			not_void: Result /= Void
 		end
+
+	replace_token_all (target, token, new_value: STRING;
+		start_delimiter, end_delimiter: CHARACTER) is
+			-- Replace in `target' all occurrences of
+			-- `start_delimiter' + `token' + `end_delimiter'
+			-- with `new_value'.
+		require
+			args_exist: target /= Void and token /= Void and new_value /= Void
+		local
+			replacement: STRING
+		do
+			replacement := clone (token)
+			replacement.prepend_character (start_delimiter)
+			replacement.append_character (end_delimiter)
+			target.replace_substring_all (replacement, new_value)
+		end
+
+feature -- Logging
 
 	print_list (l: ARRAY [ANY]) is
 			-- Print all members of `l'.
@@ -72,16 +90,6 @@ feature -- Basic operations
 			end
 		end
 
-	deep_copy_list (target, source: LIST [ANY]) is
-			-- Do a deep copy from `source' to `target' - work-around
-			-- for apparent bug in LINKED_LIST's deep_copy.
-		local
-			temp: like target
-		do
-			temp := deep_clone (source)
-			target.copy (temp)
-		end
-
 	log_error (msg: STRING) is
 			-- Log `msg' as an error.
 		require
@@ -115,6 +123,18 @@ feature -- Basic operations
 			not_void: msg /= Void
 		do
 			io.print (msg)
+		end
+
+feature -- Miscellaneous
+
+	deep_copy_list (target, source: LIST [ANY]) is
+			-- Do a deep copy from `source' to `target' - work-around
+			-- for apparent bug in LINKED_LIST's deep_copy.
+		local
+			temp: like target
+		do
+			temp := deep_clone (source)
+			target.copy (temp)
 		end
 
 	check_objects (a: ARRAY [ANY]; descriptions: ARRAY [STRING];

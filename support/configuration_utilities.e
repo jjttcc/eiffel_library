@@ -196,24 +196,6 @@ feature {NONE} -- Implementation
 			check_results
 		end
 
-feature {NONE} -- Implementation - utilities
-
-	replace_token_all (target, token, new_value: STRING;
-		start_delimiter, end_delimiter: CHARACTER) is
-			-- Replace in `target' all occurrences of
-			-- `start_delimiter' + `token' + `end_delimiter'
-			-- with `new_value'.
-		require
-			args_exist: target /= Void and token /= Void and new_value /= Void
-		local
-			replacement: STRING
-		do
-			replacement := clone (token)
-			replacement.prepend_character (start_delimiter)
-			replacement.append_character (end_delimiter)
-			target.replace_substring_all (replacement, new_value)
-		end
-
 invariant
 
 	settings_initialized: settings /= Void
