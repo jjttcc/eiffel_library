@@ -67,9 +67,11 @@ feature -- Basic operations
 feature {NONE} -- Hook routines
 
 	operate (v1, v2: H) is
+		require
+			not_void: v1 /= Void and v2 /= Void
 		deferred
 		ensure
-			value /= Void
+			value_not_void: value /= Void
 		end
 
 end -- class BINARY_OPERATOR
