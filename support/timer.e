@@ -37,8 +37,9 @@ feature -- Access
 			-- Amount of time that has elapsed since `start' was called.
 		do
 			Result := current_time.duration - start_time.duration
+			-- DATE_TIME_DURATION requires origin to be set.
 			Result.set_origin_date_time (
-				create {DATE_TIME}.make_by_date (create {DATE}.make (0, 1, 1)))
+				create {DATE_TIME}.make_by_date (create {DATE}.make (1, 1, 1)))
 		end
 
 feature -- Basic operations
