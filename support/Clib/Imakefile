@@ -1,0 +1,7 @@
+INCLUDES = -I.
+
+SRCS = mas_utilities.c
+
+OBJS = mas_utilities.o
+
+AllTarget ($(OBJS))
