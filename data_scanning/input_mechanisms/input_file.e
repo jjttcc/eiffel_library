@@ -55,10 +55,8 @@ feature -- Access
 			check
 				readable: readable
 			end
-print ("fldcnt - saved pos: " + saved_position.out + "%N")
 			from
 				s := ""
---!!!! Remove?: start
 			until
 				end_of_record
 			loop
@@ -83,15 +81,11 @@ print ("fldcnt - saved pos: " + saved_position.out + "%N")
 					end
 				end
 			end
-print ("fldcnt - pos: " + position.out + "%N")
 			go (saved_position)
-print ("fldcnt - pos (after go): " + position.out + "%N")
 			if not s.is_empty then
-print ("fldcnt - s: " + s + "%N")
 				su.set_target (s)
 				Result := su.tokens (field_separator).count
 			end
-print ("fldcnt - Result: " + Result.out + "%N")
 		end
 
 feature -- Status report
@@ -102,21 +96,6 @@ feature -- Status report
 		end
 
 	last_error_fatal: BOOLEAN
-
---Remove:
--- !!!Not sure if this ns needed.
-	all_field_counts_valid: BOOLEAN is
-			-- Are all field counts valid?
-		do
-			from
-				Result := True
-			until
-				not Result or else after_last_record
-			loop
---				Result := field_count /= expected_field_count
-				advance_to_next_record
-			end
-		end
 
 feature -- Cursor movement
 
