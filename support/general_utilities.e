@@ -34,7 +34,7 @@ feature -- String manipulation
 			not_void: Result /= Void
 		end
 
-	list_concatenation (l: LIST [ANY]; suffix: STRING): STRING is
+	list_concatenation (l: LINEAR [ANY]; suffix: STRING): STRING is
 			-- A string containing a concatenation of all elements of `l',
 			-- with `suffix', if it is not empty, appended to each element
 		require
@@ -54,6 +54,37 @@ feature -- String manipulation
 			loop
 				if l.item /= Void then
 					Result.append (l.item.out + s)
+				end
+				l.forth
+			end
+		ensure
+			not_void: Result /= Void
+			empty_if_empty: l.is_empty implies Result.is_empty
+		end
+
+	field_concatenation (l: LINEAR [ANY]; separator: STRING): STRING is
+			-- A string containing a concatenation of all elements of `l'
+			-- interpreted as fields - that is, with `separator' appended
+			-- to the first to next-to-last elements of `l'
+		require
+			not_void: l /= Void and separator /= Void
+		local
+			s: STRING
+		do
+			from
+				Result := ""
+				s := separator
+				l.start
+				if not l.exhausted then
+					Result := Result + l.item.out
+					l.forth
+				end
+			until
+				l.exhausted
+			loop
+				Result := Result + s
+				if l.item /= Void then
+					Result := Result + l.item.out
 				end
 				l.forth
 			end
