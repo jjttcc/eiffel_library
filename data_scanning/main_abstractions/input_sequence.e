@@ -69,7 +69,7 @@ feature -- Status report
 
 feature -- Input
 
-	read_real, readreal is
+	read_real is
 			-- Read a new real.
 			-- Make result available in `last_real'.
 		require
@@ -77,7 +77,7 @@ feature -- Input
 		deferred
 		end;
 
-	read_double, readdouble is
+	read_double is
 			-- Read a new double.
 			-- Make result available in `last_double'.
 		require
@@ -85,7 +85,7 @@ feature -- Input
 		deferred
 		end;
 
-	read_character, readchar is
+	read_character is
 			-- Read a new character.
 			-- Make result available in `last_character'.
 		require
@@ -93,7 +93,7 @@ feature -- Input
 		deferred
 		end;
 
-	read_integer, readint is
+	read_integer is
 			-- Read a new integer.
 			-- Make result available in `last_integer'.
 		require
@@ -101,7 +101,7 @@ feature -- Input
 		deferred
 		end;
 
-	read_stream, readstream (nb_char: INTEGER) is
+	read_stream (nb_char: INTEGER) is
 			-- Read a string of at most `nb_char' bound characters
 			-- or until end of medium is encountered.
 			-- Make result available in `last_string'.
@@ -110,7 +110,7 @@ feature -- Input
 		deferred
 		end;
 
-	read_line, readline is
+	read_line is
 			-- Read characters until a new line or
 			-- end of medium.
 			-- Make result available in `last_string'.
