@@ -56,17 +56,17 @@ feature -- Access
 	error_description: STRING
 			-- Description of error, if available
 
+	usage: STRING is
+			-- Message: how to invoke the program from the command-line
+		deferred
+		end
+
 feature -- Basic operations
 
 	print_usage is
 			-- Print `usage' message.
 		do
 			print (usage)
-		end
-
-	usage: STRING is
-			-- Message: how to invoke the program from the command-line
-		deferred
 		end
 
 	check_for_invalid_flags is
