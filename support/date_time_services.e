@@ -329,7 +329,7 @@ feature -- Access
 			-- specified by `f1', `f2', and `f3', separated by `fs'.  If
 			-- `fs' is empty, no field separator is used.
 		require
-			fields_y_m_or_d:
+			fields_h_m_or_s:
 				(f1 = 'h' or f1 = 'm' or f1 = 's') and
 				(f2 = 'h' or f2 = 'm' or f2 = 's') and
 				(f3 = 'h' or f3 = 'm' or f3 = 's')
