@@ -66,12 +66,22 @@ feature {NONE} -- Implementation
 
 	contents: LINKED_LIST [STRING]
 
+	Help_character: CHARACTER is
+		once
+			Result := 'h'
+		end
+
+	Question_mark: CHARACTER is '?'
+
 	set_help is
 		do
-			if option_in_contents ('h') then
+			if option_in_contents (Help_character) then
 				help := true
 				contents.remove
-			elseif option_in_contents ('?') then
+			elseif
+				Help_character /= Question_mark and
+				option_in_contents (Question_mark)
+			then
 					help := true
 					contents.remove
 			end
