@@ -1,7 +1,9 @@
 indexing
 	description: "Executable SQL commands"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 2004: Jim Cochrane"
 
 deferred class SQL_COMMAND [G] inherit
 

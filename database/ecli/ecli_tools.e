@@ -1,7 +1,9 @@
 indexing
 	description: "ECLI/database tools"
+	author: "Jim Cochrane"
 	date: "$Date$"
 	revision: "$Revision$"
+	licensing: "Copyright 2004: Jim Cochrane"
 
 deferred class ECLI_TOOLS inherit
 

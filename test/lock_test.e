@@ -1,5 +1,9 @@
 indexing
 	description: "Test of file locking";
+	author: "Jim Cochrane"
+	date: "$Date$"
+	revision: "$Revision$"
+	licensing: "Copyright 2004: Jim Cochrane"
 
 class LOCK_TEST inherit
 
