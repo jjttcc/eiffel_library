@@ -3,9 +3,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class BINARY_OPERATOR
-
-inherit
+deferred class BINARY_OPERATOR inherit
 
 	NUMERIC_COMMAND
 		redefine
@@ -51,6 +49,8 @@ feature {TEST_FUNCTION_FACTORY, MARKET_FUNCTION} -- !!!Check export clause
 			-- Set the operands to the specified values.
 		require
 			not_void: op1 /= Void and op2 /= Void
+			ops_ready_to_execute:
+				op1.execute_precondition and op2.execute_precondition
 		do
 		    operand1 := op1
 		    operand2 := op2
