@@ -51,6 +51,27 @@ feature -- Basic operations
 			end
 		end
 
+	print_actual_list (l: LIST [ANY]; newlines: BOOLEAN) is
+			-- Print all members of `l'.
+			-- If `newlines' a new line is printed after each element.
+		require
+			not_void: l /= Void
+		local
+			i: INTEGER
+		do
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item /= Void then
+					print (l.item)
+					if newlines then print ("%N") end
+				end
+				l.forth
+			end
+		end
+
 	log_error (msg: STRING) is
 			-- Log `msg' as an error.
 		require
