@@ -32,6 +32,16 @@ feature {NONE} -- Initialization
 			item_set: item = value
 		end
 
+	new_instance (value: G): ENUMERATED [G] is
+			-- A new instance of this 'ENUMERATED' with the specified `value'
+		require
+			valid_value: valid_value (value)
+		deferred
+		ensure
+			item_exists: Result.item /= Void
+			item_set: equal (Result.item, value)
+		end
+
 feature -- Access
 
 	item: G is
@@ -54,6 +64,26 @@ feature -- Access
 		do
 			Result := value_name_map.linear_representation
 			Result.compare_objects
+		end
+
+	all_members: LINKED_SET [ENUMERATED [G]] is
+			-- All members of the set of allowed values for this enumeration
+		local
+			values: LINKED_SET [G]
+		do
+			values := value_set
+			create Result.make
+			from
+				values.start
+			until
+				values.exhausted
+			loop
+				Result.extend (new_instance (values.item))
+				values.forth
+			end
+		ensure
+			exists: Result /= Void
+			valid_count: Result.count = value_set.count
 		end
 
 	out: STRING is

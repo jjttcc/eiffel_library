@@ -222,6 +222,39 @@ feature {NONE} -- Access
 			end
 		end
 
+	character_enumeration_selection (msg: STRING;
+		members: SET [ENUMERATED [CHARACTER]]): ENUMERATED [CHARACTER] is
+			-- User-selected character-based enumeration selection, from
+			-- `members' - User will be prompted, with `msg', for a
+			-- selection until he makes a valid choice.
+		local
+			c: CHARACTER
+			l: LINEAR [ENUMERATED [CHARACTER]]
+		do
+			l := members.linear_representation
+			from
+			until
+				Result /= Void
+			loop
+				from
+					c := character_selection (msg)
+					l.start
+				until
+					Result /= Void or else l.exhausted
+				loop
+					if l.item.item = c then
+						Result := l.item
+					end
+					l.forth
+				end
+				if Result = Void then
+					print ("%NInvalid selection%N")
+				end
+			end
+		ensure
+			selection_is_valid: Result /= Void
+		end
+
 	input_device, output_device: IO_MEDIUM
 			-- Input/output media to which all input will be sent and
 			-- from which output will be received, respectively
