@@ -115,7 +115,10 @@ feature -- Basic operations
 				create_product
 				check product /= Void end
 				input.start
-				if input.field_count /= value_setters.count then
+				if
+					value_setters_used and
+					input.field_count /= value_setters.count
+				then
 					last_error_fatal := True
 					error_in_current_tuple := True
 					error_list.extend (Wrong_field_count_message)
@@ -197,6 +200,13 @@ feature {NONE} -- Hook methods
 		ensure
 			--one_more: product.count = old product.count + 1 or
 			--		discard_current_tuple
+		end
+
+	value_setters_used: BOOLEAN is
+			-- Is `value_setters' used?  (Will be true if `make_tuple' is
+			-- not redefined.)
+		once
+			Result := True	-- Redefine if they are not used.
 		end
 
 	open_tuple (t: ANY) is
@@ -323,8 +333,9 @@ feature {NONE} -- Implementation constants
 
 invariant
 
-	properties_not_void:
-		tuple_maker /= Void and value_setters /= Void
-	value_setters_not_empty: not value_setters.is_empty
+	properties_not_void: tuple_maker /= Void and
+		value_setters_used implies value_setters /= Void
+	value_setters_not_empty_if_used: value_setters_used implies
+		not value_setters.is_empty
 
 end -- class DATA_SCANNER
