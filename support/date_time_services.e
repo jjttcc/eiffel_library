@@ -68,4 +68,31 @@ feature -- Access
 			end
 		end
 
+feature -- Status report
+
+	hour_valid (h: INTEGER): BOOLEAN is
+			-- Is `h' a valid hour?
+		do
+			Result := h >= 0 and h < work_time.hours_in_day
+		end
+
+	minute_valid (m: INTEGER): BOOLEAN is
+			-- Is `m' a valid minute?
+		do
+			Result := m >= 0 and m < work_time.minutes_in_hour
+		end
+
+	second_valid (s: INTEGER): BOOLEAN is
+			-- Is `s' a valid second?
+		do
+			Result := s >= 0 and s < work_time.seconds_in_minute
+		end
+
+feature  {NONE} -- Implementation
+
+	work_time: TIME is
+		once
+			create Result.make (0, 0, 0)
+		end
+
 end -- class DATE_TIME_SERVICES
