@@ -76,15 +76,15 @@ feature {NONE} -- Implementation - Hook routines
 
 	handle_file_read_error (msg: STRING) is
 			-- Handle failure to read the configuration file - defaults
-			-- to throwing and exception - redefine if needed.
+			-- to outputting `msg' and aborting - redefine if needed.
 		require
 			msg_exists: msg /= Void
 		local
-			gs: expanded EXCEPTION_SERVICES
+			ex_srv: expanded EXCEPTION_SERVICES
 			ex: expanded EXCEPTIONS
 		do
-			gs.last_exception_status.set_fatal (True)
-			ex.raise (msg)
+			ex_srv.last_exception_status.set_fatal (True)
+			ex_srv.handle_exception (msg)
 		end
 
 	use_customized_setting (key, value: STRING): BOOLEAN is
@@ -201,7 +201,7 @@ feature {NONE} -- Implementation
 			else
 				errmsg := "Fatal error reading " + configuration_type +
 					" configuration file:%N" + file_reader.error_string + "%N"
-				log_error (errmsg)
+				-- Log the error and, if appropriate, abort:
 				handle_file_read_error (errmsg)
 			end
 			post_process_settings
