@@ -66,6 +66,23 @@ feature -- Access
 		deferred
 		end
 
+	assertion_report: STRING is
+			-- Report: Are assertions on or off?
+		local
+			assertions_on: BOOLEAN
+		do
+			if not assertions_on then
+				Result := "Assertion checking is disabled."
+				-- Trick to determine if assertions are on:
+				violate_precondition
+			else
+				Result := "Assertion checking is enabled."
+			end
+		rescue
+			assertions_on := True
+			retry
+		end
+
 feature {NONE} -- Implementation
 
 	months: TABLE [STRING, INTEGER] is
@@ -76,6 +93,13 @@ feature {NONE} -- Implementation
 					"May", "June", "July", "August",
 					"September", "October", "November", "December">>
 			Result := r
+		end
+
+	violate_precondition is
+			-- Tool for checking if assertions are on
+		require
+			impossible: false
+		do
 		end
 
 end -- class PRODUCT_INFO

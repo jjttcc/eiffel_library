@@ -32,7 +32,8 @@ feature -- Initialization
 				command_line_options.print_usage
 			elseif command_line_options.version_request then
 				print_list (<<version.name, ", Version ", version.number, ", ",
-					version.informal_date, "%N">>)
+					version.informal_date, "%N",
+					version.assertion_report, "%N">>)
 			elseif configuration_error then
 				log_errors (<<"Error occurred during initialization:%N",
 					config_error_description, ".%N">>)
