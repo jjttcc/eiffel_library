@@ -128,9 +128,9 @@ feature -- Input
 			-- any non-digits are included in the input, last_integer is
 			-- set to 0.
 		do
-			io_device.read_line
-			if io_device.last_string.is_integer then
-				last_integer := io_device.last_string.to_integer
+			input_device.read_line
+			if input_device.last_string.is_integer then
+				last_integer := input_device.last_string.to_integer
 			else
 				last_integer := 0
 			end
@@ -142,9 +142,9 @@ feature -- Input
 			-- entered characters do not make up a real value, last_real is
 			-- set to 0.
 		do
-			io_device.read_line
-			if io_device.last_string.is_real then
-				last_real := io_device.last_string.to_real
+			input_device.read_line
+			if input_device.last_string.is_real then
+				last_real := input_device.last_string.to_real
 			else
 				last_real := 0
 			end
@@ -153,8 +153,8 @@ feature -- Input
 	read_line is
 			-- Input a string and place it in `last_string'.
 		do
-			io_device.read_line
-			last_string := io_device.last_string
+			input_device.read_line
+			last_string := input_device.last_string
 		end
 
 feature -- Miscellaneous
@@ -332,14 +332,24 @@ feature -- Miscellaneous
 
 feature -- Status setting
 
-	set_io_device (arg: IO_MEDIUM) is
-			-- Set io_device to `arg'.
+	set_input_device (arg: IO_MEDIUM) is
+			-- Set input_device to `arg'.
 		require
 			arg_not_void: arg /= Void
 		do
-			io_device := arg
+			input_device := arg
 		ensure
-			io_device_set: io_device = arg and io_device /= Void
+			input_device_set: input_device = arg and input_device /= Void
+		end
+
+	set_output_device (arg: IO_MEDIUM) is
+			-- Set output_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			output_device := arg
+		ensure
+			output_device_set: output_device = arg and output_device /= Void
 		end
 
 feature {NONE} -- Implementation - Hook methods
@@ -353,9 +363,9 @@ feature {NONE} -- Implementation - Hook methods
 
 feature {NONE} -- Implementation
 
-	io_device: IO_MEDIUM
-			-- Input/output medium to which all input will be sent and
-			-- from which output will be received
+	input_device, output_device: IO_MEDIUM
+			-- Input/output media to which all input will be sent and
+			-- from which output will be received, respectively
 
 	last_integer: INTEGER
 			-- Last integer input with `read_integer'
@@ -368,10 +378,10 @@ feature {NONE} -- Implementation
 
 	print (o: GENERAL) is
 			-- Redefinition of output method inherited from GENERAL to
-			-- send output to io_device
+			-- send output to output_device
 		do
 			if o /= Void then
-				io_device.put_string (o.out)
+				output_device.put_string (o.out)
 			end
 		end
 
@@ -383,8 +393,8 @@ feature {NONE} -- Implementation
 			stream_socket: STREAM_SOCKET
 		do
 			if eot_cache = Void then
-				file ?= io_device
-				stream_socket ?= io_device
+				file ?= input_device
+				stream_socket ?= input_device
 				if file /= Void then
 					eot_cache := ""
 				elseif stream_socket /= Void then
@@ -400,6 +410,6 @@ feature {NONE} -- Implementation
 
 invariant
 
-	io_not_void: io_device /= Void
+	io_not_void: input_device /= Void
 
 end -- class COMMAND_LINE_UTILITIES
