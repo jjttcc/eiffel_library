@@ -103,6 +103,12 @@ feature -- Status report
 		deferred
 		end
 
+	is_editable: BOOLEAN is
+			-- Is Current editable - that is, does it have one or more
+			-- parameters that can be changed?
+		do
+		end
+
 feature -- Element change
 
 	set_name (arg: STRING) is
@@ -122,6 +128,14 @@ feature -- Basic operations
 		require
 			arg_not_void_if_mandatory: arg_mandatory implies arg /= Void
 		deferred
+		end
+
+	prepare_for_editing (editor: ANY) is
+			-- Prepare editor for editing Current.
+		require
+			editable: is_editable
+		do
+			-- Default to null action - Redefine if needed.
 		end
 
 feature {NONE} -- Implementation
