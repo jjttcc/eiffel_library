@@ -30,7 +30,7 @@ class COMMAND_LINE_UTILITIES [G] inherit
 			print
 		end
 
-	SERVER_PROTOCOL
+	NETWORK_PROTOCOL
 		rename
 			eom as network_eom
 		export
