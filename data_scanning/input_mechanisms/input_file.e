@@ -46,7 +46,7 @@ feature -- Access
 			saved_position: INTEGER
 			s: STRING
 			end_of_record: BOOLEAN
-			su: STRING_UTILITIES
+			su: expanded STRING_UTILITIES
 		do
 			saved_position := position
 			from
@@ -77,7 +77,7 @@ feature -- Access
 			end
 			go (saved_position)
 			if not s.empty then
-				create su.make (s)
+				su.set_target (s)
 				Result := su.tokens (field_separator).count
 			end
 		end
