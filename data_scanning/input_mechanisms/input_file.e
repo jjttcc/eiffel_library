@@ -6,15 +6,19 @@ indexing
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
+--!!!REminders: record_separator is no longer needed ...
 class INPUT_FILE inherit
 
 	PLAIN_TEXT_FILE
+		rename
+			make as file_make, make_create_read_write as
+				file_make_create_read_write
 		export
 			{NONE} all
 			{ANY} close, after, exists, open_read, is_closed, date, count,
 			position, is_open_read
 		redefine
-			start
+			start ,read_integer ,read_real ,read_double
 		end
 
 	INPUT_RECORD_SEQUENCE
@@ -28,7 +32,24 @@ class INPUT_FILE inherit
 
 creation
 
-	make_open_read, make_create_read_write, make_open_read_write, make
+	make, make_create_read_write
+
+feature -- Initialization
+
+--	make (fn, field_sep: STRING) is
+	make (fn: STRING) is
+		require
+--			args_exist: fn /= Void and field_sep /= Void
+--			one_character_field_separator: field_sep.count = 1
+		do
+			make_open_read (fn)
+--			field_separator := clone (field_sep)
+		end
+
+	make_create_read_write (fn: STRING) is
+		do
+			file_make_create_read_write (fn)
+		end
 
 feature -- Access
 
@@ -40,57 +61,29 @@ feature -- Access
 	record_separator: STRING
 			-- Record separator used in `advance_to_next_record'
 
-	field_index: INTEGER
+	field_index: INTEGER is
+		do
+			if current_record /= Void then
+				Result := current_record.index
+			end
+		end
 
 	record_index: INTEGER
 
 	field_count: INTEGER is
 		local
-			saved_position, fcount: INTEGER
+			fcount: INTEGER
 			s: STRING
 			end_of_record: BOOLEAN
 			su: expanded STRING_UTILITIES
 		do
-			saved_position := position
 			check
 				readable: readable
 			end
-			from
-				s := ""
-			until
-				end_of_record
-			loop
-				read_character
-				if last_character = record_separator @ 1 then
-					if record_separator.count = 1 then
-						end_of_record := True
-					else
-						end_of_record := current_string_matches (
-						record_separator.substring(2, record_separator.count))
-						if not end_of_record then
-							back
-							read_character
-						end
-					end
-				end
-				if not end_of_record then
-					if after then
-						end_of_record := True
-					else
-						s.extend (last_character)
-					end
-				end
+			if current_record = Void then
+				split_current_record
 			end
-			go (saved_position)
-			if not s.is_empty then
-				su.set_target (s)
-				fcount := su.tokens (field_separator).count
-				if field_index = 0 or else fcount = field_index then
-					Result := fcount
-				else
-					Result := fcount + field_index - 1
-				end
-			end
+			Result := current_record.count
 		end
 
 feature -- Status report
@@ -104,40 +97,15 @@ feature -- Cursor movement
 	advance_to_next_field is
 			-- Advance the cursor to the next field.
 			-- Set error_occurred and error_string if an error is encountered.
-		local
-			i: INTEGER
 		do
 			last_error_fatal := False
 			error_occurred := False
-			from
-				i := 1
-			variant
-				field_separator.count + 1 - i
-			until
-				i > field_separator.count
-			loop
-				-- If field_separator @ i is a tab or space, it will have
-				-- been eaten in the last read_x call (idiosyncracy of an
-				-- PLAIN_TEXT_FILE).  If it's something else, then the
-				-- character still needs to be eaten.
-				if
-					not (field_separator @ i = '%T' or
-						field_separator @ i = ' ')
-				then
-					read_character
-					if
-						last_character /= field_separator @ i
-					then
-						error_occurred := True
-						error_string := "Incorrect field separator %
-							%character detected: '"
-						error_string.extend (last_character)
-						error_string.append ("'.")
-					end
-				end
-				i := i + 1
+			if not current_record.exhausted then
+				current_record.forth
+			else
+				error_occurred := True
+				error_string := too_few_fields_msg
 			end
-			field_index := field_index + 1
 		end
 
 	advance_to_next_record is
@@ -148,52 +116,39 @@ feature -- Cursor movement
 		do
 			last_error_fatal := False
 			error_occurred := False
-			from
-				i := 1
-			variant
-				record_separator.count + 1 - i
-			until
-				i > record_separator.count or last_error_fatal
-			loop
-				-- If record_separator @ i is a tab or space or newline,
-				-- it will have been eaten in the last read_x call.  If it's
-				-- something else, then the character still needs to be eaten.
-				if
-					not is_tab_space_or_newline (record_separator @ i)
-				then
-					read_character
-					if
-						last_character /= record_separator @ i
-					then
-						error_occurred := True
-						last_error_fatal := True
-						error_string := "Incorrect record separator %
-							%character detected: '"
-						error_string.extend (last_character)
-						error_string.append ("'.")
-					end
-				end
-				i := i + 1
-			end
-			field_index := 1
 			record_index := record_index + 1
-			-- If just before the end-of-file, force EOF.
-			if not end_of_file then
-				check
-					is_readable: readable
-				end
-				read_character
-				check
-					not_closed_or_empty: count > 0 and not is_closed
-				end
-				if not end_of_file then
-					back
-				else
+if record_index >= 1999 then
+	print ("ri: " + record_index.out + "%N")
+end
+			if not off then
+				split_current_record
+				current_record.start
+				if current_record.count <= 1 then
 					after_last_record := True
 				end
 			else
 				after_last_record := True
 			end
+			--!!!!set after_last_record
+debug ("old code")
+-- If just before the end-of-file, force EOF.
+if not end_of_file then
+	check
+		is_readable: readable
+	end
+	read_character
+	check
+		not_closed_or_empty: count > 0 and not is_closed
+	end
+	if not end_of_file then
+		back
+	else
+		after_last_record := True
+	end
+else
+	after_last_record := True
+end
+end -- debug
 		end
 
 	discard_current_record is
@@ -201,12 +156,10 @@ feature -- Cursor movement
 			first_rsep_char: CHARACTER
 			last_character_was_record_separator: BOOLEAN
 		do
+print ("discard current record called" + "%N")
 			first_rsep_char := record_separator @ 1
---!!!:print ("scr, before back - position: " + position.out + "%N")
 			if
---!!!!:				not before and not (field_index = 1) and
---!!!Note: suggested bug fix - if it works, formalize it:
-position > 0 and not (field_index = 1) and
+				not before and not (field_index = 1) and
 				is_tab_space_or_newline (first_rsep_char)
 			then
 				back
@@ -243,26 +196,36 @@ position > 0 and not (field_index = 1) and
 	start is
 		do
 			Precursor
-			field_index := 1
 			record_index := 1
 			after_last_record := count = 0
+			if not after_last_record then
+				split_current_record
+				current_record.start
+			end
+		ensure then
+			indexes_set_to_1: not after_last_record implies
+				field_index = 1 and record_index = 1
 		end
 
 	position_cursor (p: INTEGER) is
 			-- Move the file cursor to the absolute position `p' and
-			-- initialize `' and `' to 1.
+			-- initialize `field_index' and `record_index' to 1.
 			-- (The first cursor position is 0.)
 		require
 			is_open: not is_closed
 			p_valid: p >= 0 and p < count
 		do
 			go (p)
-			field_index := 1
 			record_index := 1
 			after_last_record := count = position
+			if not after_last_record then
+				split_current_record
+				current_record.start
+			end
 		ensure
 			position_set: position = p
-			indexes_set_to_1: field_index = 1 and record_index = 1
+			indexes_set_to_1: not after_last_record implies
+				field_index = 1 and record_index = 1
 		end
 
 feature -- Element change
@@ -291,25 +254,57 @@ feature -- Element change
 
 feature -- Input
 
+	read_integer is
+		do
+			if not current_record.exhausted then
+				if current_record.item.is_integer then
+					last_integer := current_record.item.to_integer
+				else
+					error_occurred := True
+					error_string := non_integer_msg
+				end
+			else
+				error_occurred := True
+				error_string := too_few_fields_msg
+			end
+		end
+
+	read_real is
+		do
+			if not current_record.exhausted then
+				if current_record.item.is_real then
+					last_real := current_record.item.to_real
+				else
+					error_occurred := True
+					error_string := non_real_msg
+				end
+			else
+				error_occurred := True
+				error_string := too_few_fields_msg
+			end
+		end
+
+	read_double is
+		do
+			if not current_record.exhausted then
+				if current_record.item.is_double then
+					last_double := current_record.item.to_double
+				else
+					error_occurred := True
+					error_string := non_real_msg
+				end
+			else
+				error_occurred := True
+				error_string := too_few_fields_msg
+			end
+		end
+
 	read_string is
 		do
-			create last_string.make (0)
-			from
-				read_character
-			until
-				last_character = field_separator @ 1 or
-				last_character = record_separator @ 1 or end_of_file
-			loop
-				last_string.extend (last_character)
-				read_character
-			end
-			if
-				not (last_character = record_separator @ 1) or else
-				not is_tab_space_or_newline (record_separator @ 1)
-				-- Don't move back if record_separator is a tab, space,
-				-- or newline and last_character = record_separator @ 1.
-			then
-				back
+			if not current_record.exhausted then
+				last_string := current_record.item
+			else
+				create last_string.make (0)
 			end
 		end
 
@@ -320,6 +315,21 @@ feature -- Input
 
 feature {NONE} -- Implementation
 
+	current_record: LIST [STRING]
+			-- The record (line) currently being parsed
+
+	split_current_record is
+			-- Scan the current line (data record) and split the result into
+			-- `current_record'.
+		require
+			not_at_end: not after_last_record
+		do
+			read_line
+			current_record := last_string.split (field_separator @ 1)
+		ensure
+			current_record_exists: current_record /= Void
+		end
+
 	is_tab_space_or_newline (c: CHARACTER): BOOLEAN is
 			-- Is `c' a tab, space, or newline character?
 		do
@@ -329,10 +339,10 @@ feature {NONE} -- Implementation
 	current_string_matches (s: STRING): BOOLEAN is
 			-- Does the string at the current cursor match `s'?
 		local
-			saved_position, i: INTEGER
+			i: INTEGER
 		do
 			if readable then
-				saved_position := position
+				save_position
 				Result := True
 				from i := 1 until
 					i = s.count + 1 or
@@ -347,12 +357,57 @@ feature {NONE} -- Implementation
 				if Result and after then
 					Result := i = s.count + 1
 				end
-				go (saved_position)
+				restore_position (0)
 			end
+		end
+
+	save_position is
+		do
+			saved_position := position
+		end
+
+	restore_position (offset: INTEGER) is
+			-- Restore `position' to `saved_position' + offset
+		do
+			file_go (file_pointer, saved_position + offset)
+		end
+
+	saved_position: INTEGER
+
+feature {NONE} -- Implementation - error messages
+
+	incorrect_field_separator_msg: STRING is "Incorrect field separator %
+		%character detected"
+
+	incorrect_record_separator_msg: STRING is "Incorrect record separator %
+		%character detected"
+
+	too_few_fields_msg: STRING is
+		do
+			Result := "Not enough fields in record # " + record_index.out +
+				": " + current_record.count.out
+		end
+
+	non_real_msg: STRING is
+		require
+			current_field_exists: current_record /= Void and then
+				not current_record.exhausted
+		do
+			Result := "Real value expected, got" + current_record.item
+		end
+
+	non_integer_msg: STRING is
+		require
+			current_field_exists: current_record /= Void and then
+				not current_record.exhausted
+		do
+			Result := "Integer value expected, got" + current_record.item
 		end
 
 invariant
 
 	exists_and_is_open_read: exists and not is_closed implies is_open_read
+	one_character_field_separator: field_separator /= Void and then
+		field_separator.count = 1
 
 end -- INPUT_FILE
