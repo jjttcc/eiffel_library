@@ -23,6 +23,8 @@ feature -- Basic operations
 				args.exhausted
 			loop
 				if not (args.item.item (1) = option_sign) then
+					-- If a UNIX-style separator was used, convert to Windows.
+					args.item.replace_substring_all ("/", "\")
 					if (args.item.has ('*')) then
 						--file names haven't been expanded, do it
 						-- "manually". MSWindows specific.
@@ -43,23 +45,43 @@ feature {NONE} -- Implemetation
 
 	expand_file_names (s: STRING) is
 		local
-			e : EXECUTION_ENVIRONMENT
-			b : STRING
+			e: expanded EXECUTION_ENVIRONMENT
+			o: expanded OPERATING_ENVIRONMENT
+			b, file_glob, previous_dir: STRING
+			last_sep: INTEGER
 		do
-			create e
 			b := clone(e.get("ComSpec"))
 			if b /= Void then
+				if s.has (o.directory_separator) then
+					-- Separate out the directory part of `s', place it
+					-- in `working_directory', place the remainder of
+					-- `s' into file_glob, and cd to `working_directory'.
+					previous_dir := e.current_working_directory
+					last_sep := s.last_index_of (o.directory_separator,
+						s.count)
+					working_directory := s.substring (1, last_sep)
+					file_glob := s.substring (last_sep + 1, s.count)
+					e.change_working_directory (working_directory)
+					work_file.prepend (
+						previous_dir + o.directory_separator.out)
+				else
+					file_glob := s
+				end
 				b.append(dir_cmd)
-				b.append(clone(s))
+				b.append(clone(file_glob))
 				b.append(output_redirect)
 				b.append(work_file)
 				e.system(b)
+				if previous_dir /= Void then
+					e.change_working_directory (previous_dir)
+				end
 			end
 		end
 
 	read_file_names is
 		local
 			f: PLAIN_TEXT_FILE
+			fname: STRING
 		do
 			create f.make(work_file)
 			if f.exists then
@@ -73,14 +95,23 @@ feature {NONE} -- Implemetation
 				loop
 					f.read_line
 					if not f.end_of_file then
-						results.extend (clone (f.last_string))
+						fname := clone (f.last_string)
+						if working_directory /= Void then
+							fname := working_directory + fname
+						end
+						results.extend (fname)
 					end
 				end
 				f.close
 			end
+			if f.exists then
+				f.delete
+			end
 		end
 
-	work_file: STRING is "files.7z4"
+	work_file: STRING is "files.mas-tmp-expand"
+
+	working_directory: STRING
 
 	dir_cmd: STRING is " /C DIR /B "
 
