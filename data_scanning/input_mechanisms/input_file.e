@@ -16,7 +16,7 @@ class INPUT_FILE inherit
 		rename
 			index as position
 		undefine
-			off
+			off, item
 		end
 
 creation
