@@ -24,6 +24,10 @@ feature -- Access
 		deferred
 		end
 
+	field_count: INTEGER is
+			-- Number of fields per record
+		deferred
+		end
 
 feature -- Status report
 
@@ -59,6 +63,7 @@ feature -- Cursor movement
 			-- Advance the cursor to the next field.
 		require
 			not_after: not after_last_record
+			field_index_valid: field_index <= field_count
 		deferred
 		ensure
 			field_index_incremented: field_index = old field_index + 1
