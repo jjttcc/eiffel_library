@@ -90,6 +90,12 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
+	error: INTEGER is
+			-- Response code for sending error-status notification
+			-- to the client
+		deferred
+		end
+
 	eom: STRING is
 			-- End of message indicator
 		deferred
