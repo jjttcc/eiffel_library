@@ -72,6 +72,16 @@ feature -- Basic operations
 			end
 		end
 
+	deep_copy_list (target, source: LIST [ANY]) is
+			-- Do a deep copy from `source' to `target' - work-around
+			-- for apparent bug in LINKED_LIST's deep_copy.
+		local
+			temp: like target
+		do
+			temp := deep_clone (source)
+			target.copy (temp)
+		end
+
 	log_error (msg: STRING) is
 			-- Log `msg' as an error.
 		require
@@ -131,8 +141,7 @@ feature -- Basic operations
 			until
 				i = a.upper + 1
 			loop
-				--!!!When ready, change eval to item.
-				if not ok.eval ([a @ i]) then
+				if not ok.item ([a @ i]) then
 					invalid_items.extend (descriptions @ i)
 				end
 				i := i + 1
