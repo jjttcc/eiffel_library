@@ -6,13 +6,13 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class FACTORY inherit
+deferred class
 
-	COMMAND
+	FACTORY
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute is
 			-- Produce a result, stored in `product'.
 		deferred
 		ensure then
@@ -25,7 +25,5 @@ feature -- Access
 			-- The object manufactured by calling execute
 		deferred
 		end
-
-feature -- Status report
 
 end -- class FACTORY

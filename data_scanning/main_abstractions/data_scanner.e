@@ -64,10 +64,6 @@ feature -- Access
 	input_file: FILE
 			-- Input file or stream
 
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is false
-
 feature -- Element change
 
 	set_tuple_maker (arg: FACTORY) is
@@ -124,7 +120,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute (arg: NONE) is
+	execute is
 			-- Scan input and create tuples from it.
 		local
 			tuple: ANY
@@ -145,7 +141,7 @@ feature -- Basic operations
 				input_file.after
 			loop
 				from
-					tuple_maker.execute (Void)
+					tuple_maker.execute
 					tuple := tuple_maker.product
 					open_tuple (tuple)
 					product.extend (tuple)
