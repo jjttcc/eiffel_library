@@ -133,7 +133,9 @@ feature {NONE} -- Implementation
 			s: STRING
 		do
 			from
-				s := file_reader.item
+				-- Prevent side effects, in case the original string object
+				-- is being referenced elsewhere:
+				s := clone (file_reader.item)
 			until
 				s.item (s.count) /= Continuation_character or
 				file_reader.exhausted
@@ -141,10 +143,14 @@ feature {NONE} -- Implementation
 				file_reader.forth
 				current_line := current_line + 1
 				if not file_reader.exhausted then
-					s.append (file_reader.item)
+					s.append (clone (file_reader.item))
 				end
 			end
-			s.prune_all (Continuation_character)
+			if s.has (Continuation_character) then
+				-- `Continuation_character' must not be in the string
+				-- to be tokenized:
+				s.prune_all (Continuation_character)
+			end
 			su.set_target (s)
 			Result := su.tokens (Field_separator)
 		end
