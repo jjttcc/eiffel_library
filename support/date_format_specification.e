@@ -231,4 +231,4 @@ invariant
 
 	year_partition_valid: convert_2_digit_year implies year_partition_value > 0
 
-end -- class MAS_COMMAND_LINE
+end
