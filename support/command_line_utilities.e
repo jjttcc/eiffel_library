@@ -31,7 +31,7 @@ class COMMAND_LINE_UTILITIES inherit
 			print
 		end
 
-feature -- Access
+feature {NONE} -- Access
 
 	character_selection (msg: STRING): CHARACTER is
 			-- User-selected character
@@ -217,7 +217,7 @@ feature -- Access
 			-- Input/output media to which all input will be sent and
 			-- from which output will be received, respectively
 
-feature -- Input
+feature {NONE} -- Input
 
 	read_integer is
 			-- Input an integer (as a sequence of digits terminated with
@@ -254,7 +254,7 @@ feature -- Input
 			last_string := input_device.last_string
 		end
 
-feature -- Miscellaneous
+feature {NONE} -- Miscellaneous
 
 	print_message (msg: STRING) is
 			-- Print `msg' to standard out, appending a newline.
