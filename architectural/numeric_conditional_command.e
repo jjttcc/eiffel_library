@@ -1,10 +1,9 @@
 indexing
 	description:
-		"A command that plays the role of client of a BOOLEAN_OPERATOR by, %
-		%in its execute routine, providing two operands for the %
-		%BINARY_OPERATOR [BOOLEAN] and, when the operator evaluates to true, %
-		%executing a 'true command', and when false, executing a 'false %
-		%command'."
+		"A command whose `value' is REAL and that depends on the result of %
+		%a boolean operator:  If the result is true, `value' is the result %
+		%of executing `true_cmd'; else `value' is the result of executing %
+		%`false_cmd'."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -49,7 +48,7 @@ feature -- Initialization
 
 feature -- Access
 
-	boolean_operator: BINARY_OPERATOR [BOOLEAN, REAL]
+	boolean_operator: RESULT_COMMAND [BOOLEAN]
 			-- Operator used to compare two values
 
 	true_cmd: RESULT_COMMAND [REAL]
