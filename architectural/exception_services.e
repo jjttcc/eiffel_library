@@ -76,6 +76,7 @@ feature -- Basic operations
 			error_msg: STRING
 			fatal: BOOLEAN
 		do
+log_error ("HANDLE_EXCEPTION was called.%N")
 			-- An exception may have caused a lock to have been left open -
 			-- ensure that clean-up occurs to remove the lock:
 			no_cleanup := false
@@ -116,6 +117,7 @@ feature -- Basic operations
 			else
 				last_exception_status.set_description ("")
 			end
+log_error ("HANDLE_EXCEPTION is returning.%N")
 		end
 
 	exit (status: INTEGER) is
@@ -259,8 +261,14 @@ feature {NONE} -- Implementation
 		end
 
 	tag_string: STRING is
+		local
+			tgname: STRING
 		do
-			Result := ":%N%"" + tag_name + "%"%N"
+			tgname := ""
+			if tag_name /= Void then
+				tgname := tag_name
+			end
+			Result := ":%N%"" + tgname + "%"%N"
 			if Result = Void then
 				Result := ""
 			elseif verbose_reporting and not Result.is_empty then
