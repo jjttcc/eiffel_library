@@ -30,6 +30,11 @@ feature -- Access
 		deferred
 		end
 
+	last_string: STRING is
+			-- Last string read by `read_string'
+		deferred
+		end
+
 	error_string: STRING
 			-- Description of last error
 
@@ -79,6 +84,14 @@ feature -- Input
 	read_integer is
 			-- Read a new integer.
 			-- Make result available in `last_integer'.
+		require
+			is_readable: readable
+		deferred
+		end
+
+	read_string is
+			-- Read a new string.
+			-- Make result available in `last_string'.
 		require
 			is_readable: readable
 		deferred
