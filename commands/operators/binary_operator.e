@@ -88,7 +88,7 @@ feature -- Basic operations
 			-- The most likely (perhaps only possible) exception is
 			-- division by 0 in the operate feature, when the run-time
 			-- type is DIVISION.
-			exception_occurred := true
+			exception_occurred := True
 			retry
 		end
 

@@ -160,8 +160,8 @@ feature {NONE} -- Hook methods
 		local
 			tuple: ANY
 		do
-			error_in_current_tuple := false
-			discard_current_tuple := false
+			error_in_current_tuple := False
+			discard_current_tuple := False
 			tuple_maker.execute
 			tuple := tuple_maker.product
 			open_tuple (tuple)
@@ -203,7 +203,7 @@ feature {NONE} -- Hook methods
 		end
 
 	value_setters_used: BOOLEAN is
-			-- Is `value_setters' used?  (Will be true if `make_tuple' is
+			-- Is `value_setters' used?  (Will be True if `make_tuple' is
 			-- not redefined.)
 		once
 			Result := True	-- Redefine if they are not used.
@@ -271,10 +271,10 @@ feature {NONE}
 			input.advance_to_next_field
 			if input.error_occurred then
 				error_list.extend (input.error_string)
-				discard_current_tuple := true
-				error_in_current_tuple := true
+				discard_current_tuple := True
+				error_in_current_tuple := True
 				if input.last_error_fatal then
-					last_error_fatal := true
+					last_error_fatal := True
 				end
 			end
 		end
@@ -297,7 +297,7 @@ feature {NONE}
 			if input.error_occurred then
 				error_list.extend (input.error_string)
 				if input.last_error_fatal then
-					last_error_fatal := true
+					last_error_fatal := True
 				end
 			end
 		end
@@ -307,12 +307,12 @@ feature {NONE}
 			-- error status variables.
 		do
 			error_list.extend (value_setters.item.last_error)
-			error_in_current_tuple := true
+			error_in_current_tuple := True
 			if
 				value_setters.item.unrecoverable_error or
 				strict_error_checking
 			then
-				discard_current_tuple := true
+				discard_current_tuple := True
 			end
 		end
 

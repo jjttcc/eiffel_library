@@ -98,7 +98,7 @@ feature {NONE} -- Implementation
 	violate_precondition is
 			-- Tool for checking if assertions are on
 		require
-			impossible: false
+			impossible: False
 		do
 		end
 

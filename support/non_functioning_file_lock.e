@@ -31,18 +31,18 @@ feature -- Basic operations
 	try_lock is
 			-- Always succeeds.
 		do
-			locked := true
+			locked := True
 		end
 
 	lock is
 			-- Always succeeds without blocking.
 		do
-			locked := true
+			locked := True
 		end
 
 	unlock is
 		do
-			locked := false
+			locked := False
 		end
 
 end -- class NON_FUNCTIONING_FILE_LOCK

@@ -107,8 +107,8 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 			-- If a divide-by-0 condition occurs and
-			-- raise_exception_on_div_by_0 is true, divide_by_0_occurred will
-			-- be true and an exception will be thrown.
+			-- raise_exception_on_div_by_0 is True, divide_by_0_occurred will
+			-- be True and an exception will be thrown.
 		local
 			result1: REAL
 		do
@@ -118,13 +118,13 @@ feature -- Basic operations
 			result1 := operand1.value
 			operand2.execute (arg)
 			if rabs (operand2.value - 0) < epsilon then
-				divide_by_0_occurred := true
+				divide_by_0_occurred := True
 				value := div_by_0_result
 				if raise_exception_on_div_by_0 then
 					raise ("Divide-by-0 exception")
 				end
 			else
-				divide_by_0_occurred := false
+				divide_by_0_occurred := False
 				value := result1 / operand2.value
 			end
 		ensure then

@@ -76,7 +76,7 @@ feature {NONE} -- Implementation
 				-- error even when it succeeds - assume then that there
 				-- is a problem only if product_count is 0.
 			then
-				error_occurred := true
+				error_occurred := True
 				product_count := 0
 				last_error := error_value (cmpresult)
 			else

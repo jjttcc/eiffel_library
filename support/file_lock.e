@@ -41,8 +41,8 @@ feature -- Status report
 feature -- Basic operations
 
 	try_lock is
-			-- Attempt to lock `file'.  `locked' will be true if
-			-- the attempt succeeds; otherwise it will be false.
+			-- Attempt to lock `file'.  `locked' will be True if
+			-- the attempt succeeds; otherwise it will be False.
 		require
 			not_locked: not locked
 		deferred

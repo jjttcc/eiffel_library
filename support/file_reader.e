@@ -34,7 +34,7 @@ feature -- Access
 	contents: STRING is
 			-- Contents of the entire file
 		do
-			error := false
+			error := False
 			if file_contents = Void then
 				if target.exists and then target.is_readable then
 					target.open_read
@@ -76,7 +76,7 @@ feature -- Cursor movement
 
 	forth is
 			-- Move to next field; if no next field,
-			-- ensure that exhausted will be true.
+			-- ensure that exhausted will be True.
 		do
 			tokens.forth
 			if not tokens.exhausted then

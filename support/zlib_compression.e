@@ -85,14 +85,14 @@ feature {NONE} -- Implementation
 					cmpresult := zlib_compress2 ($dest, $buffcount, $src,
 						target.area.count, compression_level)
 					if cmpresult /= No_error then
-						error_occurred := true
+						error_occurred := True
 						product_count := 0
 						last_error := error_value (cmpresult)
 					else
 						product_count := buffcount
 					end
 				else
-					error_occurred := true
+					error_occurred := True
 					product_count := 0
 					last_error := error_value (cmpresult)
 				end

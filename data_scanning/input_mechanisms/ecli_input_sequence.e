@@ -76,7 +76,7 @@ feature -- Cursor movement
 			tuple_sequence.start
 			field_index := 1
 			record_index := 1
-			error_occurred := false
+			error_occurred := False
 		end
 
 feature -- Element change

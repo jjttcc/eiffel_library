@@ -378,8 +378,8 @@ feature {NONE} -- Miscellaneous
 			-- Implementation, needed by some children, of procedure for
 			-- obtaining a desired list of selections from the user -
 			-- resulting in the right member of each pair in `choices'
-			-- set to true and the right member of all other pairs
-			-- set to false.
+			-- set to True and the right member of all other pairs
+			-- set to False.
 		local
 			finished, choice_made: BOOLEAN
 			slimit: INTEGER

@@ -60,7 +60,7 @@ feature -- Access
 				read_character
 				if last_character = record_separator @ 1 then
 					if record_separator.count = 1 then
-						end_of_record := true
+						end_of_record := True
 					else
 						end_of_record := current_string_matches (
 						record_separator.substring(2, record_separator.count))
@@ -72,7 +72,7 @@ feature -- Access
 				end
 				if not end_of_record then
 					if after then
-						end_of_record := true
+						end_of_record := True
 					else
 						s.extend (last_character)
 					end
@@ -102,8 +102,8 @@ feature -- Cursor movement
 		local
 			i: INTEGER
 		do
-			last_error_fatal := false
-			error_occurred := false
+			last_error_fatal := False
+			error_occurred := False
 			from
 				i := 1
 			variant
@@ -123,7 +123,7 @@ feature -- Cursor movement
 					if
 						last_character /= field_separator @ i
 					then
-						error_occurred := true
+						error_occurred := True
 						error_string := "Incorrect field separator %
 							%character detected: '"
 						error_string.extend (last_character)
@@ -141,8 +141,8 @@ feature -- Cursor movement
 		local
 			i: INTEGER
 		do
-			last_error_fatal := false
-			error_occurred := false
+			last_error_fatal := False
+			error_occurred := False
 			from
 				i := 1
 			variant
@@ -160,8 +160,8 @@ feature -- Cursor movement
 					if
 						last_character /= record_separator @ i
 					then
-						error_occurred := true
-						last_error_fatal := true
+						error_occurred := True
+						last_error_fatal := True
 						error_string := "Incorrect record separator %
 							%character detected: '"
 						error_string.extend (last_character)
@@ -187,7 +187,7 @@ feature -- Cursor movement
 				back
 				read_character
 				if last_character = first_rsep_char then
-					last_character_was_record_separator := true
+					last_character_was_record_separator := True
 				end
 			end
 			if not last_character_was_record_separator then
@@ -285,14 +285,14 @@ feature {NONE} -- Implementation
 		do
 			if readable then
 				saved_position := position
-				Result := true
+				Result := True
 				from i := 1 until
 					i = s.count + 1 or
 					not Result or after
 				loop
 					read_character
 					if s @ i /= last_character then
-						Result := false
+						Result := False
 					end
 					i := i + 1
 				end

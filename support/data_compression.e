@@ -33,10 +33,10 @@ feature -- Basic operations
 	execute is
 			-- Unlock the file.
 		do
-			error_occurred := false
+			error_occurred := False
 			process_target
 			if not error_occurred then
-				processed := true
+				processed := True
 			end
 		ensure then
 			processed: processed or error_occurred
@@ -46,7 +46,7 @@ feature {NONE} -- Implementation
 
 	process_target is
 		require
-			no_error: error_occurred = false
+			no_error: error_occurred = False
 		deferred
 		end
 

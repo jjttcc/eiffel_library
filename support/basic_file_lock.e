@@ -46,7 +46,7 @@ feature -- Basic operations
 			fname := lock_file_name.to_c
 			lock_file_descriptor := try_to_open ($fname, False_value)
 			if lock_file_descriptor = -1 then
-				locked := false
+				locked := False
 				if last_op_failed then
 					if open_file_exists /= 0 then
 						suffix := concatenation (<<"%N(Lock file ",
@@ -54,12 +54,12 @@ feature -- Basic operations
 					else
 						suffix := Void
 					end
-					error_occurred := true
+					error_occurred := True
 					set_last_error ("Error occurred trying to lock file: ",
 						suffix)
 				end
 			else
-				locked := true
+				locked := True
 			end
 		end
 
@@ -70,11 +70,11 @@ feature -- Basic operations
 			fname := lock_file_name.to_c
 			lock_file_descriptor := try_to_open ($fname, True_value)
 			if lock_file_descriptor = -1 then
-				error_occurred := true
+				error_occurred := True
 				set_last_error ("Error occurred while locking file: ", Void)
 				raise (last_error)
 			end
-			locked := true
+			locked := True
 		end
 
 	unlock is
@@ -87,14 +87,14 @@ feature -- Basic operations
 			if i = -1 then
 			end
 			if remove_file ($fname) = -1 then
-				error_occurred := true
+				error_occurred := True
 				set_last_error ("Error occurred trying to unlock item: ", Void)
 				last_error.append (".%N(Could not remove lock file:%N")
 				last_error.append (lock_file_name)
 				last_error.append (".)%N")
 				raise (last_error)
 			end
-			locked := false
+			locked := False
 		end
 
 feature {NONE} -- Implementation

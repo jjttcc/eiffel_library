@@ -31,9 +31,9 @@ feature {NONE}
 		do
 			handle_input_error (concatenation (<<field_name,
 				" field is less than or equal to 0">>), Void)
-			unrecoverable_error := true
+			unrecoverable_error := True
 		ensure
-			unrecoverable: unrecoverable_error = true
+			unrecoverable: unrecoverable_error = True
 		end
 
 end -- class REAL_SETTER

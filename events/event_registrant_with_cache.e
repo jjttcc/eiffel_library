@@ -29,7 +29,7 @@ feature -- Status report
 	is_interested_in (e: EVENT): BOOLEAN is
 			-- Is this registrant interested in `e'?  (Yes)
 		once
-			Result := true
+			Result := True
 		end
 
 feature -- Basic operations

@@ -1,5 +1,5 @@
 indexing
-	description: "Equal-to operator.  Returns true if the absolute value of %
+	description: "Equal-to operator.  Returns True if the absolute value of %
 	%the difference of the two operands is less than epsilon."
 	author: "Jim Cochrane"
 	date: "$Date$";

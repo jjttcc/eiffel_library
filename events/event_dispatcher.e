@@ -82,7 +82,7 @@ feature {NONE} -- Hook methods
 
 	finished_processing: BOOLEAN is
 			-- Is there no more processing to do on the event_queue?
-			-- Answer: true if event_queue is empty - redefine in
+			-- Answer: True if event_queue is empty - redefine in
 			-- descendants for specialized behavior.
 		do
 			Result := event_queue.is_empty

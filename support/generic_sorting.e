@@ -58,7 +58,7 @@ feature -- Basic operations
 				Result or l.exhausted
 			loop
 				if tbl.has (l.item) then
-					Result := true
+					Result := True
 				else
 					tbl.put (l.item, l.item)
 					l.forth

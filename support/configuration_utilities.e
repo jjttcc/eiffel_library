@@ -83,7 +83,7 @@ feature {NONE} -- Implementation - Hook routines
 			gs: expanded EXCEPTION_SERVICES
 			ex: expanded EXCEPTIONS
 		do
-			gs.last_exception_status.set_fatal (true)
+			gs.last_exception_status.set_fatal (True)
 			ex.raise (msg)
 		end
 
@@ -100,7 +100,7 @@ feature {NONE} -- Implementation - Hook routines
 
 	do_customized_setting (key, value: STRING) is
 			-- Customized configuration setting procedure, to be used
-			-- when `default_setting' evaluates to true
+			-- when `default_setting' evaluates to True
 		require
 			args_exist: key/= Void and value /= Void
 		do

@@ -47,7 +47,7 @@ feature -- Basic operations
 					cmd.set_session (session)
 				end
 				-- `cmd.execute' is expected to handle the error if
-				-- `request_error' is true.
+				-- `request_error' is True.
 				cmd.execute (command_argument)
 			end
 		end

@@ -21,7 +21,7 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 			-- Optimized to not execute operand2 if the result from
-			-- operand1 is false.
+			-- operand1 is False.
 			-- A system exception may occur (most likely caused by division
 			-- by 0) during execution of this feature.  In this case,
 			-- the exception is caught and `value' is set to a default.
@@ -41,7 +41,7 @@ feature -- Basic operations
 		ensure then
 			implication_value: value = (operand1.value implies operand2.value)
 		rescue
-			exception_occurred := true
+			exception_occurred := True
 			retry
 		end
 

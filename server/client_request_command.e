@@ -57,7 +57,7 @@ feature -- Basic operations
 				exit (1)
 			else
 				execution_retries := execution_retries + 1
-				exception_occurred := true
+				exception_occurred := True
 				retry
 			end
 		end

@@ -1,5 +1,5 @@
 indexing
-	description: "Command whose value is always false"
+	description: "Command whose value is always False"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -12,13 +12,13 @@ class FALSE_COMMAND inherit
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is false
+	arg_mandatory: BOOLEAN is False
 
 feature -- Basic operations
 
 	execute (arg: ANY) is
 		once
-			value := false
+			value := False
 		end
 
 end -- class FALSE_COMMAND

@@ -139,12 +139,12 @@ feature {NONE} -- Implementation
 		do
 			from
 				i := 0
-				Result := true
+				Result := True
 			until
 				not Result or i = size
 			loop
 				if a.item (i) /= b.item (i) then
-					Result := false
+					Result := False
 					print_list (<<"a_eq_b found false result at ", i,
 						"(", a.item (i), ", ", b.item (i), ")%N">>)
 				end
