@@ -87,13 +87,10 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-feature -- Basic operations
-
-	execute (arg: ANY) is
-			-- Execute the command with the specified argument.
-		require
-			arg_not_void_if_mandatory: arg_mandatory implies arg /= Void
-		deferred
+	name: STRING is
+			-- Current's name
+		do
+			Result := name_implementation
 		end
 
 feature -- Status report
@@ -103,8 +100,48 @@ feature -- Status report
 		deferred
 		end
 
+	name_is_assignable: BOOLEAN is
+			-- Can `name' be assigned?
+		do
+			-- Default to False - Redefine if needed.
+		end
+
+feature -- Element change
+
+	set_name (arg: STRING) is
+			-- Set `name' to `arg'.
+		require
+			name_is_assignable: name_is_assignable
+			arg_not_void: arg /= Void
+		do
+			-- Default to null action for the default case of
+			-- "not name_is_assignable".  Needs to be redefined
+			-- if "name_is_assignable".
+		ensure
+			name_set: name.is_equal (arg) and name /= Void
+		end
+
+feature -- Basic operations
+
+	execute (arg: ANY) is
+			-- Execute the command with the specified argument.
+		require
+			arg_not_void_if_mandatory: arg_mandatory implies arg /= Void
+		deferred
+		end
+
+feature {NONE} -- Implementation
+
+	name_implementation: STRING is
+		do
+			-- This can be made into an attribute for descendants
+			-- whose "name_is_assignable".
+			Result := Current.generator
+		end
+
 invariant
 
-	children_and_descendants_correspond: children.is_empty = descendants.is_empty
+	children_and_descendants_correspond: children.is_empty =
+		descendants.is_empty
 
 end -- class COMMAND
