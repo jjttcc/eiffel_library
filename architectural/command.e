@@ -143,9 +143,4 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 invariant
 
-	children_exist: children /= Void
-	children_and_descendants_correspond: children.is_empty =
-		descendants.is_empty
-	name_not_void: name /= Void
-
 end -- class COMMAND
