@@ -11,6 +11,8 @@ deferred class FILE_NAME_EXPANDER inherit
 feature -- Basic operations
 
 	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
+			-- Perform file-name expansion on all members of `args' that
+			-- do not begin with `option_sign'.
 		require
 			not_void: args /= Void and option_sign /= Void
 		deferred
