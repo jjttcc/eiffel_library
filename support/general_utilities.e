@@ -102,11 +102,11 @@ feature -- Basic operations
 	check_objects (a: ARRAY [ANY]; descriptions: ARRAY [STRING];
 		ok: FUNCTION [ANY, TUPLE [ANY], BOOLEAN]; handler:
 		PROCEDURE [ANY, TUPLE [LIST [STRING]]];
-		proc_arg: ANY; msg: STRING) is
+		proc_arg: ANY; info: ANY) is
 			-- For each "i" in `a.lower' to `a.upper', if a @ i is not `ok',
 			-- insert descriptions @ i into a list and execute `handler'
 			-- on the list.  `proc_arg' is an additional, optional (can
-			-- be Void) argument to `handler' and `msg' is an optional
+			-- be Void) argument to `handler' and `info' is an optional
 			-- error description to pass on to `handler'.
 		require
 			valid_args: a /= Void and descriptions /= Void and
@@ -130,7 +130,7 @@ feature -- Basic operations
 				i := i + 1
 			end
 			if not invalid_items.is_empty then
-				handler.call ([invalid_items, proc_arg])
+				handler.call ([invalid_items, proc_arg, info])
 			end
 		end
 
