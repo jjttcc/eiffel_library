@@ -19,7 +19,7 @@ deferred class
 
 feature {FACTORY} -- Basic operations
 
-	set (stream: BILINEAR_INPUT_SEQUENCE; tuple: ANY) is
+	set (stream: INPUT_SEQUENCE; tuple: ANY) is
 			-- Set the appropriate field of tuple using `stream' as input.
 		require
 			args_not_void: stream /= Void and tuple /= Void
@@ -58,12 +58,12 @@ feature {FACTORY} -- Element change
 
 feature {NONE} -- Hook methods
 
-	read_value (stream: BILINEAR_INPUT_SEQUENCE) is
+	read_value (stream: INPUT_SEQUENCE) is
 			-- Read the next value (char or integer or etc.) from `stream'.
 		deferred
 		end
 
-	do_set (stream: BILINEAR_INPUT_SEQUENCE; tuple: ANY) is
+	do_set (stream: INPUT_SEQUENCE; tuple: ANY) is
 			-- Set appropriate field of `tuple' according
 			-- to the last value read in stream.
 		require
