@@ -1,6 +1,6 @@
 indexing
-	description:
-		"Utilities for system configuration based parsing a configuration file"
+	description: "Utilities for system configuration based on parsing a %
+		%configuration file"
 	author: "Jim Cochrane and Eirik Mangseth"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,6 +8,11 @@ indexing
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 deferred class CONFIGURATION_UTILITIES inherit
+
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
 
 feature -- Initialization
 
@@ -72,11 +77,6 @@ feature {NONE} -- Implementation - Hook routines
 				" configuration file")
 		end
 
-	log_errors (errors: ARRAY [ANY]) is
-			-- Log `errors' onto a stream appropriate for the application
-		deferred
-		end
-
 	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
 			-- Should the customized configuration setting procedure
 			-- `do_customized_setting' be used, rather than the default one
@@ -84,8 +84,8 @@ feature {NONE} -- Implementation - Hook routines
 		require
 			key_exists: key_token /= Void
 		once
-			-- Default to always true - redefine if needed.
-			Result := True
+			-- Default to always False - redefine if needed.
+			Result := False
 		end
 
 	do_customized_setting (key_token, value_token: STRING) is
@@ -157,6 +157,7 @@ feature {NONE} -- Implementation
 				until
 					file_reader.exhausted
 				loop
+print ("Processing " + file_reader.item + ".%N")
 					if
 						not (file_reader.item.count = 0 or else
 							file_reader.item @ 1 = comment_character)
@@ -194,6 +195,47 @@ feature {NONE} -- Implementation
 				handle_file_read_error
 			end
 			check_results
+		end
+
+	check_for_missing_specs (ftbl: ARRAY[ANY]; ignore_if_all_true: BOOLEAN) is
+			-- Check for missing field specs in `ftbl'.   If
+			-- `ignore_if_all_true' and all 'missing' flags in ftl are
+			-- True, do not consider it an error.  Expected
+			-- types of ftbl's contents are: <<BOOLEAN, STRING,
+			-- BOOLEAN, STRING, ...>>, where the BOOLEAN element indicates
+			-- that the corresponding field is missing and the STRING
+			-- element gives the name of the corresponding field.
+		require
+			count_even: ftbl.count \\ 2 = 0
+		local
+			s: STRING
+			i: INTEGER
+			missing: BOOLEAN_REF
+			all_missing, problem: BOOLEAN
+			es: expanded EXCEPTION_SERVICES
+			ex: expanded EXCEPTIONS
+		do
+			from i := 1; all_missing := True until i > ftbl.count loop
+				missing ?= ftbl @ i
+				check
+					correct_type: missing /= Void
+				end
+				if missing.item then
+					s := concatenation (<<s, "Missing specification in ",
+						configuration_type, " configuration file:%N",
+						ftbl @ (i+1), ".%N">>)
+					problem := True
+				else
+					all_missing := False
+				end
+				i := i + 2
+			end
+			if problem and (ignore_if_all_true implies not all_missing) then
+				log_error (s)
+				es.last_exception_status.set_fatal (True)
+				ex.raise ("Fatal error reading " + configuration_type +
+					" configuration file")
+			end
 		end
 
 invariant
