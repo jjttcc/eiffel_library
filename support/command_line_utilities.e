@@ -402,6 +402,72 @@ feature -- Miscellaneous
 			end
 		end
 
+	print_row(names: LIST [STRING]; row, rows, cols, namecount,
+			column_pivot, row_width: INTEGER) is
+		local
+			column, i: INTEGER
+		do
+--print_list (<<"row, rows, cols, namecount, column_pivot, row_width: ", row,
+--", ", rows, ", ", cols, ", ", namecount, ", ", column_pivot, ", ",
+--row_width, "%N">>)
+			from column := 1 until
+				column = cols or
+				(row = rows and column_pivot > 0 and column > column_pivot)
+			loop
+				if column_pivot > 0 and column - 1 > column_pivot then
+--print_list (<<"(x", column, ") ">>)
+					i := row + rows * column_pivot +
+						(rows - 1) * (column - 1 - column_pivot)
+				else
+--print_list (<<"(y", column, ") ">>)
+					i := row + rows * (column - 1)
+				end
+				if i <= namecount then
+					print_list (<<i, ") ", names @ i,
+						spaces ((row_width / cols - (floor (log10 (i)) +
+						cols - 1 + names.i_th(i).count)).ceiling)>>)
+				end
+				column := column + 1
+			end
+			if
+				not (row = rows and column_pivot > 0 and column > column_pivot)
+			then
+				if column_pivot > 0 and column - 1 > column_pivot then
+--print_list (<<"(X", column, ") ">>)
+					i := row + rows * column_pivot +
+						(rows - 1) * (column - 1 - column_pivot)
+				else
+--print_list (<<"(Y", column, ") ">>)
+					i := row + rows * (column - 1)
+				end
+				if i <= namecount then
+					print_list (<<i, ") ", names @ i>>)
+				end
+			end
+			print ("%N")
+		end
+
+	print_names_in_n_columns (names: LIST [STRING]; cols: INTEGER) is
+			-- Print each element of `names' as a numbered item
+			-- to the screen in `cols' columns.
+		local
+			width, rows, row, end_index, namecount, col_pivot: INTEGER
+		do
+			width := 76
+			namecount := names.count
+			rows := (namecount + cols - 1) // cols
+			col_pivot := namecount \\ cols
+			end_index := rows * cols
+			row := 1
+			from
+			until
+				row = rows + 1
+			loop
+				print_row(names, row, rows, cols, namecount, col_pivot, width)
+				row := row + 1
+			end
+		end
+
 	print_names_in_1_column (names: LIST [STRING]; first_number: INTEGER) is
 			-- Print each element of `names' as a numbered item to the
 			-- screen in 1 column.  Numbering is from first_number to
