@@ -30,6 +30,15 @@ class COMMAND_LINE_UTILITIES [G] inherit
 			print
 		end
 
+	SERVER_PROTOCOL
+		rename
+			eom as network_eom
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 feature -- Access
 
 	selected_character: CHARACTER is
@@ -338,28 +347,6 @@ feature -- Miscellaneous
 			end
 		end
 
-feature -- Status setting
-
-	set_input_device (arg: IO_MEDIUM) is
-			-- Set input_device to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			input_device := arg
-		ensure
-			input_device_set: input_device = arg and input_device /= Void
-		end
-
-	set_output_device (arg: IO_MEDIUM) is
-			-- Set output_device to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			output_device := arg
-		ensure
-			output_device_set: output_device = arg and output_device /= Void
-		end
-
 feature {NONE} -- Implementation - Hook methods
 
 	print_component_trees (o: G; level: INTEGER) is
@@ -406,7 +393,7 @@ feature {NONE} -- Implementation
 				if file /= Void then
 					eom_cache := ""
 				elseif stream_socket /= Void then
-					eom_cache := ""
+					eom_cache := network_eom
 				else
 					eom_cache := ""
 				end
@@ -415,9 +402,5 @@ feature {NONE} -- Implementation
 		end
 
 	eom_cache: STRING
-
-invariant
-
-	io_not_void: input_device /= Void and output_device /= Void
 
 end -- class COMMAND_LINE_UTILITIES
