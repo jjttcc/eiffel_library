@@ -50,7 +50,7 @@ feature -- Access
 	integer_selection (msg: STRING): INTEGER is
 			-- User-selected integer value
 		do
-			print_list (<<"Enter an integer value for ", msg, ": ", eot>>)
+			print_list (<<"Enter an integer value for ", msg, ": ", eom>>)
 			read_integer
 			Result := last_integer
 		end
@@ -58,7 +58,7 @@ feature -- Access
 	real_selection (msg: STRING): REAL is
 			-- User-selected real value
 		do
-			print_list (<<"Enter a real value for ", msg, ": ", eot>>)
+			print_list (<<"Enter a real value for ", msg, ": ", eom>>)
 			read_real
 			Result := last_real
 		end
@@ -66,7 +66,7 @@ feature -- Access
 	string_selection (msg: STRING): STRING is
 			-- User-selected real value
 		do
-			print_list (<<"Enter a real value for ", msg, ": ", eot>>)
+			print_list (<<"Enter a real value for ", msg, ": ", eom>>)
 			read_line
 			Result := clone (last_string)
 		end
@@ -102,7 +102,7 @@ feature -- Access
 					-- startnum = the sum of the count of all `left' elements
 					-- of lists
 				end
-				print (eot)
+				print (eom)
 				read_integer
 				if
 					last_integer < 1 or
@@ -315,7 +315,7 @@ feature -- Miscellaneous
 					choice_made
 				loop
 					print ("Select an item (0 to end):%N")
-					print_names_in_1_column (names, 1); print (eot)
+					print_names_in_1_column (names, 1); print (eom)
 					read_integer
 					if
 						last_integer <= -1 or
@@ -393,28 +393,28 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	eot: STRING is
-			-- End of transmission indicator - "<Ctl>G" for stream socket,
+	eom: STRING is
+			-- End of message indicator - "<Ctl>G" for stream socket,
 			-- "" (empty string) for files (including stdin) and other types
 		local
 			file: FILE
 			stream_socket: STREAM_SOCKET
 		do
-			if eot_cache = Void then
+			if eom_cache = Void then
 				file ?= input_device
 				stream_socket ?= input_device
 				if file /= Void then
-					eot_cache := ""
+					eom_cache := ""
 				elseif stream_socket /= Void then
-					eot_cache := ""
+					eom_cache := ""
 				else
-					eot_cache := ""
+					eom_cache := ""
 				end
 			end
-			Result := eot_cache
+			Result := eom_cache
 		end
 
-	eot_cache: STRING
+	eom_cache: STRING
 
 invariant
 
