@@ -1,9 +1,8 @@
 indexing
-	description:
-		"A command whose `value' is REAL and that depends on the result of %
-		%a boolean operator:  If the result is true, `value' is the result %
-		%of executing `true_cmd'; else `value' is the result of executing %
-		%`false_cmd'."
+	description: "Commands whose `value' is REAL and that depend on the %
+		%result of a boolean operator:  If the result is true, `value' is %
+		%the result of executing `true_cmd'; else `value' is the result %
+		%of executing `false_cmd'."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
