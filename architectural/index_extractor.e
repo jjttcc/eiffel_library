@@ -15,6 +15,7 @@ class INDEX_EXTRACTOR inherit
 	RESULT_COMMAND [REAL]
 		redefine
 			initialize, children
+,node_contains_cycle
 		end
 
 creation
@@ -22,6 +23,10 @@ creation
 	make
 
 feature -- Initialization
+node_contains_cycle (node: like Current): BOOLEAN is
+do
+Result := node.descendants_contain_cycle
+end
 
 	make (i: INDEXED) is
 		do

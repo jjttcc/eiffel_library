@@ -32,8 +32,8 @@ feature -- Access
 			node_set: LINKED_SET [like Current]
 		do
 			create {LINKED_LIST [TREE_NODE]} Result.make
-			if not descendants_locked then
-				lock_descendants
+			if not cycle_in_descendants and then not already_visited then
+				set_already_visited (True)
 				l := copy_of_children
 				create node_set.make
 				if descendant_comparison_is_by_objects then
@@ -45,7 +45,13 @@ feature -- Access
 					l.forth
 				end
 				Result.append (node_set)
-				unlock_descendants
+				set_already_visited (False)
+			else
+				-- Since `already_visited', Current.descendants must have
+				-- already been called as the result of a call to 
+				-- `descendants' on the root of the tree.  This indicates
+				-- that there is a cycle in the tree structure.
+				set_cycle_in_descendants (True)
 			end
 		ensure
 			exists: Result /= Void
@@ -85,7 +91,21 @@ feature -- Status report
 
 	descendants_contain_cycle: BOOLEAN is
 			-- Is there a cycle in `descendants'?
+		local
+			d: LIST [like Current]
 		do
+			Result := cycle_in_descendants
+			if not Result then
+				-- Calling `descendants' will cause `cycle_in_descendants'
+				-- to be true if Current contains a cycle.
+				d := descendants
+				Result := cycle_in_descendants
+				if not Result then
+					-- Do the children or their descendants contain a cycle?
+					Result := children.there_exists (agent
+						node_contains_cycle (?))
+				end
+			end
 		end
 
 feature {NONE} -- Implementation - Hook routines
@@ -182,39 +202,49 @@ feature {TREE_NODE} -- Implementation
 			end
 		end
 
-	descendants_locked: BOOLEAN is
-			-- Implementation state to prevent infinite calls to descendants
-			-- when Current is part of a -time cycle.
+	cycle_in_descendants: BOOLEAN is
+			-- Has a cycle been detected in `descendants'?
 		do
-			Result := state_at (Descendants_locked_index)
+			Result := state_at (Descendants_cycle_index)
 		end
 
-	lock_descendants is
-		do
-			set_descendants_locked (True)
-		end
-
-	unlock_descendants is
-		do
-			set_descendants_locked (False)
-		end
-
-	set_descendants_locked (arg: BOOLEAN) is
-			-- Set `descendants_locked' according to `arg'.
+	set_cycle_in_descendants (arg: BOOLEAN) is
+			-- Set `cycle_in_descendants' according to `arg'.
 		require
 			arg_not_void: arg /= Void
 		do
-			put_state (arg, Descendants_locked_index)
+			put_state (arg, Descendants_cycle_index)
 		ensure
-			descendants_locked_set: descendants_locked = arg and
-				descendants_locked /= Void
+			descendants_cycle_set: cycle_in_descendants = arg
+		end
+
+	already_visited: BOOLEAN is
+			-- Has Current already been visitied in the context of a
+			-- call to `descendants'?
+		do
+			Result := state_at (Already_visited_index)
+		end
+
+	set_already_visited (arg: BOOLEAN) is
+			-- Set `already_visited' according to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			put_state (arg, Already_visited_index)
+		ensure
+			already_visited_set: already_visited = arg
+		end
+
+	node_contains_cycle (node: like Current): BOOLEAN is
+		do
+			Result := node.descendants_contain_cycle
 		end
 
 feature {NONE} -- Implementation - constants
 
-	Descendants_locked_index: INTEGER is 32
+	Descendants_cycle_index: INTEGER is 32
 
-	Descendants_have_cycle_index: INTEGER is 31
+	Already_visited_index: INTEGER is 31
 
 	Indent_increment: INTEGER is 3
 
@@ -222,7 +252,7 @@ invariant
 
 	children_exist: children /= Void
 	descendants_exist: descendants /= Void
-	children_and_descendants_correspond: not descendants_locked implies
+	children_and_descendants_correspond: not descendants_contain_cycle implies
 		children.is_empty = descendants.is_empty
 	name_not_void: name /= Void
 
