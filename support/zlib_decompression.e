@@ -41,7 +41,7 @@ feature -- Initialization
 
 feature -- Access
 
-	target: TO_SPECIAL [CHARACTER]
+	target: SPECIAL [CHARACTER]
 
 	product: STRING
 
@@ -66,7 +66,7 @@ feature {NONE} -- Implementation
 			create buffer.make_area (max_product_count)
 			product_count := max_product_count
 			dest := buffer.area
-			src := target.area
+			src := target
 			cmpresult := zlib_uncompress ($dest, $product_count,
 				$src, target_count)
 			if
