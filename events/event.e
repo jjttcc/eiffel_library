@@ -10,7 +10,7 @@ indexing
 
 deferred class EVENT inherit
 
-	ANY
+	COMPARABLE
 
 feature -- Access
 
@@ -40,6 +40,13 @@ feature -- Access
 	unique_id: STRING is
 			-- String that uniquely identifies the current instance
 		deferred
+		end
+
+feature -- Comparison
+
+	infix "<" (other: EVENT): BOOLEAN is
+		do
+			Result := time_stamp < other.time_stamp
 		end
 
 invariant
