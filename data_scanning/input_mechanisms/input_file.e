@@ -63,6 +63,7 @@ feature -- Access
 						end_of_record := current_string_matches (
 						record_separator.substring(2, record_separator.count))
 						if not end_of_record then
+							back
 							read_character
 						end
 					end
@@ -181,6 +182,7 @@ feature -- Cursor movement
 				not before and not (field_index = 1) and
 				is_tab_space_or_newline (first_rsep_char)
 			then
+				back
 				read_character
 				if last_character = first_rsep_char then
 					last_character_was_record_separator := true
@@ -194,10 +196,16 @@ feature -- Cursor movement
 				loop
 					read_character
 				end
+				if not is_tab_space_or_newline (last_character) then
+					back
+				end
 				advance_to_next_record
 			end
 			-- If just before the end-of-file, force EOF.
 			read_character
+			if not after then
+				back
+			end
 		end
 
 	start is
@@ -244,6 +252,14 @@ feature -- Input
 			loop
 				last_string.extend (last_character)
 				read_character
+			end
+			if
+				not (last_character = record_separator @ 1) or else
+				not is_tab_space_or_newline (record_separator @ 1)
+				-- Don't move back if record_separator is a tab, space,
+				-- or newline and last_character = record_separator @ 1.
+			then
+				back
 			end
 		end
 
