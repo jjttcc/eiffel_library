@@ -46,7 +46,7 @@ feature -- Access
 	character_selection (msg: STRING): CHARACTER is
 			-- User-selected character
 		do
-			if msg /= Void and not msg.empty then
+			if msg /= Void and not msg.is_empty then
 				print_list (<<msg, eom>>)
 			end
 			from
@@ -64,7 +64,7 @@ feature -- Access
 	integer_selection (msg: STRING): INTEGER is
 			-- User-selected integer value
 		do
-			if msg /= Void and not msg.empty then
+			if msg /= Void and not msg.is_empty then
 				print_list (<<"Enter an integer value for ", msg, " ", eom>>)
 			end
 			read_integer
@@ -74,7 +74,7 @@ feature -- Access
 	real_selection (msg: STRING): REAL is
 			-- User-selected real value
 		do
-			if msg /= Void and not msg.empty then
+			if msg /= Void and not msg.is_empty then
 				print_list (<<"Enter a real value for ", msg, " ", eom>>)
 			end
 			read_real
@@ -84,7 +84,7 @@ feature -- Access
 	string_selection (msg: STRING): STRING is
 			-- User-selected real value
 		do
-			if msg /= Void and not msg.empty then
+			if msg /= Void and not msg.is_empty then
 				print_list (<<msg, " ", eom>>)
 			end
 			read_line
@@ -101,7 +101,7 @@ feature -- Access
 		do
 			create date.make_now
 			create time.make_now
-			if msg /= Void and not msg.empty then
+			if msg /= Void and not msg.is_empty then
 				print_list (<<msg, "%N">>)
 			end
 			from
@@ -137,8 +137,6 @@ feature -- Access
 
 	list_selection (l: LIST [STRING]; general_msg: STRING): INTEGER is
 			-- User's selection from an element of `l'
-		local
-			i, startnum: INTEGER
 		do
 			print_list (<<general_msg, "%N">>)
 			from
@@ -495,7 +493,7 @@ feature {NONE} -- Implementation
 	last_string: STRING
 			-- Last string input with `read_line'
 
-	print (o: GENERAL) is
+	print (o: ANY) is
 			-- Redefinition of output method inherited from GENERAL to
 			-- send output to output_device
 		do
@@ -542,13 +540,13 @@ feature {NONE} -- Implementation - date-related routines
 			from
 				read_line
 			until
-				last_string.empty or Result.date_valid (
+				last_string.is_empty or Result.date_valid (
 					last_string, Result.date_default_format_string)
 			loop
 				print_list (<<"Date format invalid, try again: ", eom>>)
 				read_line
 			end
-			if not last_string.empty then
+			if not last_string.is_empty then
 				create Result.make_from_string_default (last_string)
 			end
 			print_list (<<"Using date of ", Result, ".%N">>)

@@ -77,7 +77,7 @@ feature -- Access
 				end
 			end
 			go (saved_position)
-			if not s.empty then
+			if not s.is_empty then
 				su.set_target (s)
 				Result := su.tokens (field_separator).count
 			end
