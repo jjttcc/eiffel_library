@@ -117,8 +117,6 @@ feature -- Element change
 		require
 			target_not_void: target /= Void
 			has_c: target.has (c)
-		local
-			i, last_index: INTEGER
 		do
 			target.head (target.index_of (c, 1) - 1)
 		ensure
