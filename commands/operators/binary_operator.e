@@ -98,6 +98,7 @@ feature {NONE} -- Hook routines
 	set_value_to_default is
 			-- Set `value' to a default value to handle exception condition.
 		do
+			value := value.default
 		end
 
 end -- class BINARY_OPERATOR
