@@ -70,26 +70,26 @@ feature -- Access
 		end
 
 	date_from_formatted_string (d, field_separator: STRING; y_index,
-		m_index, d_index: INTEGER; two_digit_year_parition: INTEGER): DATE is
+		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER): DATE is
 			-- Date from the string `d' in the form [field1]X[field2]X[field3],
 			-- where X is the value of `field_separator' and `y_index`,
 			-- `m_index', and `d_index' specify which of "field1", "field2",
 			-- and "field3" is the year, month, and day, respectively, and
-			-- where two_digit_year_parition is either -1 if the year is in
+			-- where two_digit_year_partition is either -1 if the year is in
 			-- standard (yyyy) format or, if the year in two-digit (yy)
 			-- format, gives the partition value for which the century of
 			-- the result is the 1990s if the year y from `d' is >
-			-- two_digit_year_parition and the 2000s if y <=
-			-- two_digit_year_parition.
+			-- two_digit_year_partition and the 2000s if y <=
+			-- two_digit_year_partition.
 			-- If the format of `d' is invalid or the values of `y_index`,
 			-- `m_index', or `d_index' are invalid, the result will be Void.
 		require
 			args_exist: d /= Void and field_separator /= Void
-			partition_valid: two_digit_year_parition = -1 or
-				two_digit_year_parition > 0
+			partition_valid: two_digit_year_partition = -1 or
+				two_digit_year_partition > 0
 		do
 			Result := date_from_string_implementation (d, field_separator,
-				y_index, m_index, d_index, two_digit_year_parition, False)
+				y_index, m_index, d_index, two_digit_year_partition, False)
 		ensure
 			void_if_indexes_invalid: (y_index <= 0 or y_index > 3) or
 				(m_index <= 0 or m_index > 3) or
@@ -99,28 +99,28 @@ feature -- Access
 		end
 
 	date_from_month_abbrev_string (d, field_separator: STRING; y_index,
-		m_index, d_index: INTEGER; two_digit_year_parition: INTEGER): DATE is
+		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER): DATE is
 			-- Date from the string `d' (where the month field is a 3-letter
 			-- abbreviation - "Jan", etc.) in the form
 			-- [field1]X[field2]X[field3], where X is the value of
 			-- `field_separator' and `y_index`, `m_index', and `d_index'
 			-- specify which of "field1", "field2", and "field3" is the year,
 			-- month, and day, respectively, and where
-			-- two_digit_year_parition is either -1 if the year is in
+			-- two_digit_year_partition is either -1 if the year is in
 			-- standard (yyyy) format or, if the year in two-digit (yy)
 			-- format, gives the partition value for which the century of
 			-- the result is the 1990s if the year y from `d' is <
-			-- two_digit_year_parition and the 2000s if y >=
-			-- two_digit_year_parition.
+			-- two_digit_year_partition and the 2000s if y >=
+			-- two_digit_year_partition.
 			-- If the format of `d' is invalid or the values of `y_index`,
 			-- `m_index', or `d_index' are invalid, the result will be Void.
 		require
 			args_exist: d /= Void and field_separator /= Void
-			partition_valid: two_digit_year_parition = -1 or
-				two_digit_year_parition > 0
+			partition_valid: two_digit_year_partition = -1 or
+				two_digit_year_partition > 0
 		do
 			Result := date_from_string_implementation (d, field_separator,
-				y_index, m_index, d_index, two_digit_year_parition, True)
+				y_index, m_index, d_index, two_digit_year_partition, True)
 		ensure
 			void_if_indexes_invalid: (y_index <= 0 or y_index > 3) or
 				(m_index <= 0 or m_index > 3) or
@@ -191,26 +191,26 @@ feature -- Access
 			definition: Result = day_of_week_table @ d
 		end
 
-	adjusted_2_digit_year (year, two_digit_year_parition: INTEGER): INTEGER is
+	adjusted_2_digit_year (year, two_digit_year_partition: INTEGER): INTEGER is
 			-- Year value adjusted for 2-digit years according to
-			-- `two_digit_year_parition'
+			-- `two_digit_year_partition'
 		require
-			partition_valid: two_digit_year_parition > 0
+			partition_valid: two_digit_year_partition > 0
 		do
-			if year > two_digit_year_parition then
+			if year > two_digit_year_partition then
 				Result := year + 1900
 			else
 				check
-					not_greater_than: year <= two_digit_year_parition
+					not_greater_than: year <= two_digit_year_partition
 				end
 				Result := year + 2000
 			end
 		ensure
 			after_1900: Result > 1900
 			before_2000_if_year_higher:
-				year > two_digit_year_parition implies Result < 2000
+				year > two_digit_year_partition implies Result < 2000
 			after_2000_if_year_not_higher:
-				year <= two_digit_year_parition implies Result >= 2000
+				year <= two_digit_year_partition implies Result >= 2000
 		end
 
 	year_month_day (date_components: ARRAY [STRING]; y_index, m_index,
@@ -441,14 +441,14 @@ feature  {NONE} -- Implementation
 		end
 
 	date_from_string_implementation (d, field_separator: STRING; y_index,
-		m_index, d_index: INTEGER; two_digit_year_parition: INTEGER;
+		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER;
 		three_letter_month: BOOLEAN): DATE is
 			-- Implementation of `date_from_2_digit_year_string' and
 			-- `date_from_month_abbrev_string'
 		require
 			args_exist: d /= Void and field_separator /= Void
-			partition_valid: two_digit_year_parition = -1 or
-				two_digit_year_parition > 0
+			partition_valid: two_digit_year_partition = -1 or
+				two_digit_year_partition > 0
 		local
 			components: ARRAY [STRING]
 			su: expanded STRING_UTILITIES
@@ -460,9 +460,9 @@ feature  {NONE} -- Implementation
 				three_letter_month)
 			if date @ 1 /= -1 then
 				-- The contents of `components' were valid.
-				if two_digit_year_parition > 0 then
+				if two_digit_year_partition > 0 then
 					date.put (adjusted_2_digit_year (
-						date @ 1, two_digit_year_parition), 1)
+						date @ 1, two_digit_year_partition), 1)
 				end
 				Result := date_from_y_m_d (date @ 1, date @ 2, date @ 3)
 			end
