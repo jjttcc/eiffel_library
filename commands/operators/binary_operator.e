@@ -1,5 +1,5 @@
 indexing
-	description: "Abstraction for an operator that operates on two operands."
+	description: "Abstraction for an operator that operates on two operands"
 	date: "$Date$";
 	revision: "$Revision$"
 

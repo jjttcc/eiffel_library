@@ -12,6 +12,7 @@ inherit
 feature
 
 	execute (arg: ANY) is
+			-- Set value to the result of operand1 - operand2
 		do
 			operand1.execute (arg)
 			operand2.execute (arg)
@@ -25,6 +26,10 @@ feature
 				io.put_real (value)
 				io.put_string ("%N")
 			end
+		ensure then
+			value = operand1.value - operand2.value
+			subtraction_correct:
+				rabs (value - (operand1.value - operand2.value)) < epsilon
 		end
 
 end -- class SUBTRACTION
