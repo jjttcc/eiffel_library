@@ -35,7 +35,7 @@ feature -- Status report
 		do
 			Result := operand1.arg_used or operand2.arg_used
 		ensure then
-			ops_arg_used: Result = operand1.arg_used or operand2.arg_used
+			ops_arg_used: Result = (operand1.arg_used or operand2.arg_used)
 		end
 
 	execute_precondition: BOOLEAN is

@@ -27,7 +27,8 @@ feature -- Status report
 				rabs (value - (operand1.value - operand2.value)) < epsilon
 		ensure then
 			subtraction_correct:
-				rabs (value - (operand1.value - operand2.value)) < epsilon
+				Result =
+				(rabs (value - (operand1.value - operand2.value)) < epsilon)
 		end
 
 end -- class SUBTRACTION
