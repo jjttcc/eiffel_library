@@ -238,6 +238,7 @@ feature -- Input
 			y, m, d: INTEGER
 		do
 			error_occurred := False
+			last_date := Void
 			if not contents.item.item.is_empty then
 				splitter.set_target (contents.item.item)
 				ymd := splitter.tokens (date_field_separator)
