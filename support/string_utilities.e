@@ -34,6 +34,7 @@ feature -- Access
 		require
 			s_not_void: s /= Void
 			s_not_empty: not s.empty
+			target_not_void: target /= Void
 			target_not_empty: not target.empty
 		local
 			i, last_index: INTEGER
@@ -74,6 +75,7 @@ feature -- Element change
 			-- Remove all characters of `target' up to the last occurrence
 			-- of `c'.
 		require
+			target_not_void: target /= Void
 			has_c: target.has (c)
 		local
 			i, last_index: INTEGER
@@ -103,6 +105,7 @@ feature -- Element change
 	head (c: CHARACTER) is
 			-- Remove all characters of `target' from `c' to the end.
 		require
+			target_not_void: target /= Void
 			has_c: target.has (c)
 		local
 			i, last_index: INTEGER
@@ -111,9 +114,5 @@ feature -- Element change
 		ensure
 			no_c: not target.has (c)
 		end
-
-invariant
-
-	target_not_void: target /= Void
 
 end -- class STRING_UTILITIES
