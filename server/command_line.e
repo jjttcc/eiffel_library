@@ -30,9 +30,9 @@ feature {NONE} -- Initialization
 				contents.extend (argument (i))
 				i := i + 1
 			end
+			prepare_for_argument_processing
 			check_for_ambiguous_options
 			process_arguments (initial_setup_procedures)
-			prepare_for_argument_processing
 			process_arguments (main_setup_procedures)
 			finish_argument_processing
 			check_for_invalid_flags
