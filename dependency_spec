@@ -8,6 +8,9 @@ architectural	5
 commands	6
 data_scanning	7
 events	7
-server	5
+server	6
 support	5
+error	5
+database	6
+networking	5
 test	20
