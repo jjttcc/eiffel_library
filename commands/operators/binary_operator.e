@@ -64,6 +64,28 @@ feature -- Status report
 			Result := operand1.arg_mandatory or operand2.arg_mandatory
 		end
 
+feature -- Element change
+
+	set_operand1 (arg: RESULT_COMMAND [H]) is
+			-- Set `operand1' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			operand1 := arg
+		ensure
+			operand1_set: operand1 = arg and operand1 /= Void
+		end
+
+	set_operand2 (arg: RESULT_COMMAND [H]) is
+			-- Set `operand2' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			operand2 := arg
+		ensure
+			operand2_set: operand2 = arg and operand2 /= Void
+		end
+
 feature -- Basic operations
 
 	execute (arg: ANY) is
