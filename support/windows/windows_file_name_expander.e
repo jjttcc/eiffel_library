@@ -64,6 +64,8 @@ feature {NONE} -- Implemetation
 			create f.make(work_file)
 			if f.exists then
 				f.open_read
+			end
+			if f.readable then
 				from
 					f.start
 				until
