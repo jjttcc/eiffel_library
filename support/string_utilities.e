@@ -37,27 +37,27 @@ feature -- Access
 	target: STRING
 			-- The target string to operate on
 
-	tokens (s: STRING): ARRAYED_LIST [STRING] is
-			-- Tokenized list of all components of `target' separated by `s'.
-			-- If `s' does not occur in `target' Result will contain one
-			-- element whose contents equal `target'.
+	tokens (fld_sep: STRING): ARRAYED_LIST [STRING] is
+			-- Tokenized list of all components of `target' separated by
+			-- `fld_sep'.  If `fld_sep' does not occur in `target' Result
+			-- will contain one element whose contents equal `target'.
 		require
-			s_not_void: s /= Void
-			s_not_empty: not s.is_empty
+			s_not_void: fld_sep /= Void
+			s_not_empty: not fld_sep.is_empty
 			target_not_void: target /= Void
 		local
 			i, last_index, s_count: INTEGER
 		do
 			create Result.make (0)
 			if not target.is_empty then
-				last_index := target.substring_index (s, 1)
+				last_index := target.substring_index (fld_sep, 1)
 			end
 			if last_index = 0 then
 				Result.extend (target)
 			else
 				from
 					check last_index > 0 end
-					s_count := s.count
+					s_count := fld_sep.count
 					Result.extend (target.substring (1, last_index - 1))
 					i := last_index + s_count
 				until
@@ -65,11 +65,11 @@ feature -- Access
 				loop
 					if i > target.count then
 						last_index := 0
-						-- `s' occurred at the end of target, resulting
+						-- `fld_sep' occurred at the end of target, resulting
 						-- in an empty field
 						Result.extend ("")
 					else
-						last_index := target.substring_index (s, i)
+						last_index := target.substring_index (fld_sep, i)
 						if last_index > 0 then
 							Result.extend (target.substring (i, last_index - 1))
 							i := last_index + s_count
