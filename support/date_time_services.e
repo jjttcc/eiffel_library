@@ -82,11 +82,39 @@ feature -- Access
 							h := -1
 						end
 					end
-					if h >= 0 then
+					if
+						h >= 0 and work_time.is_correct_time (h, m, s, False)
+					then
 						create Result.make (h, m, s)
 					end
 				end
 			end
+		end
+
+	month_from_3_letter_abbreviation (m: STRING): INTEGER is
+			-- Month as an integer from the 3-letter abbreviation specified
+			-- by `m'
+		require
+			valid_month: m /= Void and m.count = 3 and
+				month_table.has (m)
+		do
+			Result := month_table @ m
+		ensure
+			valid_result: Result >= 1 and Result <= 12
+			definition: Result = month_table @ m
+		end
+
+	weekday_from_3_letter_abbreviation (d: STRING): INTEGER is
+			-- Weekday as an integer from the 3-letter abbreviation specified
+			-- by `d'
+		require
+			valid_weekday: d /= Void and d.count = 3 and
+				weekday_table.has (d)
+		do
+			Result := weekday_table @ d
+		ensure
+			valid_result: Result >= 1 and Result <= 7
+			definition: Result = weekday_table @ d
 		end
 
 	current_date: DATE is
@@ -195,6 +223,37 @@ feature -- Access
 			Result.append (fmtr.formatted (i3))
 		end
 
+	month_table: HASH_TABLE [INTEGER, STRING] is
+			-- Table of 3-letter month abbreviations mapped to the
+			-- respective integer value for the month
+		local
+			months: ARRAY [STRING]
+			i: INTEGER
+		once
+			create Result.make (12)
+			months := <<"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+				"Aug", "Sep", "Oct", "Nov", "Dec">>
+			from i := months.lower until i = months.upper + 1 loop
+				Result.extend (i, months @ i)
+				i := i + 1
+			end
+		end
+
+	weekday_table: HASH_TABLE [INTEGER, STRING] is
+			-- Table of 3-letter weekday abbreviations mapped to the
+			-- respective integer value for the weekday
+		local
+			weekdays: ARRAY [STRING]
+			i: INTEGER
+		once
+			create Result.make (12)
+			weekdays := <<"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat">>
+			from i := weekdays.lower until i = weekdays.upper + 1 loop
+				Result.extend (i, weekdays @ i)
+				i := i + 1
+			end
+		end
+
 feature -- Status report
 
 	hour_valid (h: INTEGER): BOOLEAN is
@@ -227,4 +286,14 @@ feature  {NONE} -- Implementation
 			create Result.make
 		end
 
-end -- class DATE_TIME_SERVICES
+invariant
+
+	month_table_setup: month_table /= Void and then month_table.count = 12 and
+		month_table @ "Jan" = 1 and month_table @ "Feb" = 2 and
+		month_table @ "Mar" = 3 and month_table @ "Apr" = 4 and
+		month_table @ "May" = 5 and month_table @ "Jun" = 6 and
+		month_table @ "Jul" = 7 and month_table @ "Aug" = 8 and
+		month_table @ "Sep" = 9 and month_table @ "Oct" = 10 and
+		month_table @ "Nov" = 11 and month_table @ "Dec" = 12
+
+end
