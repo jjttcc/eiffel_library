@@ -113,6 +113,8 @@ feature -- Basic operations
 		require
 			valid_args: a /= Void and descriptions /= Void and
 				a.count = descriptions.count
+			same_ranges: a.lower = descriptions.lower and
+				a.upper = descriptions.upper
 		local
 			i: INTEGER
 			invalid_items: LINKED_LIST [STRING]
