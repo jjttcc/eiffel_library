@@ -202,8 +202,11 @@ feature -- Cursor movement
 			last_character_was_record_separator: BOOLEAN
 		do
 			first_rsep_char := record_separator @ 1
+--!!!:print ("scr, before back - position: " + position.out + "%N")
 			if
-				not before and not (field_index = 1) and
+--!!!!:				not before and not (field_index = 1) and
+--!!!Note: suggested bug fix - if it works, formalize it:
+position > 0 and not (field_index = 1) and
 				is_tab_space_or_newline (first_rsep_char)
 			then
 				back
