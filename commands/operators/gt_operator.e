@@ -4,17 +4,19 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class GT_OPERATOR [G->COMPARABLE] inherit
+class GT_OPERATOR inherit
 
-	BOOLEAN_OPERATOR [G]
+	BOOLEAN_OPERATOR
 
-feature
+creation
 
-	execute (arg: ANY) is
+	make
+
+feature {NONE} -- Implementation
+
+	operation (v1, v2: REAL): BOOLEAN is
 		do
-			value := operand1 > operand2
-		ensure then
-			value_gt: value = (operand1 > operand2)
+			Result := v1 > v2
 		end
 
 end -- class GT_OPERATOR
