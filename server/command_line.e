@@ -43,6 +43,9 @@ feature -- Access
 			-- Has the user requested the version number?
 			-- True if "-v" is found.
 
+	is_debug: BOOLEAN
+			-- Has "debug" mode been specified?
+
 	error_occurred: BOOLEAN
 			-- Did an error occur while processing options?
 
@@ -76,13 +79,13 @@ feature {NONE} -- Implementation
 	set_help is
 		do
 			if option_in_contents (Help_character) then
-				help := true
+				help := True
 				contents.remove
 			elseif
 				Help_character /= Question_mark and
 				option_in_contents (Question_mark)
 			then
-					help := true
+					help := True
 					contents.remove
 			end
 		end
@@ -90,13 +93,34 @@ feature {NONE} -- Implementation
 	set_version_request is
 		do
 			if option_in_contents ('v') then
-				version_request := true
+				version_request := True
 				contents.remove
 			end
 		end
 
+	set_debug is
+			-- Set `is_debug' to True and remove the item that contains
+			-- the debug setting from `contents' iff `contents' contains
+			-- "-" + Debug_string or "--" + Debug_string.  Descendant must
+			-- explicitly call this routine if the debugging state is desired.
+		local
+			i: INTEGER
+		do
+			if option_in_contents (Debug_string @ 1) then
+				if
+					contents.item.substring_index ("-" + Debug_string, 1) = 1
+					or
+					contents.item.substring_index ("--" + Debug_string, 1) = 1
+				then
+					is_debug := True
+					contents.remove
+				end
+			end
+		end
+
 	option_in_contents (c: CHARACTER): BOOLEAN is
-			-- Is option `c' in `contents'?
+			-- Is option `c' in `contents'?  (If so, position `contents'
+			-- cursor to the matching item.)
 		do
 			from
 				contents.start
@@ -113,16 +137,18 @@ feature {NONE} -- Implementation
 					contents.item.item (2) = option_sign and
 					contents.item.item (3) = c)
 				then
-					Result := true
+					Result := True
 				else
 					contents.forth
 				end
 			end
 		ensure
-			Result implies (contents.item.item (1) = option_sign and
+			cursor_set_if_true: Result = (not contents.exhausted and then
+				(contents.item.item (1) = option_sign and
 				contents.item.item (2) = c) or (contents.item.item (1) =
 				option_sign and contents.item.item (2) = option_sign and
-				contents.item.item (3) = c)
+				contents.item.item (3) = c))
+			exhausted_if_false: not Result = contents.exhausted
 		end
 
 	option_string_in_contents (s: STRING): BOOLEAN is
@@ -146,7 +172,7 @@ feature {NONE} -- Implementation
 					contents.item.item (2) = option_sign and
 					contents.item.substring (3, scount + 2).is_equal (s))
 				then
-					Result := true
+					Result := True
 				else
 					contents.forth
 				end
@@ -158,6 +184,10 @@ feature {NONE} -- Implementation
 				contents.item.item (2) = option_sign and
 				contents.item.substring (3, s.count + 2).is_equal (s))
 		end
+
+feature {NONE} -- Implementation - Constants
+
+	Debug_string: STRING is "debug"
 
 invariant
 
