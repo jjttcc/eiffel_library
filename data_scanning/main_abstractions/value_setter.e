@@ -36,8 +36,6 @@ feature -- Basic operations
 			args_not_void: stream /= Void and tuple /= Void
 			stream_readable: stream.readable
 		do
---!!!:
---print ("stream is readable: " + stream.readable.out + "%N")
 			unrecoverable_error := False
 			read_value (stream)
 			error_occurred := stream.error_occurred

@@ -44,7 +44,6 @@ feature -- Access
 
 	record_index: INTEGER
 
---!!!:
 	field_count: INTEGER is
 		local
 			saved_position, fcount: INTEGER
@@ -52,7 +51,6 @@ feature -- Access
 			end_of_record: BOOLEAN
 			su: expanded STRING_UTILITIES
 		do
-print ("IF.field_count called" + "%N")
 			saved_position := position
 			check
 				readable: readable
@@ -92,23 +90,12 @@ print ("IF.field_count called" + "%N")
 				else
 					Result := fcount + field_index - 1
 				end
---print ("fc - fcount, field_index, result: " + fcount.out + ", " +
---field_index.out + ", " + Result.out + "%N")
 			end
---if Result > 6 then print ("OH-OHHHHHHHHHHHHHHH!!!" + "%N") end
 		end
 
 feature -- Status report
 
 	after_last_record: BOOLEAN
-
---!!!!!!:
-	after_last_record_old_remove_me_please: BOOLEAN is
-		do
-			Result := after and then field_index = 1
-print ("IF.after last record ... SHOULD NOT BE CALLED, field_index: " + Result.out +
-", " + field_index.out + "%N")
-		end
 
 	last_error_fatal: BOOLEAN
 
@@ -120,8 +107,6 @@ feature -- Cursor movement
 		local
 			i: INTEGER
 		do
---!!!:
---print ("IF.field_count: " + field_count.out + "%N")
 			last_error_fatal := False
 			error_occurred := False
 			from
@@ -155,15 +140,12 @@ feature -- Cursor movement
 			field_index := field_index + 1
 		end
 
---!!!:
 	advance_to_next_record is
 			-- Advance the cursor to the next record.
 			-- Set error_occurred and error_string if an error is encountered.
 		local
 			i: INTEGER
 		do
---if record_index = 249 then print ("STOP!" + "%N") end
---print ("[1] IF.advnrec - eof: " + end_of_file.out + "%N")
 			last_error_fatal := False
 			error_occurred := False
 			from
@@ -179,8 +161,6 @@ feature -- Cursor movement
 				if
 					not is_tab_space_or_newline (record_separator @ i)
 				then
---print ("[1] anr - read_char" + "%N")
---io.output.flush
 					read_character
 					if
 						last_character /= record_separator @ i
@@ -198,8 +178,6 @@ feature -- Cursor movement
 			field_index := 1
 			record_index := record_index + 1
 			-- If just before the end-of-file, force EOF.
---print ("[2] anr - read_char" + "%N")
---io.output.flush
 			if not end_of_file then
 				check
 					is_readable: readable
@@ -216,7 +194,6 @@ feature -- Cursor movement
 			else
 				after_last_record := True
 			end
---print ("[2] IF.advnrec - eof: " + end_of_file.out + "%N")
 		end
 
 	discard_current_record is
@@ -268,7 +245,6 @@ feature -- Cursor movement
 			after_last_record := count = 0
 		end
 
---!!!:
 	position_cursor (p: INTEGER) is
 			-- Move the file cursor to the absolute position `p' and
 			-- initialize `' and `' to 1.
@@ -281,7 +257,6 @@ feature -- Cursor movement
 			field_index := 1
 			record_index := 1
 			after_last_record := count = position
---if after_last_record then print ("ODD: poscurs - count = position" + "%N") end
 		ensure
 			position_set: position = p
 			indexes_set_to_1: field_index = 1 and record_index = 1
