@@ -1,7 +1,7 @@
 indexing
 	description:
-		"An event registrant that keeps a record of past events received %
-		%and that keeps track of what types of events it is interested in"
+		"Abstraction that registers to be notified of specific types of %
+		%events and that processes each event of which it was notified"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
