@@ -55,8 +55,7 @@ feature -- Basic operations
 				handle_assertion_violation
 			elseif exception /= Signal_exception then
 				if is_developer_exception then
-					error_msg := concatenation (<<":%N",
-						developer_exception_name, "%N">>)
+					error_msg := ":%N" + developer_exception_name + "%N"
 					fatal := last_exception_status.fatal
 				else
 					error_msg := "%N"
@@ -86,6 +85,8 @@ feature -- Basic operations
 			end
 			if fatal then
 				exit (Error_exit_status)
+			else
+				last_exception_status.set_description ("")
 			end
 		end
 
@@ -141,7 +142,7 @@ feature {NONE} -- Implementation
 		do
 			Result := recipient_name
 			if Result /= Void and not Result.is_empty then
-				Result := concatenation (<<"in ", "routine `", Result, "' ">>)
+				Result := "in routine `" + Result + "' "
 			else
 				Result := ""
 			end
@@ -151,7 +152,7 @@ feature {NONE} -- Implementation
 		do
 			Result := tag_name
 			if Result /= Void and not Result.is_empty then
-				Result := concatenation (<<"with tag:%N%"", Result, "%"%N">>)
+				Result := "with tag:%N%"" + Result + "%"%N"
 			else
 				Result := ""
 			end
@@ -161,7 +162,7 @@ feature {NONE} -- Implementation
 		do
 			Result := class_name
 			if Result /= Void and not Result.is_empty then
-				Result := concatenation (<<"from class %"", Result, "%".%N">>)
+				Result := "from class %"" + Result + "%".%N"
 			else
 				Result := ""
 			end
@@ -172,10 +173,10 @@ feature {NONE} -- Implementation
 			Result := meaning (exception)
 			if Result /= Void and not Result.is_empty then
 				if errname /= Void and not errname.is_empty then
-					Result := concatenation (<<"Type of ", errname, ": ",
-						Result>>)
+					Result := "Type of " + errname + ": " +
+						Result
 				else
-					Result := concatenation (<<"(", Result, ")">>)
+					Result := "(" + Result + ")"
 				end
 			else
 				Result := ""
@@ -190,40 +191,46 @@ feature {NONE} -- Implementation
 				-- Feature call on void target is a special case that can
 				-- cause problems (specifically, OS signal when calling
 				-- class_name) - so handle it separately.
-				Result := concatenation (<<errname, " occurred: ",
-					meaning (exception), "%N[Exception trace:%N",
-					exception_trace, "]%N">>)
+				Result := errname + " occurred: " +
+					meaning (exception) + "%N[Exception trace:%N" +
+					exception_trace + "]%N"
 			else
-				Result := concatenation (<<errname, " occurred ",
-					exception_routine_string, tag_string, class_name_string,
-					exception_meaning_string (errname), "%N">>)
+				Result := errname + " occurred " +
+					exception_routine_string + tag_string + class_name_string +
+					exception_meaning_string (errname) + "%N"
 				if
 					recipient_name /= Void and original_recipient_name /= Void
-					and not recipient_name.is_equal(original_recipient_name)
+					and not recipient_name.is_equal (original_recipient_name)
 				then
-					Result := concatenation (<<Result,
-					"(Original routine where the violation occurred: ",
-					original_recipient_name, ".)%N">>)
+					Result := Result +
+						"(Original routine where the violation occurred: " +
+						original_recipient_name + ".)%N"
 				end
 				if
 					tag_name /= Void and original_tag_name /= Void and
-					not tag_name.is_equal(original_tag_name)
+					not tag_name.is_equal (original_tag_name)
 				then
-					Result := concatenation (<<Result,
-					"(Original tag name: ",
-					original_tag_name, ".)%N">>)
+					Result := Result + "(Original tag name: " +
+						original_tag_name + ".)%N"
 				end
 				if
 					class_name /= Void and original_class_name /= Void and
-					not class_name.is_equal(original_class_name)
+					not class_name.is_equal (original_class_name)
 				then
-					Result := concatenation (<<Result,
-					"(Original class name: ",
-					original_class_name, ".)%N">>)
+					Result := Result + "(Original class name: " +
+						original_class_name + ".)%N"
 				end
 				if stack_trace then
-					Result := concatenation (<<Result, "%N[Exception trace:%N",
-						exception_trace, "]%N">>)
+					Result := Result + "%N[Exception trace:%N" +
+						exception_trace + "]%N"
+				end
+			end
+			if not last_exception_status.description.is_empty then
+				if Result /= Void and not Result.is_empty then
+					Result := last_exception_status.description +
+						" - " + Result
+				else
+					Result := last_exception_status.description
 				end
 			end
 		end
