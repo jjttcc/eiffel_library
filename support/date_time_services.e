@@ -31,7 +31,7 @@ feature -- Access
 			end
 		end
 
-	date_from_yyyymmdd_string (d, separator: STRING): DATE is
+	date_from_string (d, separator: STRING): DATE is
 			-- Date from `d' in the form yyyyXmmXdd, where X is the
 			-- value of `separator' - for example, "/" when `d' is in
 			-- the format yyyy/mm/dd.  If the format of `d' is invalid,
