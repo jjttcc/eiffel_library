@@ -127,6 +127,12 @@ feature -- Access
 			create Result.make_now
 		end
 
+	date_as_yyyymmdd (date: DATE): STRING is
+			-- `date' formatted as yyyymmdd
+		do
+			Result := formatted_date (date, 'y', 'm', 'd', "")
+		end
+
 	formatted_date (date: DATE; f1, f2, f3: CHARACTER; fs: STRING): STRING is
 			-- Formatted `date', with year, month, and day in the order
 			-- specified by `f1', `f2', and `f3', separated by `fs'.  If
