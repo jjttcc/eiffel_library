@@ -12,7 +12,7 @@ inherit
 
 creation
 
-	make_with_operands
+	make
 
 feature
 

@@ -23,7 +23,7 @@ feature -- Access
 
 feature
 
-	set_operands, make_with_operands (op1: like operand1;
+	set_operands, make (op1: like operand1;
 										op2: like operand2) is
 			-- Set the operands to the specified values.
 		require
