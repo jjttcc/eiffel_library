@@ -408,6 +408,26 @@ feature -- Access
 			end
 		end
 
+	date_time_duration_in_minutes (d: DATE_TIME_DURATION): INTEGER is
+			-- Total number of minutes in `d', ignoring `d.month' and
+			-- `d.year', and `d.second'
+		require
+			d_exists: d /= Void
+		do
+			Result := d.minute + d.minutes_in_hour * d.hour
+			if not equal (d.date, d.date.zero) then
+				Result := Result + d.minutes_in_hour * d.hours_in_day * d.day
+			end
+		end
+
+	time_duration_in_minutes (d: TIME_DURATION): INTEGER is
+			-- Total number of minutes in `d', ignoring `d.second'
+		require
+			d_exists: d /= Void
+		do
+			Result := d.minute + d.minutes_in_hour * d.hour
+		end
+
 feature -- Status report
 
 	hour_valid (h: INTEGER): BOOLEAN is
