@@ -122,12 +122,12 @@ feature {NONE} -- Implementation
 
 	contents: LINKED_LIST [STRING]
 
-	Help_character: CHARACTER is
+	help_character: CHARACTER is
 		once
 			Result := 'h'
 		end
 
-	Question_mark: CHARACTER is '?'
+	question_mark: CHARACTER is '?'
 
 	set_help is
 		do
@@ -285,12 +285,12 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Constants
 
-	Debug_string: STRING is
+	debug_string: STRING is
 		once
 			Result := "debug"
 		end
 
-	Ambiguous_option_message: STRING is
+	ambiguous_option_message: STRING is
 		once
 			Result := "Ambiguous option"
 		end
