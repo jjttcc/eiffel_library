@@ -2,8 +2,6 @@ indexing
 
 	description:
 		"A readable (and read-only), iterable sequence of CHARACTERs";
-	date: "$Date$";
-	revision: "$Revision$"
 	status: "Copyright 1999 - 2000: Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
