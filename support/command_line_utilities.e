@@ -337,89 +337,19 @@ feature -- Miscellaneous
 			print_list (<<msg, "%N">>)
 		end
 
-	print_names_in_4_columns (names: LIST [STRING]) is
-			-- Print each element of `names' as a numbered item
-			-- to the screen in 4 columns.
-		local
-			cols, width, interval, i, end_index: INTEGER
-		do
-			cols := 4
-			width := 76
-			interval := (names.count + cols - 1) // cols
-			end_index := interval * cols
-			i := 1
-			if names.count >= cols then
-				from
-				until
-					i = interval + 1
-				loop
-					print_list (<<i, ") ",
-						names @ i,
-						spaces ((width / cols - (floor (log10 (i)) + 3 +
-							names.i_th(i).count)).ceiling),
-						i + interval, ") ", names @ (i + interval),
-						spaces ((width / cols -
-							(floor (log10 (i + interval)) + 3 +
-								names.i_th(i + interval).count)).ceiling),
-						i + interval * 2, ") ", names @ (i + interval * 2)>>)
-					if i + interval * 3 <= names.count then
-						print_list (<<spaces ((width / cols -
-							(floor (log10 (i + interval * 2)) + 3 +
-								names.i_th(i + interval * 2).count)).ceiling),
-						i + interval * 3, ") ", names @ (i + interval * 3),
-						"%N">>)
-					else
-						print ("%N")
-					end
-					i := i + 1
-				end
-			else
-				if i <= names.count then
-					print_list (<<i, ") ",
-						names @ i,
-						spaces ((width / cols - (floor (log10 (i)) + 3 +
-							names.i_th(i).count)).ceiling)>>)
-				end
-				if i + interval <= names.count then
-					print_list (<<i + interval, ") ", names @ (i + interval),
-						spaces ((width / cols -
-							(floor (log10 (i + interval)) + 3 +
-								names.i_th(i + interval).count)).ceiling)>>)
-				end
-				if i + interval * 2 <= names.count then
-					print_list (<<i + interval * 2, ") ",
-						names @ (i + interval * 2),
-						spaces ((width / cols -
-							(floor (log10 (i + interval * 2)) + 3 +
-								names.i_th(i + interval *
-								2).count)).ceiling)>>)
-				end
-				if i + interval * 3 <= names.count then
-						print_list (<<i + interval * 3, ") ",
-							names @ (i + interval * 3), "%N">>)
-				end
-				print ("%N")
-			end
-		end
-
 	print_row(names: LIST [STRING]; row, rows, cols, namecount,
 			column_pivot, row_width: INTEGER) is
 		local
 			column, i: INTEGER
 		do
---print_list (<<"row, rows, cols, namecount, column_pivot, row_width: ", row,
---", ", rows, ", ", cols, ", ", namecount, ", ", column_pivot, ", ",
---row_width, "%N">>)
 			from column := 1 until
 				column = cols or
 				(row = rows and column_pivot > 0 and column > column_pivot)
 			loop
 				if column_pivot > 0 and column - 1 > column_pivot then
---print_list (<<"(x", column, ") ">>)
 					i := row + rows * column_pivot +
 						(rows - 1) * (column - 1 - column_pivot)
 				else
---print_list (<<"(y", column, ") ">>)
 					i := row + rows * (column - 1)
 				end
 				if i <= namecount then
@@ -433,11 +363,9 @@ feature -- Miscellaneous
 				not (row = rows and column_pivot > 0 and column > column_pivot)
 			then
 				if column_pivot > 0 and column - 1 > column_pivot then
---print_list (<<"(X", column, ") ">>)
 					i := row + rows * column_pivot +
 						(rows - 1) * (column - 1 - column_pivot)
 				else
---print_list (<<"(Y", column, ") ">>)
 					i := row + rows * (column - 1)
 				end
 				if i <= namecount then
