@@ -34,6 +34,34 @@ feature -- String manipulation
 			not_void: Result /= Void
 		end
 
+	list_concatenation (l: LIST [ANY]; suffix: STRING): STRING is
+			-- A string containing a concatenation of all elements of `l',
+			-- with `suffix', if it is not empty, appended to each element
+		require
+			not_void: l /= Void
+		local
+			s: STRING
+		do
+			from
+				Result := ""
+				s := ""
+				if suffix /= Void and then not suffix.is_empty then
+					s := suffix
+				end
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item /= Void then
+					Result.append (l.item.out + s)
+				end
+				l.forth
+			end
+		ensure
+			not_void: Result /= Void
+			empty_if_empty: l.is_empty implies Result.is_empty
+		end
+
 	replace_token_all (target, token, new_value: STRING;
 		start_delimiter, end_delimiter: CHARACTER) is
 			-- Replace in `target' all occurrences of
