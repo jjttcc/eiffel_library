@@ -195,6 +195,14 @@ feature -- Miscellaneous
 			Result := o = Void
 		end
 
+	non_empty_string (s: STRING): BOOLEAN is
+			-- Is `s' not empty?
+		do
+			Result := s /= Void and then not s.is_empty
+		ensure
+			Result = (s /= Void and then not s.is_empty)
+		end
+
 feature -- Constants
 
 	Maximum_message_length: INTEGER is
