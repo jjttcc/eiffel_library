@@ -22,6 +22,11 @@
 #endif
 #include <eif_cecil.h>
 
+/* Exit the current process. */
+void end_program (int i) {
+	exit (i);
+}
+
 /* Simple and completely innaccurate sleep function implemented with loops */
 void loop_sleep (int seconds, int microseconds) {
 	int i, j, k, dummy;
