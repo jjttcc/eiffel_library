@@ -1,6 +1,6 @@
 indexing
 	description:
-		"An input-record sequence that splits a string into records and %
+		"Input-record sequences that split a string into records and %
 		%fields according to specified field and record separators"
 	author: "Jim Cochrane"
 	date: "$Date$";

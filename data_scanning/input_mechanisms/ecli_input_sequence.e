@@ -1,5 +1,5 @@
 indexing
-	description: "An input record sequence for a database implementation %
+	description: "Input record sequences for a database implementation %
 		%using the ECLI package"
 	author: "Jim Cochrane"
 	date: "$Date$";
