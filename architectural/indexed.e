@@ -1,5 +1,5 @@
 indexing
-	description: "Simple Abstract Data Type with an index feature"
+	description: "Objects with an index feature"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Basic abstraction for a factory that produces a result by %
+		"Basic abstraction for factories that produce a result by %
 		%calling execute"
 	author: "Jim Cochrane"
 	date: "$Date$";

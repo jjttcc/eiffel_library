@@ -1,5 +1,5 @@
 indexing
-	description: "Basic abstraction for an executable command"
+	description: "Basic abstraction for executable commands"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -107,6 +107,7 @@ feature -- Status report
 			-- Is Current editable - that is, does it have one or more
 			-- parameters that can be changed?
 		do
+			-- Default to False - redefine if needed.
 		end
 
 feature -- Element change
@@ -131,7 +132,7 @@ feature -- Basic operations
 		end
 
 	prepare_for_editing (editor: ANY) is
-			-- Prepare `editor' for editing Current.
+			-- Prepare `editor' for editing Current (not Current's children).
 		require
 			editable: is_editable
 			editor_exists: editor /= Void
@@ -145,6 +146,7 @@ feature {NONE} -- Implementation
 
 invariant
 
+	children_exist: children /= Void
 	children_and_descendants_correspond: children.is_empty =
 		descendants.is_empty
 	name_not_void: name /= Void

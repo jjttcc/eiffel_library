@@ -1,6 +1,6 @@
 indexing
 	description:
-		"A RESULT_COMMAND that extracts the current index from an %
+		"RESULT_COMMANDs that extract the current index from an %
 		%INDEXED object"
 	note: "indexable must be attached to a non-void object before execute %
 		%is called."

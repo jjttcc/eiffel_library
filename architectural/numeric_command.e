@@ -1,5 +1,5 @@
 indexing
-	description: "Command whose result is a numeric value";
+	description: "Commands with a numeric value as a result";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

@@ -1,5 +1,5 @@
 indexing
-	description: "Command with a result of generic type G";
+	description: "Commands with a result of generic type G";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
