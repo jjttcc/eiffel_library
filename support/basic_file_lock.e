@@ -14,6 +14,11 @@ class BASIC_FILE_LOCK inherit
 			make
 		end
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 	EXCEPTIONS
 		export
 			{NONE} all
@@ -36,13 +41,21 @@ feature -- Basic operations
 	try_lock is
 		local
 			fname: ANY
+			suffix: STRING
 		do
 			fname := lock_file_name.to_c
 			if try_to_open ($fname, False_value) = -1 then
 				locked := false
 				if last_op_failed then
+					if open_file_exists /= 0 then
+						suffix := concatenation (<<"%N(Lock file ",
+							lock_file_name, " exists.)">>)
+					else
+						suffix := Void
+					end
 					error_occurred := true
-					set_last_error ("Error occurred trying to lock file: ")
+					set_last_error ("Error occurred trying to lock file: ",
+						suffix)
 				end
 			else
 				locked := true
@@ -56,7 +69,7 @@ feature -- Basic operations
 			fname := lock_file_name.to_c
 			if try_to_open ($fname, True_value) = -1 then
 				error_occurred := true
-				set_last_error ("Error occurred while locking file: ")
+				set_last_error ("Error occurred while locking file: ", Void)
 				raise (last_error)
 			end
 			locked := true
@@ -69,7 +82,7 @@ feature -- Basic operations
 			fname := lock_file_name.to_c
 			if remove_file ($fname) = -1 then
 				error_occurred := true
-				set_last_error ("Error occurred trying to unlock item: ")
+				set_last_error ("Error occurred trying to unlock item: ", Void)
 				last_error.append (".%N(Could not remove lock file:%N")
 				last_error.append (lock_file_name)
 				last_error.append (".)%N")
@@ -90,6 +103,11 @@ feature {NONE} -- Implementation
 			 "C"
 		end
 
+	open_file_exists: INTEGER is
+		external
+			 "C"
+		end
+
 	error_on_last_operation: INTEGER is
 		external
 			 "C"
@@ -97,12 +115,15 @@ feature {NONE} -- Implementation
 
 	last_error: STRING
 
-	set_last_error (pre_fix: STRING) is
+	set_last_error (pre_fix, suffix: STRING) is
 		do
 			create last_error.make (0)
 			last_error.from_c (last_c_error)
 			if pre_fix /= Void and not pre_fix.empty then
 				last_error.prepend (pre_fix)
+			end
+			if suffix /= Void and not suffix.empty then
+				last_error.append (suffix)
 			end
 		end
 
