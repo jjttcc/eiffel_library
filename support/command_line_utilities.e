@@ -16,7 +16,7 @@ class COMMAND_LINE_UTILITIES [G] inherit
 			print
 		end
 
-	PRINTING
+	GENERAL_UTILITIES
 		export
 			{NONE} all
 		undefine
@@ -75,7 +75,7 @@ feature -- Access
 	string_selection (msg: STRING): STRING is
 			-- User-selected real value
 		do
-			print_list (<<"Enter a real value for ", msg, ": ", eom>>)
+			print_list (<<msg, ": ", eom>>)
 			read_line
 			Result := clone (last_string)
 		end
