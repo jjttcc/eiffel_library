@@ -40,13 +40,14 @@ feature -- Access
 		do
 			if product_implementation = Void then
 				create product_implementation.make (0)
-				raw := raw_product.area
-				product_implementation.from_c_substring ($raw, 1, product_count)
+				raw := raw_product
+				product_implementation.from_c_substring ($raw_product, 1,
+					product_count)
 			end
 			Result := product_implementation
 		end
 
-	raw_product: TO_SPECIAL [CHARACTER]
+	raw_product: SPECIAL [CHARACTER]
 
 	product_count: INTEGER
 
@@ -57,24 +58,52 @@ feature {NONE} -- Implementation
 			buffcount: INTEGER
 			src, dest: ANY
 			cmpresult: INTEGER
+			timer: TIMER
+			buffer: TO_SPECIAL [CHARACTER]
 		do
+			create timer.make
 			product_implementation := Void
 			buffcount := (target.count + target.count * .0015 + 25).ceiling
-			create raw_product.make_area (buffcount)
+			create buffer.make_area (buffcount)
 			src := target.area
-			dest := raw_product.area
+			raw_product := buffer.area
+			dest := raw_product
 			cmpresult := zlib_compress2 ($dest, $buffcount, $src,
 				target.area.count, compression_level)
 			check
 				compression_level_was_valid: cmpresult /= Stream_error
 			end
 			if cmpresult /= No_error then
-				error_occurred := true
-				product_count := 0
-				last_error := error_value (cmpresult)
+				if cmpresult = Buffer_error then
+					-- Buffer was too small - Try again with a larger buffer.
+					buffcount := buffcount + 254
+					create buffer.make_area (buffcount)
+					raw_product := buffer.area
+					dest := raw_product
+					cmpresult := zlib_compress2 ($dest, $buffcount, $src,
+						target.area.count, compression_level)
+					if cmpresult /= No_error then
+						error_occurred := true
+						product_count := 0
+						last_error := error_value (cmpresult)
+					else
+						product_count := buffcount
+					end
+				else
+					error_occurred := true
+					product_count := 0
+					last_error := error_value (cmpresult)
+				end
 			else
 				product_count := buffcount
 			end
+			print ("Compression took ");
+			print (timer.elapsed_time.fine_seconds_count); print ("%N")
+			print ("target size: ");
+			print (target.count)
+			print (", product size: ");
+			print (product_count)
+			print ("%N");
 		end
 
 	product_implementation: STRING
@@ -98,6 +127,6 @@ feature {NONE} -- Implementation - external routines
 
 invariant
 
-	compression_level >= 0 and compression_level <= 9
+	compression_level >= -1 and compression_level <= 9
 
 end -- class ZLIB_COMPRESSION
