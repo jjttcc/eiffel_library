@@ -11,8 +11,6 @@ indexing
 deferred class EVENT inherit
 
 	COMPARABLE
-general_utilities --!!!
-undefine is_equal end
 
 feature -- Access
 
@@ -48,9 +46,6 @@ feature -- Comparison
 
 	infix "<" (other: EVENT): BOOLEAN is
 		do
-print_list (<<"comparing ", date, ", ", time, " with ", other.date,
-", ", other.time, ".%Ntimestamps: ", time_stamp, ", ", other.time_stamp,
-"%N.">>)
 			if date = Void or other.date = Void then
 				Result := date = Void and other.date /= Void
 			elseif date.is_equal (other.date) then
@@ -64,7 +59,6 @@ print_list (<<"comparing ", date, ", ", time, " with ", other.date,
 			else
 				Result := date < other.date
 			end
-print_list(<<"Result: ", Result, "%N">>)
 		end
 
 invariant
