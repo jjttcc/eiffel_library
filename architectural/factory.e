@@ -15,7 +15,7 @@ feature -- Basic operations
 			-- Produce a result, stored in `product'.
 		deferred
 		ensure then
-			product /= Void
+			product_not_void: product /= Void
 		end
 
 feature -- Access
