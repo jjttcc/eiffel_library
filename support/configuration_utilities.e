@@ -157,7 +157,6 @@ feature {NONE} -- Implementation
 				until
 					file_reader.exhausted
 				loop
-print ("Processing " + file_reader.item + ".%N")
 					if
 						not (file_reader.item.count = 0 or else
 							file_reader.item @ 1 = comment_character)
