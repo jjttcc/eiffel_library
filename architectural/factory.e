@@ -2,6 +2,7 @@ indexing
 	description:
 		"Basic abstraction for a factory that produces a result by %
 		%calling execute"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

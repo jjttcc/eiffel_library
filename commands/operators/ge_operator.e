@@ -1,5 +1,6 @@
 indexing
 	description: "Greater-than-or-equal-to operator"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -11,6 +11,7 @@ indexing
 		%value_setters would contain instances of the classes (with names %
 		%such as) NAME_SETTER, ADDRESS_SETTER, and TELEPHONE_SETTER, %
 		%arranged in that order."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
