@@ -78,7 +78,7 @@ feature -- Basic operations
 		do
 			-- An exception may have caused a lock to have been left open -
 			-- ensure that clean-up occurs to remove the lock:
-			no_cleanup := false
+			no_cleanup := False
 			if assertion_violation then
 				handle_assertion_violation
 			elseif exception /= Signal_exception then
@@ -91,19 +91,19 @@ feature -- Basic operations
 						fatal_exception (exception)
 				end
 				log_errors (<<"%NError encountered - ", routine_description,
-					error_msg, error_information ("Exception", false)>>)
+					error_msg, error_information ("Exception", False)>>)
 			elseif
 				signal = Sigterm or signal = Sigabrt or signal = Sigquit
 			then
 				log_errors (<<"%NCaught kill signal in ", routine_description,
 					":%N", signal_meaning (signal), " (", signal, ")",
-					"%NDetails: ", error_information ("Exception ", true),
+					"%NDetails: ", error_information ("Exception ", True),
 					"%Nexiting ...%N">>)
-				fatal := true
+				fatal := True
 			else
 				log_errors (<<"%NCaught signal in ", routine_description,
 					":%N", signal_meaning (signal), " (", signal, ")",
-					"%NDetails: ", error_information ("Exception ", true)>>)
+					"%NDetails: ", error_information ("Exception ", True)>>)
 				fatal := last_exception_status.fatal
 				if fatal then
 					log_error(" - exiting ...%N")
@@ -120,7 +120,7 @@ feature -- Basic operations
 
 	exit (status: INTEGER) is
 			-- Exit the application with the specified status.  If `no_cleanup'
-			-- is false, call `termination_cleanup'.
+			-- is False, call `termination_cleanup'.
 		do
 			if verbose_reporting then
 				if status /= 0 then
@@ -313,7 +313,7 @@ feature {NONE} -- Implementation
 
 	handle_assertion_violation is
 		do
-			log_error (error_information (Assert_string, true))
+			log_error (error_information (Assert_string, True))
 			exit (Error_exit_status)
 		end
 

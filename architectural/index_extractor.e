@@ -45,7 +45,7 @@ feature -- Status report
 
 	arg_mandatory: BOOLEAN is
 		do
-			Result := false
+			Result := False
 		end
 
 feature -- Basic operations
