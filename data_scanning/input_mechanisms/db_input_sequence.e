@@ -61,10 +61,6 @@ feature --
 			tuple_sequence.start
 		end
 
-	read_line is
-		do
-		end
-
 	read_integer is
 		local
 			i_ref: INTEGER_REF
@@ -109,10 +105,6 @@ feature --
 			last_real := last_double.truncated_to_real
 		end
 
-	read_stream(nb_char: INTEGER) is
-		do
-		end
-
 feature -- Access
 
 	after: BOOLEAN is
@@ -142,8 +134,6 @@ feature -- Access
 
 	last_integer: INTEGER
 
-	last_string: STRING
-
 	last_character: CHARACTER
 
 	index: INTEGER is
@@ -151,18 +141,12 @@ feature -- Access
 			Result := tuple_sequence.index
 		end
 
-	item: CHARACTER is
-		do
-		end
-
 	count: INTEGER is
 		do
 			Result := tuple_sequence.count
 		end
 
-	name: STRING is
-		do
-		end
+	name: STRING is "database input sequence"
 
 feature {NONE} -- Implementation
 
