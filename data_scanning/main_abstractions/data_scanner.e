@@ -187,7 +187,7 @@ feature {NONE} -- Hook methods
 			invariant
 				-- tuple.number_of_fields_set = value_setters.index - 1
 			variant
-				value_setters.count - value_setters.index
+				value_setters.count - value_setters.index + 1
 			until
 				value_setters.after
 			loop
