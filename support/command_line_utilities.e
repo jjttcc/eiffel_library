@@ -31,11 +31,19 @@ class COMMAND_LINE_UTILITIES inherit
 			print
 		end
 
+	EXCEPTIONS
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 feature {NONE} -- Access
 
 	character_selection (msg: STRING): CHARACTER is
 			-- User-selected character
 		do
+			current_lines_read := 0
 			if msg /= Void and not msg.is_empty then
 				print_list (<<msg, eom>>)
 			end
@@ -54,6 +62,7 @@ feature {NONE} -- Access
 	integer_selection (msg: STRING): INTEGER is
 			-- User-selected integer value
 		do
+			current_lines_read := 0
 			if msg /= Void and not msg.is_empty then
 				print_list (<<"Enter an integer value for ", msg, " ", eom>>)
 			end
@@ -64,6 +73,7 @@ feature {NONE} -- Access
 	real_selection (msg: STRING): REAL is
 			-- User-selected real value
 		do
+			current_lines_read := 0
 			if msg /= Void and not msg.is_empty then
 				print_list (<<"Enter a real value for ", msg, " ", eom>>)
 			end
@@ -74,6 +84,7 @@ feature {NONE} -- Access
 	string_selection (msg: STRING): STRING is
 			-- User-selected real value
 		do
+			current_lines_read := 0
 			if msg /= Void and not msg.is_empty then
 				print_list (<<msg, " ", eom>>)
 			end
@@ -86,6 +97,7 @@ feature {NONE} -- Access
 	list_selection (l: LIST [STRING]; general_msg: STRING): INTEGER is
 			-- User's selection from an element of `l'
 		do
+			current_lines_read := 0
 			print_list (<<general_msg, "%N">>)
 			from
 			until
@@ -122,6 +134,7 @@ feature {NONE} -- Access
 		local
 			finished: BOOLEAN
 		do
+			current_lines_read := 0
 			from
 				if l.count = 0 then
 					finished := True
@@ -166,6 +179,7 @@ feature {NONE} -- Access
 		local
 			i, startnum: INTEGER
 		do
+			current_lines_read := 0
 			print (general_msg)
 			from
 			until
@@ -222,10 +236,10 @@ feature {NONE} -- Input
 	read_integer is
 			-- Input an integer (as a sequence of digits terminated with
 			-- a newline) and place the result in `last_integer'.  If
-			-- any non-digits are included in the input, last_integer is
-			-- set to 0.
+			-- any non-digits are included in the input or the input
+			-- is empty, last_integer is set to 0.
 		do
-			input_device.read_line
+			read_input_line
 			if input_device.last_string.is_integer then
 				last_integer := input_device.last_string.to_integer
 			else
@@ -239,7 +253,7 @@ feature {NONE} -- Input
 			-- entered characters do not make up a real value, last_real is
 			-- set to 0.
 		do
-			input_device.read_line
+			read_input_line
 			if input_device.last_string.is_real then
 				last_real := input_device.last_string.to_real
 			else
@@ -250,8 +264,29 @@ feature {NONE} -- Input
 	read_line is
 			-- Input a string and place it in `last_string'.
 		do
-			input_device.read_line
+			read_input_line
 			last_string := input_device.last_string
+		end
+
+	read_input_line is
+			-- If `Line_limit' is less than 0 or `current_lines_read' <
+			-- `Line_limit', read the next line from `input_device'.
+			-- If `Line_limit' is greater than 0 and `current_lines_read' >=
+			-- `Line_limit', `current_lines_read' is set to 0 and an
+			-- exception is thrown.  If input_device.readable an exception
+			-- is thrown.
+		do
+			if input_device.readable then
+				if Line_limit < 0 or else current_lines_read < Line_limit then
+					input_device.read_line
+				else
+					current_lines_read := 0
+					raise (Line_limit_reached)
+				end
+				current_lines_read := current_lines_read + 1
+			else
+				raise (input_not_readable_error_message)
+			end
 		end
 
 feature {NONE} -- Miscellaneous
@@ -411,6 +446,22 @@ feature {NONE} -- Implementation
 	last_string: STRING
 			-- Last string input with `read_line'
 
+	Line_limit: INTEGER is
+			-- Maximum number of lines that will be read - until
+			-- current_lines_read is reset to 0 - before a
+			-- `Line_limit_reached' exception is thrown - A value
+			-- less than 0 signifies no limit.
+		do
+			-- Redefine to -1 for no line limit.
+			Result := 1000
+		end
+
+	Line_limit_reached: STRING is "Input line limit reached"
+			-- Name of line-limit-reached exception
+
+	current_lines_read: INTEGER
+			-- Current number of lines read in one input attempt
+
 	print (o: ANY) is
 			-- Redefinition of output method inherited from GENERAL to
 			-- send output to output_device
@@ -425,5 +476,22 @@ feature {NONE} -- Implementation
 		once
 			Result := ""
 		end
+
+	input_not_readable_error_message: STRING is
+		do
+			Result := "Input"
+			if
+				input_device /= Void and then
+				input_device.name /= Void and then
+				not input_device.name.is_empty
+			then
+				Result := Result + " " + input_device.name
+			end
+			Result := Result + " is not readable."
+		end
+
+invariant
+
+	Line_limit >= 0 implies current_lines_read <= Line_limit
 
 end
