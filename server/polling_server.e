@@ -20,7 +20,6 @@ feature {NONE} -- Initialization
 	make is
 		do
 			create errors.make (0)
-			initialize_descendant
 			server_make
 		end
 
@@ -133,13 +132,6 @@ feature {NONE} -- Implementation - Hook routines
 			-- Read commands to be used in addition to those associated with
 			-- the elements of `current_media'
 		deferred
-		end
-
-	initialize_descendant is
-			-- Perform any needed initialization in the descendant before
-			-- calling `prepare_for_listening'.
-		do
-			-- Null action - redefine if needed.
 		end
 
 	Polling_timeout_milliseconds: INTEGER is

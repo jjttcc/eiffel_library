@@ -45,6 +45,7 @@ feature -- Initialization
 				exit (Error_exit_status)
 			else
 				register_for_termination (Current)
+				initialize
 				prepare_for_listening
 				from
 				until
@@ -61,10 +62,14 @@ feature -- Initialization
 			exit (Error_exit_status)
 		end
 
-feature {NONE}
+feature {NONE} -- Hook routines
 
-	finished: BOOLEAN
-			-- Is it time to exit the server?
+	initialize is
+			-- Perform any needed initialization before
+			-- calling `prepare_for_listening'.
+		do
+			-- Null action - redefine if needed.
+		end
 
 	prepare_for_listening is
 			-- Do any necessary set-up before listening for client requests.
@@ -104,6 +109,11 @@ feature {NONE}
 			-- a description is placed into config_error_description.
 		deferred
 		end
+
+feature {NONE}
+
+	finished: BOOLEAN
+			-- Is it time to exit the server?
 
 	config_error_description: STRING
 
