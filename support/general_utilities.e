@@ -50,6 +50,30 @@ feature -- String manipulation
 			target.replace_substring_all (replacement, new_value)
 		end
 
+	replace_tokens (target: STRING; tokens: ARRAY [STRING]; values:
+		ARRAY [STRING]; token_start, token_end: CHARACTER) is
+			-- Replace all occurrences of `tokens' in `target' with
+			-- the respective specified `values', where each token
+			-- begins with `token_start' and ends with `token_end'.
+		require
+			args_exists: target /= Void and tokens /= Void and values /= Void
+			same_number_of_tokens_and_values: tokens.count = values.count
+			same_index_settings: tokens.lower = values.lower and
+				tokens.upper = values.upper
+		local
+			i: INTEGER
+		do
+			from
+				i := tokens.lower
+			until
+				i = tokens.upper + 1
+			loop
+				replace_token_all (target, tokens @ i, values @ i,
+					token_start, token_end)
+				i := i + 1
+			end
+		end
+
 	merged (l: LIST [STRING]; separator: STRING): STRING is
 			-- Concatenation of `l' into a string whose elements are
 			-- separated with `separator'
