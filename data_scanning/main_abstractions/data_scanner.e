@@ -166,7 +166,8 @@ feature -- Basic operations
 					-- first time it was read [when `start_input' was true].)
 					last_error_fatal := True
 					error_in_current_tuple := True
-					error_list.extend (Wrong_field_count_message)
+					error_list.extend (Wrong_field_count_message (
+						input.field_count, value_setters.count))
 				end
 			invariant
 				-- product.count = number_of_records_in (
@@ -374,10 +375,11 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation constants
 
-	Wrong_field_count_message: STRING is
+	Wrong_field_count_message (count, expected_count: INTEGER): STRING is
 			-- Error message for initial field count check - redefine if needed
-		once
-			Result := "Wrong number of fields in first record."
+		do
+			Result := "Wrong number of fields in first record - expected " +
+				expected_count.out + ", got " + count.out + ".%N"
 		end
 
 invariant
