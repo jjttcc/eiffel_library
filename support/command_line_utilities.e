@@ -153,11 +153,17 @@ feature -- Access
 					print_list (<<"Selection must be between 1 and ",
 								l.count, "%N">>)
 				else
-					Result := last_integer
+					inspect
+						character_selection (concatenation (
+							<<"Select ", l @ last_integer, "? (y/n) ">>))
+					when 'y', 'Y' then
+						Result := last_integer
+					else
+					end
 				end
 			end
 		ensure
-			in_range: Result >= 1 and result <= l.count
+			in_range: Result >= 1 and Result <= l.count
 		end
 
 	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
