@@ -47,4 +47,31 @@ feature -- Basic operations
 			end
 		end
 
+	log_error (msg: STRING) is
+			-- Log `msg' as an error.
+		require
+			not_void: msg /= Void
+		do
+			io.error.put_string (msg)
+		end
+
+	log_errors (list: ARRAY [ANY]) is
+			-- Log `list' of error messages.
+		require
+			not_void: list /= Void
+		local
+			i: INTEGER
+		do
+			from
+				i := 1
+			until
+				i = list.count + 1
+			loop
+				if list @ i /= Void then
+					log_error ((list @ i).out)
+				end
+				i := i + 1
+			end
+		end
+
 end -- class GENERAL_UTILITIES
