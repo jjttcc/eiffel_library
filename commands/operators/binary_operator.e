@@ -7,7 +7,7 @@ deferred class BINARY_OPERATOR inherit
 
 	NUMERIC_COMMAND
 		redefine
-			initialize
+			initialize, execute_precondition
 		end
 
 feature -- Initialization
