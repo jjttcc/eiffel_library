@@ -22,6 +22,8 @@ feature -- Access
 
 	last_string: STRING
 
+	last_date: DATE
+
 	name: STRING is "database input sequence"
 
 	field_index: INTEGER
@@ -66,6 +68,7 @@ feature -- Input
 			i_ref: INTEGER_REF
 			dt: DATE_TIME
 		do
+			reset_error_state
 			i_ref ?= current_field
 			if i_ref /= Void then
 				last_integer := i_ref.item
@@ -76,8 +79,8 @@ feature -- Input
 					last_integer := ((dt.date.year * 10000) +
 						(dt.date.month * 100) + dt.date.day)
 				else
-					error_occurred := true
-					last_error_fatal := true
+					error_occurred := True
+					last_error_fatal := True
 					error_string :=
 						"Database error: wrong data type - integer expected"
 				end
@@ -88,12 +91,13 @@ feature -- Input
 		local
 			c_ref: CHARACTER_REF
 		do
+			reset_error_state
 			c_ref ?= current_field
 			if c_ref /= Void then
 				last_character := c_ref.item
 			else
-				error_occurred := true
-				last_error_fatal := true
+				error_occurred := True
+				last_error_fatal := True
 				error_string :=
 					"Database error: wrong data type - character expected"
 			end
@@ -103,14 +107,31 @@ feature -- Input
 		local
 			string: STRING
 		do
+			reset_error_state
 			string ?= current_field
 			if string /= Void then
 				last_string := string
 			else
-				error_occurred := true
-				last_error_fatal := true
+				error_occurred := True
+				last_error_fatal := True
 				error_string :=
 					"Database error: wrong data type - string expected"
+			end
+		end
+
+	read_date is
+		local
+			date: DT_DATE
+		do
+			reset_error_state
+			date ?= current_field
+			if date /= Void then
+				create last_date.make (date.year, date.month, date.day)
+			else
+				error_occurred := True
+				last_error_fatal := True
+				error_string :=
+					"Database error: wrong data type - date expected"
 			end
 		end
 
@@ -118,12 +139,13 @@ feature -- Input
 		local
 			d_ref: DOUBLE_REF
 		do
+			reset_error_state
 			d_ref ?= current_field
 			if d_ref /= Void then
 				last_double := d_ref.item
 			else
-				error_occurred := true
-				last_error_fatal := true
+				error_occurred := True
+				last_error_fatal := True
 				error_string :=
 					"Database error: wrong data type - double expected"
 			end
@@ -142,6 +164,13 @@ feature {NONE} -- Implementation
 	current_field: ANY is
 			-- Current field value
 		deferred
+		end
+
+	reset_error_state is
+		do
+			error_occurred := False
+			last_error_fatal := False
+			error_string := ""
 		end
 
 end -- class DB_INPUT_SEQUENCE
