@@ -1,7 +1,7 @@
 indexing
 	description:
 		"Abstraction that provides the top level data scanning algorithm, %
-		%configured by providing different types in the typle_maker and %
+		%configured by providing different types in the tuple_maker and %
 		%value_setters attributes"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -28,7 +28,6 @@ feature {MAIN_COORDINATOR, FACTORY} -- (!!!Export to FACTORY is probably
 	execute (arg: NONE) is
 			-- Scan input and create tuples from it
 		local
-			i: INTEGER
 			tuple: BASIC_MARKET_TUPLE
 		do
 			if error_list = Void then
