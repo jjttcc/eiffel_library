@@ -17,13 +17,6 @@ class INDEX_EXTRACTOR inherit
 			initialize, children
 		end
 
-	STATE_SET
-		rename
-			status as state_set_status, item as state_at
-		export
-			{NONE} all
-		end
-
 creation
 
 	make
@@ -116,7 +109,7 @@ feature {NONE} -- Implementation
 		require
 			arg_not_void: arg /= Void
 		do
-			put (arg, Initialized_state_index)
+			put_state (arg, Initialized_state_index)
 		ensure
 			initialized_set: initialized = arg and initialized /= Void
 		end
