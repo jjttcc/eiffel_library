@@ -8,7 +8,9 @@
 **/
 
 #include <stdlib.h>
+#ifndef BCC
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
