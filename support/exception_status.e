@@ -17,6 +17,7 @@ feature {NONE} -- Initialization
 
 	make is
 		do
+			create description.make (0)
 		end
 
 feature -- Access
@@ -49,5 +50,9 @@ feature -- Status setting
 		ensure
 			description_set: description = arg and description /= Void
 		end
+
+invariant
+
+	description_not_void: description /= Void
 
 end -- class EXCEPTION_STATUS
