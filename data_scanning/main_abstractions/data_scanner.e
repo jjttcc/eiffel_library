@@ -152,9 +152,6 @@ feature -- Basic operations
 				check product /= Void end
 				if start_input then
 					input.start
-print ("DS.execute called input.start%N")
-else
-print ("DS.execute did NOT call input.start%N")
 				end
 				check
 					input_valid: input /= Void and then
