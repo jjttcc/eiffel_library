@@ -9,7 +9,7 @@ class INPUT_FILE inherit
 	PLAIN_TEXT_FILE
 		export
 			{NONE} all
-			{ANY} close, after, exists, open_read
+			{ANY} close, after, exists, open_read, is_closed
 		redefine
 			start
 		end
