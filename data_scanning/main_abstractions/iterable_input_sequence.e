@@ -17,4 +17,4 @@ deferred class ITERABLE_INPUT_SEQUENCE inherit
 			has, index_of, search, occurrences, linear_representation, item
 		end
 
-end -- class INPUT_SEQUENCE
+end

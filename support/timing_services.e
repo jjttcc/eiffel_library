@@ -56,4 +56,4 @@ feature -- Basic operations
 			end
 		end
 
-end -- class TIMER
+end
