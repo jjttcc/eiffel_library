@@ -92,10 +92,10 @@ print ("IF.field_count called" + "%N")
 				else
 					Result := fcount + field_index - 1
 				end
-print ("fc - fcount, field_index, result: " + fcount.out + ", " +
-field_index.out + ", " + Result.out + "%N")
+--print ("fc - fcount, field_index, result: " + fcount.out + ", " +
+--field_index.out + ", " + Result.out + "%N")
 			end
-if Result > 6 then print ("OH-OHHHHHHHHHHHHHHH!!!" + "%N") end
+--if Result > 6 then print ("OH-OHHHHHHHHHHHHHHH!!!" + "%N") end
 		end
 
 feature -- Status report
@@ -106,7 +106,7 @@ feature -- Status report
 	after_last_record_old_remove_me_please: BOOLEAN is
 		do
 			Result := after and then field_index = 1
-print ("IF.after last record, field_index: " + Result.out +
+print ("IF.after last record ... SHOULD NOT BE CALLED, field_index: " + Result.out +
 ", " + field_index.out + "%N")
 		end
 
@@ -162,8 +162,8 @@ feature -- Cursor movement
 		local
 			i: INTEGER
 		do
-if record_index = 249 then print ("STOP!" + "%N") end
-print ("[1] IF.advnrec - eof: " + end_of_file.out + "%N")
+--if record_index = 249 then print ("STOP!" + "%N") end
+--print ("[1] IF.advnrec - eof: " + end_of_file.out + "%N")
 			last_error_fatal := False
 			error_occurred := False
 			from
@@ -179,8 +179,8 @@ print ("[1] IF.advnrec - eof: " + end_of_file.out + "%N")
 				if
 					not is_tab_space_or_newline (record_separator @ i)
 				then
-print ("[1] anr - read_char" + "%N")
-io.output.flush
+--print ("[1] anr - read_char" + "%N")
+--io.output.flush
 					read_character
 					if
 						last_character /= record_separator @ i
@@ -198,8 +198,8 @@ io.output.flush
 			field_index := 1
 			record_index := record_index + 1
 			-- If just before the end-of-file, force EOF.
-print ("[2] anr - read_char" + "%N")
-io.output.flush
+--print ("[2] anr - read_char" + "%N")
+--io.output.flush
 			if not end_of_file then
 				check
 					is_readable: readable
@@ -216,7 +216,7 @@ io.output.flush
 			else
 				after_last_record := True
 			end
-print ("[2] IF.advnrec - eof: " + end_of_file.out + "%N")
+--print ("[2] IF.advnrec - eof: " + end_of_file.out + "%N")
 		end
 
 	discard_current_record is
@@ -281,7 +281,7 @@ print ("[2] IF.advnrec - eof: " + end_of_file.out + "%N")
 			field_index := 1
 			record_index := 1
 			after_last_record := count = position
-if after_last_record then print ("ODD: poscurs - count = position" + "%N") end
+--if after_last_record then print ("ODD: poscurs - count = position" + "%N") end
 		ensure
 			position_set: position = p
 			indexes_set_to_1: field_index = 1 and record_index = 1

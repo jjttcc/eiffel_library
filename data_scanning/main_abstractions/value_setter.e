@@ -37,7 +37,7 @@ feature -- Basic operations
 			stream_readable: stream.readable
 		do
 --!!!:
-print ("stream is readable: " + stream.readable.out + "%N")
+--print ("stream is readable: " + stream.readable.out + "%N")
 			unrecoverable_error := False
 			read_value (stream)
 			error_occurred := stream.error_occurred
