@@ -20,13 +20,18 @@ deferred class SERVER inherit
 			{NONE} all
 		end
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 feature -- Initialization
 
 	make is
 		do
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",
-					"exiting ...%N">>)
+					command_line_error_description, "exiting ...%N">>)
 				exit (Error_exit_status)
 			elseif command_line_options.help then
 				command_line_options.print_usage
@@ -91,5 +96,15 @@ feature {NONE}
 		end
 
 	config_error_description: STRING
+
+	command_line_error_description: STRING is
+		do
+			if non_empty_string (command_line_options.error_description) then
+				Result := "%N" + command_line_options.error_description +
+					" - "
+			else
+				Result := ""
+			end
+		end
 
 end -- SERVER
