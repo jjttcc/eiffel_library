@@ -89,7 +89,7 @@ feature {NONE} -- Hook routines
 
 	setup_command (cmd: CLIENT_REQUEST_COMMAND) is
 			-- Perform any needed setup on `cmd' before executing it.
-		deferred
+		do
 		end
 
 	is_logout_request (id: INTEGER): BOOLEAN is
@@ -117,8 +117,7 @@ feature {NONE} -- Implementation
 		end
 
 	request_handlers: HASH_TABLE [CLIENT_REQUEST_COMMAND, INTEGER]
-			-- Handlers of client requests received via io_medium, keyed
-			-- by `request_id'
+			-- Handlers of client requests, keyed by `request_id'
 
 	session_key: INTEGER
 			-- Session key for last client request, extracted
