@@ -648,7 +648,14 @@ SRCS = mas_utilities.c
 
 OBJS = mas_utilities.o
 
+LIB = ../../lib/mas_utilities.o
+
+all:: $(LIB)
+
+$(LIB): $(OBJS)
+
 all:: $(OBJS)
+	mv $(OBJS) ../../lib
 
 # ----------------------------------------------------------------------
 # common rules for all Makefiles - do not edit

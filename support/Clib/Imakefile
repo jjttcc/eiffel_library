@@ -4,4 +4,12 @@ SRCS = mas_utilities.c
 
 OBJS = mas_utilities.o
 
-AllTarget ($(OBJS))
+LIB = ../../lib/mas_utilities.o
+
+AllTarget ($(LIB))
+
+$(LIB): $(OBJS)
+
+all:: $(OBJS)
+	mv $(OBJS) ../../lib
+
