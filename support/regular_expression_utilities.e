@@ -20,6 +20,8 @@ feature -- Basic operations
 
 	match (pattern, s: STRING): BOOLEAN is
 			-- Does `s' match the regular expression `pattern'?
+		require
+			args_exist: pattern /= Void and s /= Void
 		local
 			regexp: RX_PCRE_REGULAR_EXPRESSION
 		do
@@ -46,6 +48,9 @@ feature -- Basic operations
 			-- `pattern' in `target' by `replacement'.  `target' remains
 			-- unchanged.  If `pattern' is not found in `target' Result
 			-- is equal to target.
+		require
+			args_exist: pattern /= Void and replacement /= Void and
+				target /= Void
 		do
 			if match (pattern, target) then
 				Result := last_regular_expression.replace (replacement)
@@ -62,6 +67,9 @@ feature -- Basic operations
 			-- `pattern' in `target' by `replacement'.  `target' remains
 			-- unchanged.  If `pattern' is not found in `target' Result
 			-- is equal to target.
+		require
+			args_exist: pattern /= Void and replacement /= Void and
+				target /= Void
 		do
 			if match (pattern, target) then
 				Result := last_regular_expression.replace_all (replacement)
@@ -73,8 +81,25 @@ feature -- Basic operations
 				not match (pattern, target) implies Result = target
 		end
 
+	split (pattern, target: STRING): ARRAY [STRING] is
+			-- Parts of `target' that do not match `pattern'
+		require
+			args_exist: pattern /= Void and target /= Void
+		do
+			if match (pattern, target) then
+				-- Null instruction
+			end
+			Result := last_regular_expression.split
+		ensure
+			result_is_target_if_no_match: Result /= Void and
+				not match (pattern, target) implies Result.count = 1 and
+				Result.item (1).is_equal (target)
+		end
+
 	one_pattern_matches (patterns: LINEAR [STRING]; target: STRING): BOOLEAN is
 			-- Does `target' match at least one element of `patterns'?
+		require
+			args_exist: patterns /= Void and target /= Void
 		do
 			Result := patterns.linear_representation.there_exists (
 				agent match (?, target))
@@ -82,6 +107,8 @@ feature -- Basic operations
 
 	all_patterns_match (patterns: LINEAR [STRING]; target: STRING): BOOLEAN is
 			-- Does `target' match all elements of `patterns'?
+		require
+			args_exist: patterns /= Void and target /= Void
 		do
 			Result := patterns.linear_representation.for_all (
 				agent match (?, target))
