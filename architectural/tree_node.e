@@ -20,8 +20,8 @@ feature -- Access
 		end
 
 	descendants: LIST [like Current] is
-			-- All of this command's descendants - children, children's
-			-- children, etc., with duplicates removed
+			-- All of Current's descendants (excluding Current) - children,
+			-- children's children, etc., with duplicates removed
 		local
 			l: LIST [like Current]
 			node_set: LINKED_SET [like Current]
@@ -38,6 +38,9 @@ feature -- Access
 				l.forth
 			end
 			Result.append (node_set)
+		ensure
+			exists: Result /= Void
+			current_excluded: not Result.has (Current)
 		end
 
 	name: STRING is
