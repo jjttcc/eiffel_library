@@ -13,7 +13,7 @@ deferred class BINARY_OPERATOR [G, H] inherit
 
 	RESULT_COMMAND [G]
 		redefine
-			initialize
+			initialize, children
 		end
 
 	EXCEPTIONS
@@ -49,6 +49,13 @@ feature -- Access
 
 	operand2: RESULT_COMMAND [H]
 			-- The second operand to be operated on
+
+	children: LIST [COMMAND] is
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			Result.extend (operand1)
+			Result.extend (operand2)
+		end
 
 feature -- Status report
 

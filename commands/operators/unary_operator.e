@@ -13,7 +13,7 @@ class UNARY_OPERATOR [G, H] inherit
 
 	RESULT_COMMAND [G]
 		redefine
-			initialize
+			initialize, children
 		end
 
 feature -- Initialization
@@ -26,6 +26,12 @@ feature -- Initialization
 feature -- Access
 
 	operand: RESULT_COMMAND [H]
+
+	children: LIST [COMMAND] is
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			Result.extend (operand)
+		end
 
 feature -- Status report
 
