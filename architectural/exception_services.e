@@ -266,11 +266,10 @@ feature {NONE} -- Implementation
 			if tag_name /= Void then
 				tgname := tag_name
 			end
-			Result := ":%N%"" + tgname + "%"%N"
-			if Result = Void then
+			if not tgname.is_empty then
+				Result := ":%N%"" + tgname + "%"%N"
+			else
 				Result := ""
-			elseif verbose_reporting and not Result.is_empty then
-				Result := "with tag" + Result
 			end
 		ensure
 			Result_exists: Result /= Void
