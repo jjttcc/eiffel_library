@@ -31,6 +31,8 @@ creation
 
 feature -- Access
 
+	last_date: DATE
+
 	field_separator: STRING
 			-- Field separator used in `advance_to_next_field'
 
@@ -261,6 +263,11 @@ feature -- Input
 			then
 				back
 			end
+		end
+
+	read_date is
+		do
+			-- @@Stub
 		end
 
 feature {NONE} -- Implementation

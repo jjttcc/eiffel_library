@@ -37,6 +37,11 @@ feature -- Access
 		deferred
 		end
 
+	last_date: DATE is
+			-- Last date read by `read_date'
+		deferred
+		end
+
 	error_string: STRING
 			-- Description of last error
 
@@ -94,6 +99,14 @@ feature -- Input
 	read_string is
 			-- Read a new string.
 			-- Make result available in `last_string'.
+		require
+			is_readable: readable
+		deferred
+		end
+
+	read_date is
+			-- Read a new date.
+			-- Make result available in `last_date'.
 		require
 			is_readable: readable
 		deferred
