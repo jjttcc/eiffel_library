@@ -410,6 +410,6 @@ feature {NONE} -- Implementation
 
 invariant
 
-	io_not_void: input_device /= Void
+	io_not_void: input_device /= Void and output_device /= Void
 
 end -- class COMMAND_LINE_UTILITIES
