@@ -44,7 +44,8 @@ feature -- Basic operations
 			suffix: STRING
 		do
 			fname := lock_file_name.to_c
-			if try_to_open ($fname, False_value) = -1 then
+			lock_file_descriptor := try_to_open ($fname, False_value)
+			if lock_file_descriptor = -1 then
 				locked := false
 				if last_op_failed then
 					if open_file_exists /= 0 then
@@ -67,7 +68,8 @@ feature -- Basic operations
 			fname: ANY
 		do
 			fname := lock_file_name.to_c
-			if try_to_open ($fname, True_value) = -1 then
+			lock_file_descriptor := try_to_open ($fname, True_value)
+			if lock_file_descriptor = -1 then
 				error_occurred := true
 				set_last_error ("Error occurred while locking file: ", Void)
 				raise (last_error)
@@ -78,8 +80,12 @@ feature -- Basic operations
 	unlock is
 		local
 			fname: ANY
+			i: INTEGER
 		do
 			fname := lock_file_name.to_c
+			i := close_file (lock_file_descriptor)
+			if i = -1 then
+			end
 			if remove_file ($fname) = -1 then
 				error_occurred := true
 				set_last_error ("Error occurred trying to unlock item: ", Void)
@@ -99,6 +105,11 @@ feature {NONE} -- Implementation
 		end
 
 	remove_file (fname : POINTER): INTEGER is
+		external
+			 "C"
+		end
+
+	close_file (fdescriptor : INTEGER): INTEGER is
 		external
 			 "C"
 		end
@@ -137,6 +148,8 @@ feature {NONE} -- Implementation
 	True_value: INTEGER is 1
 
 	lock_file_name: STRING
+
+	lock_file_descriptor: INTEGER
 
 	set_lock_file_name is
 		local
