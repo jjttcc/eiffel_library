@@ -129,26 +129,36 @@ feature {NONE} -- Implementation
 	current_tokens: LIST [STRING] is
 			-- Tokens for the current "line" of `file_reader'
 		local
-			s: STRING
+			s, line: STRING
 		do
 			from
-				-- Prevent side effects, in case the original string object
-				-- is being referenced elsewhere:
+				-- Use a clone to prevent side effects, in case the
+				-- original string object is being referenced elsewhere:
 				s := clone (file_reader.item)
+				if
+					s.item (s.count) = Continuation_character
+				then
+					-- Remove any `Continuation_character's that occor at
+					-- the end of the `s'.
+					s.prune_all_trailing (Continuation_character)
+				end
 			until
-				s.item (s.count) /= Continuation_character or
-				file_reader.exhausted
+				file_reader.exhausted or file_reader.item.item (
+				file_reader.item.count) /= Continuation_character
 			loop
 				file_reader.forth
 				current_line := current_line + 1
 				if not file_reader.exhausted then
-					s.append (clone (file_reader.item))
+					line := clone (file_reader.item)
+					if
+						line.item (line.count) = Continuation_character
+					then
+						-- Remove any `Continuation_character's that occor at
+						-- the end of the `line'.
+						line.prune_all_trailing (Continuation_character)
+					end
+					s.append (line)
 				end
-			end
-			if s.has (Continuation_character) then
-				-- `Continuation_character' must not be in the string
-				-- to be tokenized:
-				s.prune_all (Continuation_character)
 			end
 			su.set_target (s)
 			Result := su.tokens (Field_separator)
