@@ -54,7 +54,6 @@ int try_to_open (char* s, int wait) {
 	int sleep_msecs = 90000;
 
 	errno = 0;
-printf("Locking file %s.\n", s);
 	result = open (s, O_RDWR | O_CREAT | O_EXCL);
 	if (wait && result == -1) {
 		do {
