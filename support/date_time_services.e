@@ -54,18 +54,37 @@ feature -- Access
 			end
 		end
 
-	time_from_string (value: STRING): TIME is
+	time_from_string (value, separator: STRING): TIME is
 			-- Time produced from `value', which must be in the form
-			-- hh:mm:ss.nnn.  If `value' specifies an invalid time, the
+			-- hhXmm[Xss], where X denotes the character specified by
+			-- `separator' and [Xss] means that the seconds component is
+			-- optional.  If `value' specifies an invalid time, the
 			-- result will be Void.
+		require
+			value_not_void: value /= Void
+			separator_valid: separator /= Void and separator.count = 1
+		local
+			h, m, s, count: INTEGER
+			tokens: LIST [STRING]
 		do
-			!!Result.make_now
-			if
-				not Result.time_valid (value, Result.time_default_format_string)
-			then
-				Result := Void
-			else
-				Result.make_from_string_default (value)
+			string_tool.make (value)
+			tokens := string_tool.tokens (separator)
+			count := tokens.count
+			if count = 2 or count = 3 then
+				if (tokens @ 1).is_integer and (tokens @ 2).is_integer then
+					h := (tokens @ 1).to_integer
+					m := (tokens @ 2).to_integer
+					if count = 3 then
+						if (tokens @ 3).is_integer then
+							s := (tokens @ 3).to_integer
+						else
+							h := -1
+						end
+					end
+					if h >= 0 then
+						create Result.make (h, m, s)
+					end
+				end
 			end
 		end
 
@@ -104,6 +123,11 @@ feature  {NONE} -- Implementation
 	work_time: TIME is
 		once
 			create Result.make (0, 0, 0)
+		end
+
+	string_tool: STRING_UTILITIES is
+		once
+			create Result.make ("")
 		end
 
 end -- class DATE_TIME_SERVICES
