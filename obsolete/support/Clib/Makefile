@@ -642,7 +642,7 @@ CXXPROJECT_DEFINES =
 # ----------------------------------------------------------------------
 # start of Imakefile
 
-INCLUDES = -I.
+INCLUDES = -I. -I${EIFFEL4}/bench/spec/${PLATFORM}/include
 
 SRCS = utilities.c
 
