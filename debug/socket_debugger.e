@@ -136,8 +136,6 @@ feature -- Status report
 				 debug_socket.readable.out + "%N" +
 				"debug_enabled: " +
 				 debug_socket.debug_enabled.out + "%N" +
-				"group_id: " +
-				 debug_socket.group_id.out + "%N" +
 				"is_blocking: " +
 				 debug_socket.is_blocking.out + "%N" +
 				"is_group_id: " +
@@ -146,8 +144,6 @@ feature -- Status report
 				 debug_socket.is_process_id.out + "%N" +
 				"is_socket_stream: " +
 				 debug_socket.is_socket_stream.out + "%N" +
-				"process_id: " +
-				 debug_socket.process_id.out + "%N" +
 				"receive_buf_size: " +
 				 debug_socket.receive_buf_size.out + "%N" +
 				"route_enabled: " +
@@ -155,6 +151,14 @@ feature -- Status report
 				"send_buf_size: " +
 				 debug_socket.send_buf_size.out + "%N" +
 				"<<<END SOCKET REPORT>>>" + "%N"
+			if debug_socket.is_group_id then
+				Result := Result + "group_id: " +
+				 debug_socket.group_id.out + "%N"
+			end
+			if debug_socket.is_process_id then
+				Result := Result + "process_id: " +
+				 debug_socket.process_id.out + "%N"
+			end
 		end
 
 end -- class TIMER
