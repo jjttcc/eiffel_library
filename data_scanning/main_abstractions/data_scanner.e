@@ -26,7 +26,7 @@ feature -- Basic operations
 			until
 				input_file.after
 			loop
-				tuple_maker.execute
+				tuple_maker.execute (Void)
 				tuple := tuple_maker.product
 				from
 					value_setters.start
