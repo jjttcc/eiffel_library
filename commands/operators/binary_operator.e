@@ -36,7 +36,7 @@ feature -- Status report
 			ops_arg_used: Result = (operand1.arg_used or operand2.arg_used)
 		end
 
-feature {TEST_FUNCTION_FACTORY, MARKET_FUNCTION} -- !!!Check export clause
+feature {FACTORY}
 
 	set_operands, make_with_operands (op1: NUMERIC_COMMAND;
 										op2: NUMERIC_COMMAND) is
