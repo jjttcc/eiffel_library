@@ -74,7 +74,7 @@ feature -- Basic operations
 	end_notification is
 		do
 			if not event_cache.empty then
-				perform_notify (event_cache)
+				perform_notify
 				event_cache.wipe_out
 			end
 		end
@@ -88,8 +88,11 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	perform_notify (elist: LIST [TYPED_EVENT]) is
-			-- Notify the registrant of all events in `elist'.
+	perform_notify is
+			-- Notify the registrant that event processing has completed
+			-- and `event_cache' holds the resulting new events.
+		require
+			cache_not_empty: event_cache /= Void and not event_cache.empty
 		deferred
 		end
 
