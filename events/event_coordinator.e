@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	event_generators: LINEAR [LINEAR [MARKET_ANALYZER]]
+	event_generators: LINEAR [MARKET_ANALYZER]
 			-- Generators of events to be dispatched
 
 	market_list: LINEAR [TRADABLE]
@@ -40,48 +40,16 @@ feature {NONE} -- Implementation
 	event_queue: QUEUE [EVENT]
 
 	process (t: TRADABLE) is
-		local
-			dispatcher: EVENT_DISPATCHER
 		do
 			from
 				event_generators.start
 			until
 				event_generators.exhausted
 			loop
-				x (t, event_generators.item)
-			end
-		end
-
-	x (t: TRADABLE; eg_list: LINEAR [MARKET_ANALYZER]) is
-		local
-			dispatcher: EVENT_DISPATCHER
-			l: LINKED_LIST [LINKED_LIST [EVENT]]
-		do
-			from
-				eg_list.start
-			until
-				eg_list.exhausted
-			loop
-				eg_list.item.set_innermost_function (t)
-				eg_list.item.execute
-				l.extend (eg_list.item.product)
-				eg_list.forth
-			end
-			if not l.empty then
-				event_queue.append (combine_events (l))
-			end
-		end
-
-	combine_events (l: LINEAR [LINEAR [EVENT]]): LINEAR [EVENT] is
-			-- Combine each event list in l such that their date/times
-			-- something-or-other ....
-		require
-			l_not_empty: not l.empty
-		do
-			if l.count = 1 then --!!!!!!!!!!!!!!!!!check
-				Result := l.item
-			else
-				--something-or-other
+				event_generators.item.set_innermost_function (t)
+				event_generators.item.execute
+				event_queue.append (event_generators.item.product)
+				event_generators.forth
 			end
 		end
 
