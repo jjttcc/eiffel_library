@@ -141,7 +141,7 @@ feature {TREE_NODE} -- Implementation
 --@@!!!!!			create tuple.make; tuple.make_from_array (<<Current>>)
 --@@!!!!Note: The above line has been replaced by the line below, to allow
 --compilation with estudio 5.4; it's likely equivalent, but check!!! it.
-			create tuple.make; tuple.put (Current, 1)
+			create tuple.make; tuple.force (Current, 1)
 			report_function.set_operands (tuple)
 			report_function.apply
 			if
