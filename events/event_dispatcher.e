@@ -18,7 +18,7 @@ feature -- Initialization
 
 	make is
 		do
-			!!registrants.make
+			create registrants.make
 		end
 
 feature -- Access

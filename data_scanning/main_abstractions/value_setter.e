@@ -84,7 +84,7 @@ feature {NONE} -- Utility
 		require
 			main_msg /= Void
 		do
-			!!last_error.make (128)
+			create last_error.make (128)
 			last_error.append (main_msg)
 			if msg2 /= Void then
 				last_error.append (msg2)

@@ -38,7 +38,7 @@ feature {NONE} -- Hook methods
 
 	create_queue is
 		do
-			!LINKED_QUEUE [EVENT]!event_queue.make
+			create {LINKED_QUEUE [EVENT]} event_queue.make
 		ensure
 			event_queue /= Void
 		end

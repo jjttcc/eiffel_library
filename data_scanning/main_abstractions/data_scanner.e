@@ -107,7 +107,7 @@ feature -- Basic operations
 			-- `input' must not be Void.
 		do
 			if error_list = Void then
-				!!error_list.make
+				create error_list.make
 			end
 			from
 				create_product

@@ -17,9 +17,9 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-			!LINKED_SET [EVENT_TYPE]!event_types.make
-			!!event_cache.make
-			!!event_history.make (0)
+			create {LINKED_SET [EVENT_TYPE]} event_types.make
+			create event_cache.make
+			create event_history.make (0)
 		ensure
 			not_void: event_types /= Void and event_cache /= Void
 		end
