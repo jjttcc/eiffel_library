@@ -134,7 +134,7 @@ feature -- Miscellaneous
 		end
 
 	print_message (msg: STRING) is
-			-- Print `msg' to standard out.
+			-- Print `msg' to standard out, appending a newline.
 		do
 			print_list (<<msg, "%N">>)
 		end
