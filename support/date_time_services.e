@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	date_from_number (value: integer): DATE is
+	date_from_number (value: INTEGER): DATE is
 			-- Date produced from `value', which must be in the form
 			-- yyyymmdd.  If `value' specifies an invalid date, the
 			-- result will be Void.
@@ -20,11 +20,23 @@ feature -- Access
 			y, m, d: INTEGER
 		do
 			create Result.make_now
-			y := value // 10000
-			m := value \\ 10000 // 100
-			d := value \\ 100
+			if value < 10000 then
+				Result := Void
+			else
+				y := value // 10000
+				m := value \\ 10000 // 100
+				d := value \\ 100
+				Result := date_from_y_m_d (y, m, d)
+			end
+		end
+
+	date_from_y_m_d (y, m, d: INTEGER): DATE is
+			-- Date produced from `y', `m', `d' - year, month date
+			-- If any of `y', `m', or `d' are invalid, the
+			-- result will be Void.
+		do
+			create Result.make_now
 			if
-				value < 10000 or
 				y < 0 or m < 1 or m > Result.months_in_year or
 				d < 1 or d > Result.days_in_i_th_month (m, y)
 			then
@@ -39,6 +51,8 @@ feature -- Access
 			-- value of `separator' - for example, "/" when `d' is in
 			-- the format yyyy/mm/dd.  If the format of `d' is invalid,
 			-- the result will be Void.
+		require
+			args_exist: d /= Void and separator /= Void
 		local
 			components: ARRAY [STRING]
 		do
@@ -53,6 +67,66 @@ feature -- Access
 								components.item(2).to_integer, 
 								components.item(3).to_integer)
 			end
+		end
+
+	date_from_formatted_string (d, field_separator: STRING; y_index,
+		m_index, d_index: INTEGER; two_digit_year_parition: INTEGER): DATE is
+			-- Date from the string `d' in the form [field1]X[field2]X[field3],
+			-- where X is the value of `field_separator' and `y_index`,
+			-- `m_index', and `d_index' specify which of "field1", "field2",
+			-- and "field3" is the year, month, and day, respectively, and
+			-- where two_digit_year_parition is either -1 if the year is in
+			-- standard (yyyy) format or, if the year in two-digit (yy)
+			-- format, gives the partition value for which the century of
+			-- the result is the 1990s if the year y from `d' is >
+			-- two_digit_year_parition and the 2000s if y <=
+			-- two_digit_year_parition.
+			-- If the format of `d' is invalid or the values of `y_index`,
+			-- `m_index', or `d_index' are invalid, the result will be Void.
+		require
+			args_exist: d /= Void and field_separator /= Void
+			partition_valid: two_digit_year_parition = -1 or
+				two_digit_year_parition > 0
+		do
+			Result := date_from_string_implementation (d, field_separator,
+				y_index, m_index, d_index, two_digit_year_parition, False)
+		ensure
+			void_if_indexes_invalid: (y_index <= 0 or y_index > 3) or
+				(m_index <= 0 or m_index > 3) or
+				(d_index <= 0 or d_index > 3) implies Result = Void
+			void_if_indexes_equal: (y_index = m_index or y_index = d_index or
+				m_index = d_index) implies Result = Void
+		end
+
+	date_from_month_abbrev_string (d, field_separator: STRING; y_index,
+		m_index, d_index: INTEGER; two_digit_year_parition: INTEGER): DATE is
+			-- Date from the string `d' (where the month field is a 3-letter
+			-- abbreviation - "Jan", etc.) in the form
+			-- [field1]X[field2]X[field3], where X is the value of
+			-- `field_separator' and `y_index`, `m_index', and `d_index'
+			-- specify which of "field1", "field2", and "field3" is the year,
+			-- month, and day, respectively, and where
+			-- two_digit_year_parition is either -1 if the year is in
+			-- standard (yyyy) format or, if the year in two-digit (yy)
+			-- format, gives the partition value for which the century of
+			-- the result is the 1990s if the year y from `d' is <
+			-- two_digit_year_parition and the 2000s if y >=
+			-- two_digit_year_parition.
+			-- If the format of `d' is invalid or the values of `y_index`,
+			-- `m_index', or `d_index' are invalid, the result will be Void.
+		require
+			args_exist: d /= Void and field_separator /= Void
+			partition_valid: two_digit_year_parition = -1 or
+				two_digit_year_parition > 0
+		do
+			Result := date_from_string_implementation (d, field_separator,
+				y_index, m_index, d_index, two_digit_year_parition, True)
+		ensure
+			void_if_indexes_invalid: (y_index <= 0 or y_index > 3) or
+				(m_index <= 0 or m_index > 3) or
+				(d_index <= 0 or d_index > 3) implies Result = Void
+			void_if_indexes_equal: (y_index = m_index or y_index = d_index or
+				m_index = d_index) implies Result = Void
 		end
 
 	time_from_string (value, separator: STRING): TIME is
@@ -115,6 +189,75 @@ feature -- Access
 		ensure
 			valid_result: Result >= 1 and Result <= 7
 			definition: Result = day_of_week_table @ d
+		end
+
+	adjusted_2_digit_year (year, two_digit_year_parition: INTEGER): INTEGER is
+			-- Year value adjusted for 2-digit years according to
+			-- `two_digit_year_parition'
+		require
+			partition_valid: two_digit_year_parition > 0
+		do
+			if year > two_digit_year_parition then
+				Result := year + 1900
+			else
+				check
+					not_greater_than: year <= two_digit_year_parition
+				end
+				Result := year + 2000
+			end
+		ensure
+			after_1900: Result > 1900
+			before_2000_if_year_higher:
+				year > two_digit_year_parition implies Result < 2000
+			after_2000_if_year_not_higher:
+				year <= two_digit_year_parition implies Result >= 2000
+		end
+
+	year_month_day (date_components: ARRAY [STRING]; y_index, m_index,
+		d_index: INTEGER; three_letter_month: BOOLEAN): ARRAY [INTEGER] is
+			-- `date_components' as a 3-element array, where:
+			-- Result @ 1 is the year
+			-- Result @ 2 is the month
+			-- Result @ 3 is the day
+			-- and where `y_index', m`_index', and d`_index' specify the
+			-- year, month, and date fields of `date_components',
+			-- respectively and where `three_letter_month' specifies
+			-- whether the month field in `date_components' is a 3-letter
+			-- abbreviation ("Jan", "Feb", etc.).  If `date_components' is
+			-- invalid, Result will be <<-1, -1, -1>>.
+		require
+			valid_indexes: (y_index > 0 and y_index <= 3) and
+				(m_index > 0 and m_index <= 3) and
+				(d_index > 0 and d_index <= 3)
+			valid_indexes2: not (y_index = m_index or y_index = d_index or
+				m_index = d_index)
+			date_components_valid: date_components /= Void and then
+				date_components.count = 3
+		local
+			y, m, d: INTEGER
+		do
+			y := 1; m := 2; d := 3
+			Result := <<-1, -1, -1>>
+			if (date_components @ y_index).is_integer then
+				Result.put ((date_components @ y_index).to_integer, y)
+			end
+			if three_letter_month then
+				-- Month field is "Jan", "Feb", etc.
+				if month_table.has (date_components @ m_index) then
+					Result.put (month_from_3_letter_abbreviation (
+						date_components @ m_index), m)
+				end
+			else
+				if (date_components @ m_index).is_integer then
+					Result.put ((date_components @ m_index).to_integer, m)
+				end
+			end
+			if (date_components @ d_index).is_integer then
+				Result.put ((date_components @ d_index).to_integer, d)
+			end
+		ensure
+			normal_lower_upper: Result /= Void and then Result.lower = 1 and
+				Result.upper = 3
 		end
 
 	current_date: DATE is
@@ -295,6 +438,40 @@ feature  {NONE} -- Implementation
 	string_tool: STRING_UTILITIES is
 		once
 			create Result.make
+		end
+
+	date_from_string_implementation (d, field_separator: STRING; y_index,
+		m_index, d_index: INTEGER; two_digit_year_parition: INTEGER;
+		three_letter_month: BOOLEAN): DATE is
+			-- Implementation of `date_from_2_digit_year_string' and
+			-- `date_from_month_abbrev_string'
+		require
+			args_exist: d /= Void and field_separator /= Void
+			partition_valid: two_digit_year_parition = -1 or
+				two_digit_year_parition > 0
+		local
+			components: ARRAY [STRING]
+			su: expanded STRING_UTILITIES
+			date: ARRAY [INTEGER]
+		do
+			su.set_target (d)
+			components := su.tokens (field_separator)
+			date := year_month_day (components, y_index, m_index, d_index,
+				three_letter_month)
+			if date @ 1 /= -1 then
+				-- The contents of `components' were valid.
+				if two_digit_year_parition > 0 then
+					date.put (adjusted_2_digit_year (
+						date @ 1, two_digit_year_parition), 1)
+				end
+				Result := date_from_y_m_d (date @ 1, date @ 2, date @ 3)
+			end
+		ensure
+			void_if_indexes_invalid: (y_index <= 0 or y_index > 3) or
+				(m_index <= 0 or m_index > 3) or
+				(d_index <= 0 or d_index > 3) implies Result = Void
+			void_if_indexes_equal: (y_index = m_index or y_index = d_index or
+				m_index = d_index) implies Result = Void
 		end
 
 invariant
