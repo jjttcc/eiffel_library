@@ -23,12 +23,18 @@ feature -- Access
 feature -- Basic operations
 
 	execute is
+			-- If `dispatcher' and `event_generators' are not void,
+			-- generate events with `event_generators' and use
+			-- `dispatcher' to dispatch them to its event registrants.
+			-- Otherwise, do nothing.
 		do
-			create_queue
-			generate_events
-			if not event_queue.empty then
-				dispatcher.set_event_queue (event_queue)
-				dispatcher.execute
+			if event_generators /= Void and dispatcher /= Void then
+				create_queue
+				generate_events
+				if not event_queue.empty then
+					dispatcher.set_event_queue (event_queue)
+					dispatcher.execute
+				end
 			end
 		end
 
@@ -48,6 +54,7 @@ feature {NONE} -- Hook methods
 	generate_events is
 		require
 			queue_not_void: event_queue /= Void
+			generators_not_void: event_generators /= Void
 		deferred
 		end
 
@@ -79,10 +86,5 @@ feature {NONE} -- Implementation
 				event_generators.forth
 			end
 		end
-
-invariant
-
-	dispatcher_not_void: dispatcher /= Void
-	event_generators_not_void: event_generators /= Void
 
 end -- class EVENT_COORDINATOR
