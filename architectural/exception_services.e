@@ -42,6 +42,33 @@ feature -- Access
 			create Result.make
 		end
 
+feature -- Status report
+
+	verbose: BOOLEAN is
+			-- Should `error_information' include detailed
+			-- exception information?  (Defaults to True.)
+		do
+			Result := not not_verbose
+		end
+
+feature -- Status setting
+
+	set_verbose_on is
+			-- Set `verbose' to True.
+		do
+			not_verbose := False
+		ensure
+			verbose: verbose
+		end
+
+	set_verbose_off is
+			-- Set `verbose' to False.
+		do
+			not_verbose := True
+		ensure
+			not_verbose: not verbose
+		end
+
 feature -- Basic operations
 
 	handle_exception (routine_description: STRING) is
@@ -132,101 +159,61 @@ feature -- Basic operations
 				or e = Floating_point_exception or e = Routine_failure)
 		end
 
-feature {NONE} -- Implementation - Hook routines
-
-	application_name: STRING is
-			-- The name of the application to be used for error reporting
-		once
-			Result := "server"
-		end
-
-feature {NONE} -- Implementation
-
-	exception_routine_string: STRING is
-		do
-			Result := recipient_name
-			if Result /= Void and not Result.is_empty then
-				Result := "in routine `" + Result + "' "
-			else
-				Result := ""
-			end
-		end
-
-	tag_string: STRING is
-		do
-			Result := tag_name
-			if Result /= Void and not Result.is_empty then
-				Result := "with tag:%N%"" + Result + "%"%N"
-			else
-				Result := ""
-			end
-		end
-
-	class_name_string: STRING is
-		do
-			Result := class_name
-			if Result /= Void and not Result.is_empty then
-				Result := "from class %"" + Result + "%".%N"
-			else
-				Result := ""
-			end
-		end
-
-	exception_meaning_string (errname: STRING): STRING is
-		do
-			Result := meaning (exception)
-			if Result /= Void and not Result.is_empty then
-				if errname /= Void and not errname.is_empty then
-					Result := "Type of " + errname + ": " +
-						Result
-				else
-					Result := "(" + Result + ")"
-				end
-			else
-				Result := ""
-			end
-		end
-
 	error_information (errname: STRING; stack_trace: BOOLEAN): STRING is
 			-- Information about the current exception, with a stack
 			-- trace if `stack_trace'
+		local
+			errtag: STRING
 		do
+			if errname /= Void then
+				errtag := errname
+			else
+				errtag := Default_errname
+			end
+			check
+				errtag_exists: errtag /= Void
+			end
 			if exception = Void_call_target then
 				-- Feature call on void target is a special case that can
 				-- cause problems (specifically, OS signal when calling
 				-- class_name) - so handle it separately.
-				Result := errname + " occurred: " +
-					meaning (exception) + "%N[Exception trace:%N" +
+				Result := errtag + " occurred: " +
+					meaning (exception)
+				if verbose then
+					Result := Result + "%N[Exception trace:%N" +
 					exception_trace + "]%N"
+				end
 			else
-				Result := errname + " occurred " +
+				Result := errtag + " occurred " +
 					exception_routine_string + tag_string + class_name_string +
 					exception_meaning_string (errname) + "%N"
-				if
-					recipient_name /= Void and original_recipient_name /= Void
-					and not recipient_name.is_equal (original_recipient_name)
-				then
-					Result := Result +
-						"(Original routine where the violation occurred: " +
-						original_recipient_name + ".)%N"
-				end
-				if
-					tag_name /= Void and original_tag_name /= Void and
-					not tag_name.is_equal (original_tag_name)
-				then
-					Result := Result + "(Original tag name: " +
-						original_tag_name + ".)%N"
-				end
-				if
-					class_name /= Void and original_class_name /= Void and
-					not class_name.is_equal (original_class_name)
-				then
-					Result := Result + "(Original class name: " +
-						original_class_name + ".)%N"
-				end
-				if stack_trace then
-					Result := Result + "%N[Exception trace:%N" +
-						exception_trace + "]%N"
+				if verbose then
+					if
+						recipient_name /= Void and
+						original_recipient_name /= Void and not
+						recipient_name.is_equal (original_recipient_name)
+					then
+						Result := Result + "(Original routine where the violat%
+							%ion occurred: " + original_recipient_name + ".)%N"
+					end
+					if
+						tag_name /= Void and original_tag_name /= Void and
+						not tag_name.is_equal (original_tag_name)
+					then
+						Result := Result + "(Original tag name: " +
+							original_tag_name + ".)%N"
+					end
+					if
+						class_name /= Void and original_class_name /= Void and
+						not class_name.is_equal (original_class_name)
+					then
+						Result := Result + "(Original class name: " +
+							original_class_name + ".)%N"
+					end
+					if stack_trace then
+						Result := Result + "%N[Exception trace:%N" +
+							exception_trace + "]%N"
+					end
 				end
 			end
 			if not last_exception_status.description.is_empty then
@@ -240,6 +227,78 @@ feature {NONE} -- Implementation
 					Result := last_exception_status.description + "%N"
 				end
 			end
+		end
+
+feature {NONE} -- Implementation - Hook routines
+
+	application_name: STRING is
+			-- The name of the application to be used for error reporting
+		once
+			Result := "server"
+		end
+
+feature {NONE} -- Implementation
+
+	exception_routine_string: STRING is
+		do
+			Result := ""
+			if verbose then
+				Result := recipient_name
+				if Result /= Void and then not Result.is_empty then
+					Result := "in routine `" + Result + "' "
+				else
+					Result := ""
+				end
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	tag_string: STRING is
+		do
+			Result := ":%N%"" + tag_name + "%"%N"
+			if Result = Void then
+				Result := ""
+			elseif verbose and not Result.is_empty then
+				Result := "with tag" + Result
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	class_name_string: STRING is
+		do
+			Result := ""
+			if verbose then
+				Result := class_name
+				if Result /= Void and not Result.is_empty then
+					Result := "from class %"" + Result + "%".%N"
+				else
+					Result := ""
+				end
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	exception_meaning_string (errname: STRING): STRING is
+		do
+			Result := ""
+			if verbose then
+				Result := meaning (exception)
+				if Result /= Void and not Result.is_empty then
+					if errname /= Void and not errname.is_empty then
+						Result := "Type of " + errname + ": " +
+							Result
+					else
+						Result := "(" + Result + ")"
+					end
+				else
+					Result := ""
+				end
+			end
+		ensure
+			Result_exists: Result /= Void
 		end
 
 	handle_assertion_violation is
@@ -261,8 +320,21 @@ feature {NONE} -- Implementation
 				Developer_exception, Runtime_io_exception, Com_exception>>
 		end
 
+feature {NONE} -- Implementation
+
+	not_verbose: BOOLEAN
+			-- Should `error_information' NOT include detailed
+			-- exception information?  (Allows defaulting to `verbose'.)
+
 feature {NONE} -- Implementation - constants
 
 	Assert_string: STRING is "Assertion violation"
+
+	Default_errname: STRING is "Error"
+			-- Default `errname' for `error_information' if none supplied
+
+invariant
+
+	verbose_not_verbose_are_opposites: verbose = not not_verbose
 
 end -- EXCEPTION_SERVICES
