@@ -630,4 +630,4 @@ feature {NONE} -- Implementation - date-related routines
 		end
 
 
-end -- class COMMAND_LINE_UTILITIES
+end
