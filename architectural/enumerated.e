@@ -8,12 +8,19 @@ indexing
 
 deferred class ENUMERATED [G -> HASHABLE] inherit
 
+	ANY
+		redefine
+			out
+		end
+
 feature {NONE} -- Initialization
 
 	make (value: G) is
 		require
-			valid_value: value_set.has(value)
+			valid_value: valid_value (value)
 		do
+io.error.print ("enum make called%N");
+			value_set := value_set_implementation
 			from
 				value_set.start
 			until
@@ -40,16 +47,44 @@ feature -- Access
 			Result := value_name_map @ item
 		end
 
-	value_set: LINKED_SET [G] is
+	value_set: LINKED_SET [G]
 			-- Set of allowable values
-		deferred
-		end
 
 	name_set: CHAIN [STRING] is
 			-- Names corresponding to `value_set'
-		once
+		do
+print ("Warning: name_set called%N")
 			Result := value_name_map.linear_representation
 			Result.compare_objects
+		end
+
+	out: STRING is
+		do
+io.error.print ("[I am a " + Current.generator.out + "]%N")
+io.error.print ("vnm: " + value_name_map.out + "%N")
+io.error.print ("vs: " + value_set.out + "%N")
+io.error.print ("vs count, vnm count: " +
+value_set.count.out + ", " +
+value_set.count.out +
+"%N")
+			Result := ""
+			from
+				value_set.start
+			until
+				value_set.exhausted
+			loop
+if not value_name_map.has (value_set.item) then
+print ("No name for value " + value_set.item.out + "%N")
+value_set.finish
+else
+				Result := Result + value_set.item.out + " (" +
+					value_name_map @ value_set.item + ")"
+				value_set.forth
+				if not value_set.exhausted then
+					Result := Result + ", "
+				end
+end
+			end
 		end
 
 feature -- Status report
@@ -57,7 +92,7 @@ feature -- Status report
 	valid_value (v: G): BOOLEAN is
 			-- Is `v' a valid value for this enumeration?
 		do
-			Result := value_set.has (v)
+			Result := allowable_values.has (v)
 		end
 
 feature {NONE} -- Implementation
@@ -86,22 +121,38 @@ feature {NONE} -- Implementation
 	allowable_values: ARRAY [G] is
 			-- Allowable values as an array - used for implementation
 			-- efficiency and ease of implementation.
-		deferred
+		do
+			if allowable_values_implementation = Void then
+				allowable_values_implementation := initial_allowable_values
+			end
+			Result := allowable_values_implementation
 		end
 
 	item_index: INTEGER
-			-- 
+			-- Index of the enumeration value
+
+feature {NONE} -- Initialization utilities
+
+	initial_allowable_values: ARRAY [G] is
+			-- Used to initialize `allowable_values'.
+		deferred
+		ensure
+			exists: Result /= Void
+		end
+
+	allowable_values_implementation: ARRAY [G]
 
 invariant
 
 	name_exists: name /= Void and then not name.is_empty
 	sets_exist: value_set /= Void and name_set /= Void
 	value_set_not_empty: not value_set.is_empty
-	value_name_sets_correspond: value_set.count = name_set.count
+--	value_name_sets_correspond: value_set.count = name_set.count
 	value_in_set: value_set.has (item)
 	name_in_set: name_set.has (name)
 	name_definition: name /= Void and then equal (name, value_name_map @ item)
 	item_valid: valid_value (item)
 	name_set_object_comparison: name_set.object_comparison
+	allowable_values_exist: allowable_values /= Void
 
 end
