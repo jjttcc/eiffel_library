@@ -63,6 +63,7 @@ feature {NONE} -- Hook routines
 	do_execute (arg: ANY) is
 			-- Produce response from `arg'.
 		require
+			arg_not_void_if_mandatory: arg_mandatory implies arg /= Void
 			do_execute_precondition: do_execute_precondition
 		deferred
 		end
