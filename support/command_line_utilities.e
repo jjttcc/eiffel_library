@@ -65,7 +65,7 @@ feature -- Access
 			-- User-selected integer value
 		do
 			if msg /= Void and not msg.empty then
-				print_list (<<"Enter an integer value for ", msg, ": ", eom>>)
+				print_list (<<"Enter an integer value for ", msg, " ", eom>>)
 			end
 			read_integer
 			Result := last_integer
@@ -75,7 +75,7 @@ feature -- Access
 			-- User-selected real value
 		do
 			if msg /= Void and not msg.empty then
-				print_list (<<"Enter a real value for ", msg, ": ", eom>>)
+				print_list (<<"Enter a real value for ", msg, " ", eom>>)
 			end
 			read_real
 			Result := last_real
@@ -85,7 +85,7 @@ feature -- Access
 			-- User-selected real value
 		do
 			if msg /= Void and not msg.empty then
-				print_list (<<msg, ": ", eom>>)
+				print_list (<<msg, " ", eom>>)
 			end
 			read_line
 			Result := clone (last_string)
@@ -166,6 +166,48 @@ feature -- Access
 			end
 		ensure
 			in_range: Result >= 1 and Result <= l.count
+		end
+
+	backoutable_selection (l: LIST [STRING]; msg: STRING;
+				exit_value: INTEGER): INTEGER is
+			-- User's selection from an element of `l', which can be
+			-- backed out of by entering 0 - `exit_value' is the value to
+			-- return to indicate the the user has backed out.
+		local
+			finished: BOOLEAN
+		do
+			from
+				if l.count = 0 then
+					finished := True
+					Result := exit_value
+					print ("There are no items to edit.%N")
+				end
+			until
+				finished
+			loop
+				print_list (<<msg, ":%N">>)
+				print_names_in_1_column (l, 1)
+				print ("(0 to end) ")
+				print (eom)
+				read_integer
+				if
+					last_integer < 0 or
+						last_integer > l.count
+				then
+					print_list (<<"Selection must be between 0 and ",
+								l.count, "%N">>)
+				elseif last_integer = 0 then
+					finished := True
+					Result := exit_value
+				else
+					check
+						valid_index: last_integer > 0 and
+									last_integer <= l.count
+					end
+					finished := True
+					Result := last_integer
+				end
+			end
 		end
 
 	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
