@@ -1,24 +1,14 @@
 indexing
 	description:
-		"Root class for a server application that responds to requests %
-		%from clients"
+		"Framework for a root class for a server application that responds %
+		%to requests from clients"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class SERVER inherit
-
-	GLOBAL_SERVER
-		export
-			{NONE} all
-		end
-
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
+deferred class SERVER inherit
 
 	EXCEPTION_SERVICES
 		export
@@ -30,16 +20,11 @@ class SERVER inherit
 			{NONE} all
 		end
 
-creation
-
-	make
-
 feature -- Initialization
 
 	make is
 		local
 			factory_builder: FACTORY_BUILDER
-			version: expanded PRODUCT_INFO
 		do
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",
@@ -56,37 +41,12 @@ feature -- Initialization
 				exit (Error_exit_status)
 			else
 				register_for_termination (Current)
-				create poller.make_read_only
-				create factory_builder.make
-				create {LINKED_LIST [SOCKET]} current_sockets.make
-				-- Make a socket for each port number provided in the
-				-- command line, create a STREAM_READER to handle it,
-				-- and add it to the poller's list of read commands.
-				-- (Allows concurrent processing - in a future version.)
-				from
-					command_line_options.port_numbers.start
-				until
-					command_line_options.port_numbers.exhausted
-				loop
-					create socket.make_server_by_port (
-						command_line_options.port_numbers.item)
-					create {STREAM_READER} readcmd.make (socket,
-						factory_builder)
-					poller.put_read_command (readcmd)
-					current_sockets.extend (socket)
-					command_line_options.port_numbers.forth
-				end
-				-- If background is not specified, add a reader to respond to
-				-- console commands.
-				if not command_line_options.background then
-					create {CONSOLE_READER} readcmd.make (factory_builder)
-					poller.put_read_command (readcmd)
-				end
+				prepare_for_listening
 				from
 				until
 					finished
 				loop
-					poller.execute (15, 20000)
+					listen
 				end
 				exit (0)
 			end
@@ -100,50 +60,37 @@ feature {NONE}
 	finished: BOOLEAN
 			-- Is it time to exit the server?
 
-	poller: MEDIUM_POLLER
-			-- Poller for client socket connections
+	prepare_for_listening is
+			-- Do any necessary set-up before listening for client requests.
+		deferred
+		end
+
+	listen is
+			-- Listen for and respond to client requests.
+		deferred
+		end
+
+	version: PRODUCT_INFO is
+			-- Version information
+		deferred
+		end
+
+	command_line_options: COMMAND_LINE is
+			-- Command-line argument services
+		deferred
+		end
 
 	cleanup is
-			-- Close all unclosed sockets.
-		do
-			if current_sockets /= Void then
-				from
-					current_sockets.start
-				until
-					current_sockets.exhausted
-				loop
-					if not current_sockets.item.is_closed then
-						current_sockets.item.close
-					end
-					current_sockets.forth
-				end
-			end
+			-- Do any needed cleanup before exiting.
+		deferred
 		end
 
 	configuration_error: BOOLEAN is
 			-- Is there an error in the MAS configuration?  If so,
 			-- a description is placed into config_error_description.
-		local
-			env: expanded APP_ENVIRONMENT
-			env_vars: expanded APP_ENVIRONMENT_VARIABLE_NAMES
-			d: DIRECTORY
-		do
-			if
-				env.app_directory /= Void and not env.app_directory.empty
-			then
-				create d.make (env.app_directory)
-				if not d.exists then
-					config_error_description := concatenation (<<
-						env_vars.application_directory_name, " setting ",
-						"specifies a directory that does not exist or that ",
-						"is not reachable from the current directory">>)
-					Result := true
-				end
-			end
+		deferred
 		end
 
 	config_error_description: STRING
-
-	current_sockets: LIST [SOCKET]
 
 end -- SERVER
