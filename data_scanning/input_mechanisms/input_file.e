@@ -46,6 +46,11 @@ feature -- Status report
 			Result := after and then field_index = 1
 		end
 
+	last_error_fatal: BOOLEAN is
+		once
+			Result := false
+		end
+
 feature -- Cursor movement
 
 	advance_to_next_field is
