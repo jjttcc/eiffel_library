@@ -47,6 +47,46 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
+	suppliers: SET [ANY] is
+			-- One instance of each supplier class (usually arguments to
+			-- `execute', but the precise semantics are at the discretion
+			-- of the class's author) used by Current and its `descendants'
+			-- to carry out the calculation performed by `execute' -
+			-- This feature is intended to allow run-time type checking
+			-- that may be needed by some applications.
+		local
+			l: LIST [COMMAND]
+		do
+			l := descendants
+			if not l.is_empty then
+				Result := descendants.first.suppliers
+				from
+					l.go_i_th (2)
+				until
+					l.exhausted
+				loop
+					Result.fill (l.item.suppliers)
+					l.forth
+				end
+			else
+				create {LINKED_SET [ANY]} Result.make
+			end
+			Result.fill (root_suppliers)
+		end
+
+	root_suppliers: SET [ANY] is
+			-- An instance of each supplier class used by Current
+			-- (usually arguments to `execute', but the precise semantics
+			-- are at the discretion of the class's author), as the
+			-- root of a command hierarchy (i.e., exluding suppliers
+			-- of `descendants'), to carry out its execution
+		do
+			-- Default to empty - redefine as needed.
+			create {LINKED_SET [ANY]} Result.make
+		ensure
+			not_void: Result /= Void
+		end
+
 feature -- Basic operations
 
 	execute (arg: ANY) is
