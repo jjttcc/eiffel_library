@@ -15,9 +15,17 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-deferred class
+deferred class VALUE_SETTER inherit
 
-	VALUE_SETTER
+	EXCEPTIONS
+		export
+			{NONE} all
+		end
+
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
 
 feature -- Basic operations
 
@@ -36,6 +44,11 @@ feature -- Basic operations
 			then
 				do_set (stream, tuple)
 			end
+		rescue
+			unrecoverable_error := true
+			handle_input_error (concatenation(<<"Error occurred while ",
+				"reading ", stream.name, ": ", meaning (exception)>>), Void)
+			log_error (last_error)
 		end
 
 feature -- Access
