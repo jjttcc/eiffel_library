@@ -10,7 +10,7 @@ class
 
 	GENERIC_SORTING [G -> PART_COMPARABLE, H -> HASHABLE]
 
-feature -- Basic operations
+feature -- Access
 
 	sorted_list (l: LIST [G]): PART_SORTED_TWO_WAY_LIST [G] is
 			-- All elements of `l', sorted
@@ -63,6 +63,52 @@ feature -- Basic operations
 					tbl.put (l.item, l.item)
 					l.forth
 				end
+			end
+		end
+
+	is_sorted_ascending (l: LINEAR [PART_COMPARABLE]): BOOLEAN is
+			-- Is `l' sorted in ascending order?
+		local
+			prev: PART_COMPARABLE
+		do
+			Result := True
+			from
+				l.start
+				if not l.exhausted then
+					prev := l.item
+					l.forth
+				end
+			until
+				not Result or l.exhausted
+			loop
+				if l.item < prev then
+					Result := False
+				end
+				prev := l.item
+				l.forth
+			end
+		end
+
+	is_sorted_descending (l: LINEAR [PART_COMPARABLE]): BOOLEAN is
+			-- Is `l' sorted in descending order?
+		local
+			prev: PART_COMPARABLE
+		do
+			Result := True
+			from
+				l.start
+				if not l.exhausted then
+					prev := l.item
+					l.forth
+				end
+			until
+				not Result or l.exhausted
+			loop
+				if l.item > prev then
+					Result := False
+				end
+				prev := l.item
+				l.forth
 			end
 		end
 
