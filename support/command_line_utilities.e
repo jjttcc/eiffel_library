@@ -4,7 +4,6 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-foobar
 class UI_UTILITIES inherit
 
 	STD_FILES
