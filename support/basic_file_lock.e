@@ -40,6 +40,10 @@ feature -- Basic operations
 			fname := lock_file_name.to_c
 			if try_to_open ($fname, False_value) = -1 then
 				locked := false
+				if last_op_failed then
+					error_occurred := true
+					set_last_error ("Error occurred trying to lock file: ")
+				end
 			else
 				locked := true
 			end
@@ -52,7 +56,7 @@ feature -- Basic operations
 			fname := lock_file_name.to_c
 			if try_to_open ($fname, True_value) = -1 then
 				error_occurred := true
-				set_last_error
+				set_last_error ("Error occurred while locking file: ")
 				raise (last_error)
 			end
 			locked := true
@@ -68,7 +72,7 @@ print (".%N")
 			fname := lock_file_name.to_c
 			if remove_file ($fname) = -1 then
 				error_occurred := true
-				set_last_error
+				set_last_error ("Error occurred trying to unlock file: ")
 				raise (last_error)
 			end
 			locked := false
@@ -86,12 +90,20 @@ feature {NONE} -- Implementation
 			 "C"
 		end
 
+	error_on_last_operation: INTEGER is
+		external
+			 "C"
+		end
+
 	last_error: STRING
 
-	set_last_error is
+	set_last_error (pre_fix: STRING) is
 		do
 			create last_error.make (0)
 			last_error.from_c (last_c_error)
+			if pre_fix /= Void and not pre_fix.empty then
+				last_error.prepend (pre_fix)
+			end
 		end
 
 	last_c_error: POINTER is
@@ -117,6 +129,11 @@ feature {NONE} -- Implementation
 print ("lock file name was set to: ")
 print (lock_file_name)
 print ("%N")
+		end
+
+	last_op_failed: BOOLEAN is
+		do
+			Result := error_on_last_operation /= 0
 		end
 
 end -- class BASIC_FILE_LOCK
