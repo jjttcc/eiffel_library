@@ -80,7 +80,7 @@ feature -- Basic operations
 			fname: ANY
 		do
 			fname := lock_file_name.to_c
-			if remove_file ($fname) = -1 then
+			if not remove_lock_file then
 				error_occurred := true
 				set_last_error ("Error occurred trying to unlock item: ", Void)
 				last_error.append (".%N(Could not remove lock file:%N")
@@ -99,8 +99,31 @@ feature {NONE} -- Implementation
 		end
 
 	remove_file (fname : POINTER): INTEGER is
+			-- (Obsolete)
 		external
 			 "C"
+		end
+
+	remove_lock_file: BOOLEAN is
+			-- Remove file with name `lock_file_name'.  Result is true if
+			-- the operations succeeds; otherwise, it is false.  If the
+			-- file does not exist, removal "succeeds".
+		local
+			failed: BOOLEAN
+			f: PLAIN_TEXT_FILE
+		do
+			if failed then
+				Result := false
+			else
+				create f.make (lock_file_name)
+				if f.exists then
+					f.delete
+				end
+				Result := true
+			end
+		rescue
+			failed := true
+			retry
 		end
 
 	open_file_exists: INTEGER is
