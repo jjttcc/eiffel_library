@@ -8,30 +8,11 @@ indexing
 
 class LOG inherit
 
-	UNARY_OPERATOR [REAL, REAL]
-		redefine
-			operate
-		end
-
-	SINGLE_MATH
-		export
-			{NONE} all
-		end
+	UNARY_MATH_OPERATOR
 
 creation
 
 	make
-
-feature -- Initialization
-
-	make (o: like operand) is
-		require
-			not_void: o /= Void
-		do
-			set_operand (o)
-		ensure
-			set: operand = o
-		end
 
 feature {NONE} -- Basic operations
 

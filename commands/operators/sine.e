@@ -1,12 +1,12 @@
 indexing
-	description: "Base-10 logarithm operator"
+	description: "Trigonometric sine operator"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class LOG10 inherit
+class SINE inherit
 
 	UNARY_MATH_OPERATOR
 		redefine
@@ -22,7 +22,7 @@ feature {NONE} -- Basic operations
 	operate (v: REAL) is
 			-- Null action by default
 		do
-			value := log10 (v)
+			value := sine (v)
 		end
 
-end -- class LOG10
+end
