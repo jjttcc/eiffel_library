@@ -83,6 +83,7 @@ feature {NONE} -- Implementation - Hook routines
 			ex_srv: expanded EXCEPTION_SERVICES
 		do
 			ex_srv.last_exception_status.set_fatal (True)
+			ex_srv.last_exception_status.set_description (msg)
 			ex_srv.handle_exception (msg)
 		end
 
