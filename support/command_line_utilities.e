@@ -1,6 +1,6 @@
 indexing
 	description: "Command-line user interface functionality"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	note:
 		"This class redefines print from GENERAL.  Classes that inherit from %
 		%this class and one or more other classes will need to undefine %
