@@ -52,4 +52,4 @@ feature {NONE} -- Hook routine implementation
 		do
 		end
 
-end -- class IMPLICATION_OPERATOR
+end

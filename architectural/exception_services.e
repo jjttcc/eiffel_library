@@ -348,4 +348,4 @@ invariant
 	verbose_not_verbose_are_opposites:
 		verbose_reporting = not not_verbose_reporting
 
-end -- EXCEPTION_SERVICES
+end
