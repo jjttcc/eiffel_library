@@ -184,6 +184,30 @@ feature -- Element change
 				record_separator /= Void
 		end
 
+feature -- Input
+
+	read_string is
+		do
+			create last_string.make (0)
+			from
+				read_character
+			until
+				last_character = field_separator @ 1 or
+				last_character = record_separator @ 1 or end_of_file
+			loop
+				last_string.extend (last_character)
+				read_character
+			end
+			if
+				not (last_character = record_separator @ 1) or else
+				not is_tab_space_or_newline (record_separator @ 1)
+				-- Don't move back if record_separator is a tab, space,
+				-- or newline and last_character = record_separator @ 1.
+			then
+				back
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	is_tab_space_or_newline (c: CHARACTER): BOOLEAN is
