@@ -41,9 +41,12 @@ class COMMAND_LINE_UTILITIES [G] inherit
 
 feature -- Access
 
-	selected_character: CHARACTER is
-			-- Character selected by user
+	character_selection (msg: STRING): CHARACTER is
+			-- User-selected character
 		do
+			if msg /= Void and not msg.empty then
+				print_list (<<msg, eom>>)
+			end
 			from
 				Result := '%U'
 			until
@@ -59,7 +62,9 @@ feature -- Access
 	integer_selection (msg: STRING): INTEGER is
 			-- User-selected integer value
 		do
-			print_list (<<"Enter an integer value for ", msg, ": ", eom>>)
+			if msg /= Void and not msg.empty then
+				print_list (<<"Enter an integer value for ", msg, ": ", eom>>)
+			end
 			read_integer
 			Result := last_integer
 		end
@@ -67,7 +72,9 @@ feature -- Access
 	real_selection (msg: STRING): REAL is
 			-- User-selected real value
 		do
-			print_list (<<"Enter a real value for ", msg, ": ", eom>>)
+			if msg /= Void and not msg.empty then
+				print_list (<<"Enter a real value for ", msg, ": ", eom>>)
+			end
 			read_real
 			Result := last_real
 		end
@@ -75,7 +82,9 @@ feature -- Access
 	string_selection (msg: STRING): STRING is
 			-- User-selected real value
 		do
-			print_list (<<msg, ": ", eom>>)
+			if msg /= Void and not msg.empty then
+				print_list (<<msg, ": ", eom>>)
+			end
 			read_line
 			Result := clone (last_string)
 		end
@@ -105,7 +114,7 @@ feature -- Access
 					%     Set market analysis date %
 					%to currently selected date (s)%N", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'd', 'D' then
 					date := date_choice
 				when 't', 'T' then
@@ -113,7 +122,7 @@ feature -- Access
 				when 'r', 'R' then
 					date := relative_date_choice
 				when 's', 'S' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid selection%N")
 				end
@@ -390,7 +399,7 @@ feature -- Miscellaneous
 				slimit = 0 or finished
 			loop
 				from
-					choice_made := false
+					choice_made := False
 				until
 					choice_made
 				loop
@@ -404,14 +413,14 @@ feature -- Miscellaneous
 						print_list (<<"Selection must be between 0 and ",
 									choices.count, "%N">>)
 					elseif last_integer = 0 then
-						finished := true
-						choice_made := true
+						finished := True
+						choice_made := True
 					else
 						print_list (
 								<<"Added %"", names @ last_integer,
 								"%"%N">>)
-						choices.i_th (last_integer).set_right (true)
-						choice_made := true
+						choices.i_th (last_integer).set_right (True)
+						choice_made := True
 					end
 				end
 				slimit := slimit - 1
@@ -513,7 +522,7 @@ feature {NONE} -- Implementation - date-related routines
 				print_list (<<"Select period length:%N%
 					%     day (d) month (m) year (y) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'd', 'D' then
 					period := 'd'
 					period_name := "day"
