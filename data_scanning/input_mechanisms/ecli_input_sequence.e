@@ -81,7 +81,7 @@ feature -- Cursor movement
 
 feature -- Element change
 
-	set_tuple_sequence(ts: ECLI_STATEMENT) is
+	set_tuple_sequence (ts: ECLI_STATEMENT) is
 		require
 			valid_sequence: ts /= Void
 		do
