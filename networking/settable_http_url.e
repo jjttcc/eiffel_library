@@ -13,6 +13,9 @@ class
 inherit
 
 	HTTP_URL
+		export
+			{ANY} address
+		end
 
 create
 
