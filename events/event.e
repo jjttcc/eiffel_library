@@ -6,44 +6,33 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class EVENT inherit
+deferred class EVENT inherit
 
 	ANY
-		redefine
-			out
-		end
 
 feature -- Access
 
 	name: STRING
 			-- Name of the event
 
-	description: STRING
+	description: STRING is
 			-- Description of the event
+		deferred
+		end
 
-	time_stamp: DATE_TIME
+	time_stamp: DATE_TIME is
 			-- Date and time that the event occurred
-
-	out: STRING is
-		do
-			Result := clone (name)
-			Result.extend (' ')
-			Result.append (time_stamp.out)
-			Result.extend (' ')
-			Result.append (description)
+		deferred
 		end
 
-feature {NONE}
-
-	set_description (arg: STRING) is
-			-- Set description to `arg'.
-		require
-			arg /= Void
-		do
-			description := arg
-		ensure
-			description_set: description = arg and description /= Void
-		end
+	--out: STRING is
+	--	do
+	--		Result := clone (name)
+	--		Result.extend (' ')
+	--		Result.append (time_stamp.out)
+	--		Result.extend (' ')
+	--		Result.append (description)
+	--	end
 
 invariant
 

@@ -19,7 +19,7 @@ feature -- Initialization
 		do
 			!!event_history.make
 			event_history.compare_objects
-			!!event_types.make
+			!LINKED_SET [EVENT_TYPE]!event_types.make
 			!!event_cache.make
 		end
 
@@ -33,7 +33,7 @@ feature -- Status report
 
 feature -- Access
 
-	event_types: LINKED_LIST [EVENT_TYPE]
+	event_types: COLLECTION [EVENT_TYPE]
 			-- Types of events that this registrant is interested in
 
 feature -- Element change
@@ -45,8 +45,17 @@ feature -- Element change
 		do
 			event_types.extend (arg)
 		ensure
-			event_type_added: event_types.count = old event_types.count + 1 and
-				event_types.has (arg)
+			event_type_added: event_types.has (arg)
+		end
+
+	remove_event_type (arg: EVENT_TYPE) is
+			-- Remove `arg' from `event_types'.
+		require
+			arg_not_void: arg /= Void
+		do
+			event_types.prune (arg)
+		ensure
+			event_type_removed: not event_types.has (arg)
 		end
 
 feature -- Basic operations
