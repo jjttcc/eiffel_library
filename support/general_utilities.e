@@ -241,7 +241,7 @@ feature -- Miscellaneous
 
 	check_objects (a: ARRAY [ANY]; descriptions: ARRAY [STRING];
 		ok: FUNCTION [ANY, TUPLE [ANY], BOOLEAN]; handler:
-		PROCEDURE [ANY, TUPLE [LIST [STRING]]];
+		PROCEDURE [ANY, TUPLE [LINEAR [STRING]]];
 		proc_arg: ANY; info: ANY) is
 			-- For each "i" in `a.lower' to `a.upper', if a @ i is not `ok',
 			-- insert descriptions @ i into a list and execute `handler'
@@ -291,6 +291,26 @@ feature -- Miscellaneous
 			Result := s /= Void and then not s.is_empty
 		ensure
 			Result = (s /= Void and then not s.is_empty)
+		end
+
+	string_boolean_pair (s: STRING; b: BOOLEAN): PAIR [STRING, BOOLEAN] is
+			-- A PAIR with `s' as the left item and `b' as the right item
+		do
+			create Result.make (s, b)
+		ensure
+			result_exists: Result /= Void
+			s_left_b_right: Result.left = s and Result.right = b
+		end
+
+feature -- List manipulation
+
+	append_string_boolean_pair (l: SEQUENCE [PAIR [STRING, BOOLEAN]];
+		s: STRING; b: BOOLEAN) is
+			-- Wrap `s' and `b' into a PAIR and append the pair to `l'.
+		require
+			l_exists: l /= Void
+		do
+			l.extend (string_boolean_pair (s, b))
 		end
 
 feature -- Constants
