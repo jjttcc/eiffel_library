@@ -1,3 +1,12 @@
+/**
+	description: "Low-level utilities";
+	author: "Jim Cochrane"
+	date: "$Date$";
+	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
+**/
+
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
