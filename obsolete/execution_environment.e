@@ -24,7 +24,7 @@ feature
 		ext := s.to_c 
 		c_string := eif_getenv($ext) 
 		if c_string /= default_pointer then
-			!!Result.make (0) 
+			create Result.make (0) 
 			Result.from_c (c_string) 
 		end
 	end 
