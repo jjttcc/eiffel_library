@@ -14,10 +14,7 @@ feature -- Access
 
 	timer: TIMER
 
-	timing_information: STRING is
-		once
-			Result := ""
-		end
+	timing_information: STRING
 
 feature -- Status report
 
@@ -32,6 +29,9 @@ feature -- Basic operations
 			-- If `timing_on', start the timer; otherwise do nothing.
 		do
 			if timing_on then
+				if timing_information = Void then
+					create timing_information.make (25)
+				end
 				if timer = Void then create timer.make end
 				timer.start
 			end
@@ -41,7 +41,7 @@ feature -- Basic operations
 			-- If `timing_on', print `timing_information' and then reset it
 			-- to empty.
 		do
-			if timing_on then
+			if timing_on and then timing_information /= Void then
 				print (timing_information)
 				timing_information.wipe_out
 			end
@@ -50,7 +50,7 @@ feature -- Basic operations
 	add_timing_data (msg: STRING) is
 			-- If `timing_on', add `msg' to `timing_information'.
 		do
-			if timing_on then
+			if timing_on and then timing_information /= Void then
 				timing_information.append ("Time taken for " + msg + ":%N" +
 					timer.elapsed_time.time.fine_seconds_count.out + "%N")
 			end
