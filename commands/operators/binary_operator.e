@@ -1,45 +1,29 @@
 indexing
-	description: "Abstraction for an operator that operates on two operands"
+	description: "Abstraction for a command that operates on two operands"
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class BINARY_OPERATOR inherit
+deferred class BINARY_OPERATOR [G, H] inherit
 
-	NUMERIC_COMMAND
-		redefine
-			initialize
-		end
-
-feature -- Initialization
-
-	initialize (arg: ANY) is
-			-- Call initialize with arg on operand1 and operand2.
-		do
-			operand1.initialize (arg)
-			operand2.initialize (arg)
-		end
+	COMMAND
 
 feature -- Access
 
-	operand1: NUMERIC_COMMAND
-			-- the first operand to be operated on
+	operand1: G
+			-- The first operand to be operated on
 
-	operand2: NUMERIC_COMMAND
-			-- the second operand to be operated on
+	operand2: G
+			-- The second operand to be operated on
 
-feature -- Status report
-
-	arg_used: BOOLEAN is
-		do
-			Result := operand1.arg_used or operand2.arg_used
-		ensure then
-			ops_arg_used: Result = (operand1.arg_used or operand2.arg_used)
+	value: H is
+			-- The value resulting from calling execute
+		deferred
 		end
 
-feature {FACTORY}
+feature
 
-	set_operands, make_with_operands (op1: NUMERIC_COMMAND;
-										op2: NUMERIC_COMMAND) is
+	set_operands, make_with_operands (op1: like operand1;
+										op2: like operand2) is
 			-- Set the operands to the specified values.
 		require
 			not_void: op1 /= Void and op2 /= Void
@@ -50,9 +34,5 @@ feature {FACTORY}
 			are_set: operand1 = op1 and operand2 = op2
 			not_void: operand1 /= Void and operand2 /= Void
 		end
-
-invariant
-
-	operands_set: operand1 /= Void and operand2 /= Void
 
 end -- class BINARY_OPERATOR

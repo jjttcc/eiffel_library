@@ -1,5 +1,5 @@
 indexing
-	description: "Binary operator that implements subtraction."
+	description: "Binary numeric operator that implements subtraction."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -7,7 +7,7 @@ class SUBTRACTION
 
 inherit
 
-	BINARY_OPERATOR
+	BINARY_NUMERIC_OPERATOR
 
 creation
 

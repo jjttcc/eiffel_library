@@ -1,5 +1,5 @@
 indexing
-	description: "Binary operator that implements division."
+	description: "Binary numeric operator that implements division."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -7,7 +7,7 @@ class DIVISION
 
 inherit
 
-	BINARY_OPERATOR
+	BINARY_NUMERIC_OPERATOR
 
 creation
 
