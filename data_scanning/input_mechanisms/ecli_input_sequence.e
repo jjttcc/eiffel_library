@@ -33,6 +33,11 @@ feature -- Access
 
 	record_index: INTEGER
 
+	field_count: INTEGER is
+		do
+			Result := tuple_sequence.result_column_count
+		end
+
 feature -- Status report
 
 	after_last_record: BOOLEAN is

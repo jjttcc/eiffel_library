@@ -41,6 +41,48 @@ feature -- Access
 
 	record_index: INTEGER
 
+	field_count: INTEGER is
+		local
+			saved_position: INTEGER
+			s: STRING
+			end_of_record: BOOLEAN
+			su: STRING_UTILITIES
+		do
+			saved_position := position
+			from
+				s := ""
+				start
+			until
+				end_of_record
+			loop
+				read_character
+				if last_character = record_separator @ 1 then
+					if record_separator.count = 1 then
+						end_of_record := true
+					else
+						end_of_record := current_string_matches (
+						record_separator.substring(2, record_separator.count))
+						if not end_of_record then
+							back
+							read_character
+						end
+					end
+				end
+				if not end_of_record then
+					if after then
+						end_of_record := true
+					else
+						s.extend (last_character)
+					end
+				end
+			end
+			go (saved_position)
+			if not s.empty then
+				create su.make (s)
+				Result := su.tokens (field_separator).count
+			end
+		end
+
 feature -- Status report
 
 	after_last_record: BOOLEAN is
@@ -48,10 +90,7 @@ feature -- Status report
 			Result := after and then field_index = 1
 		end
 
-	last_error_fatal: BOOLEAN is
-		once
-			Result := false
-		end
+	last_error_fatal: BOOLEAN
 
 feature -- Cursor movement
 
@@ -61,6 +100,7 @@ feature -- Cursor movement
 		local
 			i: INTEGER
 		do
+			last_error_fatal := false
 			error_occurred := false
 			from
 				i := 1
@@ -82,7 +122,10 @@ feature -- Cursor movement
 						last_character /= field_separator @ i
 					then
 						error_occurred := true
-						error_string := "Incorrect field separator detected."
+						error_string := "Incorrect field separator %
+							%character detected: '"
+						error_string.extend (last_character)
+						error_string.append ("'.")
 					end
 				end
 				i := i + 1
@@ -96,13 +139,14 @@ feature -- Cursor movement
 		local
 			i: INTEGER
 		do
+			last_error_fatal := false
 			error_occurred := false
 			from
 				i := 1
 			variant
 				record_separator.count + 1 - i
 			until
-				i > record_separator.count
+				i > record_separator.count or last_error_fatal
 			loop
 				-- If record_separator @ i is a tab or space or newline,
 				-- it will have been eaten in the last read_x call.  If it's
@@ -115,7 +159,11 @@ feature -- Cursor movement
 						last_character /= record_separator @ i
 					then
 						error_occurred := true
-						error_string := "Incorrect record separator detected."
+						last_error_fatal := true
+						error_string := "Incorrect record separator %
+							%character detected: '"
+						error_string.extend (last_character)
+						error_string.append ("'.")
 					end
 				end
 				i := i + 1
@@ -220,7 +268,32 @@ feature {NONE} -- Implementation
 	is_tab_space_or_newline (c: CHARACTER): BOOLEAN is
 			-- Is `c' a tab, space, or newline character?
 		do
-			Result := c = '%T' or c = ' ' or c = '%N'
+			Result := c = '%T' or c = ' ' or c = '%N' or c = '%R'
+		end
+
+	current_string_matches (s: STRING): BOOLEAN is
+			-- Does the string at the current cursor match `s'?
+		local
+			saved_position, i: INTEGER
+		do
+			if readable then
+				saved_position := position
+				Result := true
+				from i := 1 until
+					i = s.count + 1 or
+					not Result or after
+				loop
+					read_character
+					if s @ i /= last_character then
+						Result := false
+					end
+					i := i + 1
+				end
+				if Result and after then
+					Result := i = s.count + 1
+				end
+				go (saved_position)
+			end
 		end
 
 invariant
