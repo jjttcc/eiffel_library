@@ -135,7 +135,8 @@ feature {NONE} -- Implementation
 
 	session: SESSION is
 			-- The current log-in session
-		deferred
+		do
+			-- Needs to be redefined if `sessions_used' is True.
 		end
 
 invariant
