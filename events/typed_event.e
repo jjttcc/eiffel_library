@@ -17,13 +17,6 @@ feature -- Access
 	type: EVENT_TYPE
 			-- The type of the event
 
-	--out: STRING is
-	--	do
-	--		Result := Precursor
-	--		Result.extend (' ')
-	--		Result.append (type.out)
-	--	end
-
 feature -- Status report
 
 	is_equal (other: like Current): BOOLEAN is

@@ -25,15 +25,6 @@ feature -- Access
 		deferred
 		end
 
-	--out: STRING is
-	--	do
-	--		Result := clone (name)
-	--		Result.extend (' ')
-	--		Result.append (time_stamp.out)
-	--		Result.extend (' ')
-	--		Result.append (description)
-	--	end
-
 invariant
 
 	name_time_not_void: name /= Void and time_stamp /= Void
