@@ -8,6 +8,9 @@ indexing
 class EVENT_TYPE inherit
 
 	ANY
+		redefine
+			is_equal
+		end
 
 creation
 
@@ -32,6 +35,13 @@ feature -- Access
 
 	name: STRING
 			-- Name of the event type
+
+feature -- Status report
+
+	is_equal (other: like Current): BOOLEAN is
+		do
+			Result := other.ID = ID
+		end
 
 invariant
 

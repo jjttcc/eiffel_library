@@ -19,8 +19,16 @@ feature {NONE} -- Initialization
 		do
 			!LINKED_SET [EVENT_TYPE]!event_types.make
 			!!event_cache.make
-			load_history
+			!!event_history.make
+		ensure
+			not_void: event_types /= Void and event_cache /= Void
 		end
+
+
+feature -- Access
+
+	event_types: CHAIN [EVENT_TYPE]
+			-- Types of events that this registrant is interested in
 
 feature -- Status report
 
@@ -29,11 +37,6 @@ feature -- Status report
 		do
 			Result := not event_history.has (e) and event_types.has (e.type)
 		end
-
-feature -- Access
-
-	event_types: COLLECTION [EVENT_TYPE]
-			-- Types of events that this registrant is interested in
 
 feature -- Element change
 
@@ -73,18 +76,18 @@ feature -- Basic operations
 			end
 		end
 
-feature {NONE} -- Hook routines
-
-	perform_notify (elist: LIST [TYPED_EVENT]) is
-			-- Notify the registrant of all events in `elist'.
-		deferred
-		end
-
 	load_history is
 			-- Load the `event_history' from persistent store.
 		deferred
 		ensure
 			eh_not_void: event_history /= Void
+		end
+
+feature {NONE} -- Hook routines
+
+	perform_notify (elist: LIST [TYPED_EVENT]) is
+			-- Notify the registrant of all events in `elist'.
+		deferred
 		end
 
 feature {NONE} -- Implementation

@@ -10,6 +10,13 @@ deferred class
 
 	EVENT_REGISTRANT
 
+feature -- Access
+
+	name: STRING is
+			-- Name of the registrant
+		deferred
+		end
+
 feature -- Status report
 
 	is_interested_in (e: EVENT): BOOLEAN is
