@@ -1,4 +1,5 @@
 indexing
+--!!!!!!!!!!!!!!Move this to eiffel_library.
 	description: "Suppliers for EVENT_CLIENTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -32,13 +33,15 @@ feature {NONE} -- Implementation
 	notify_clients is
 			-- Call all agents in `client_actions' with Current as an argument.
 		do
-			from
-				client_actions.start
-			until
-				client_actions.exhausted
-			loop
-				client_actions.item.call ([Current])
-				client_actions.forth
+			if client_actions /= Void then
+				from
+					client_actions.start
+				until
+					client_actions.exhausted
+				loop
+					client_actions.item.call ([Current])
+					client_actions.forth
+				end
 			end
 		end
 
