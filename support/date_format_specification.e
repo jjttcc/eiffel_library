@@ -99,7 +99,8 @@ feature {NONE} -- Implementation
 				setting.count < 2 or
 				not format_setters.has (setting @ 1)
 			then
-				publish_error (Invalid_date_specification_error)
+				publish_error (Invalid_date_specification_component_error +
+					" (" + setting @ 1 + ")")
 				valid := False
 			else
 				format_setters.item (setting @ 1).call ([setting @ 2])
@@ -114,7 +115,8 @@ feature {NONE} -- Implementation
 			if
 				values.count /= 3
 			then
-				publish_error (Invalid_date_format_error)
+				publish_error (Invalid_date_format_error + " (" +
+					setting + ")")
 				valid := False
 			else
 				from
@@ -162,11 +164,13 @@ feature {NONE} -- Implementation
 				if v > 0 and v < 100 then
 					year_partition_value := v
 				else
-					publish_error (Invalid_year_partition_value_error)
+					publish_error (Invalid_year_partition_value_error +
+						" (" + setting + ")")
 					valid := False
 				end
 			else
-				publish_error (Non_numeric_year_partition_error)
+				publish_error (Non_numeric_year_partition_error +
+					" (" + setting + ")")
 				valid := False
 			end
 		end
@@ -215,15 +219,15 @@ feature {NONE} -- Implementation constants
 feature {NONE} -- Error constants
 
 	Invalid_year_partition_value_error: STRING is
-		"Year partition value is invalid."
+		"Year partition value is invalid - must be > 0 and < 100."
 
 	Non_numeric_year_partition_error: STRING is
 		"Year partition value not a number."
 
-	Invalid_date_specification_error: STRING is
-		"Date specification is inavlid."
+	Invalid_date_specification_component_error: STRING is
+		"Date specification component is invalid."
 
-	Invalid_date_format_error: STRING is "Date format is inavlid."
+	Invalid_date_format_error: STRING is "Date format is invalid."
 
 	Numeric_date_separator_error: STRING is "Date separator is numeric."
 
