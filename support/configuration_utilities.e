@@ -162,9 +162,9 @@ feature {NONE} -- Implementation
 							file_reader.item @ 1 = comment_character)
 					then
 						tokens := current_tokens (file_reader)
-						key_token := tokens @ key_index
-						value_token := tokens @ value_index
 						if tokens.count >= 2 then
+							key_token := tokens @ key_index
+							value_token := tokens @ value_index
 							if
 								use_customized_setting (key_token, value_token)
 							then
