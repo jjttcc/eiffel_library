@@ -45,12 +45,13 @@ feature -- Access
 			s_not_void: s /= Void
 			s_not_empty: not s.is_empty
 			target_not_void: target /= Void
-			target_not_empty: not target.is_empty
 		local
 			i, last_index, s_count: INTEGER
 		do
 			create Result.make (0)
-			last_index := target.substring_index (s, 1)
+			if not target.is_empty then
+				last_index := target.substring_index (s, 1)
+			end
 			if last_index = 0 then
 				Result.extend (target)
 			else
@@ -78,6 +79,9 @@ feature -- Access
 					end
 				end
 			end
+		ensure
+			result_exists: Result /= Void
+			target.is_empty implies Result.count = 1 and Result.first.is_empty
 		end
 
 feature -- Element change
