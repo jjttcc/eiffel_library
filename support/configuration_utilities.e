@@ -84,18 +84,18 @@ feature {NONE} -- Implementation - Hook routines
 				" configuration file")
 		end
 
-	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
+	use_customized_setting (key, value: STRING): BOOLEAN is
 			-- Should the customized configuration setting procedure
 			-- `do_customized_setting' be used, rather than the default one
-			-- [settings.replace (`value_token', `key_token')]?
+			-- [settings.replace (`value', `key')]?
 		require
-			key_exists: key_token /= Void
+			key: key/= Void
 		once
 			-- Default to always False - redefine if needed.
 			Result := False
 		end
 
-	do_customized_setting (key_token, value_token: STRING) is
+	do_customized_setting (key, value: STRING) is
 			-- Customized configuration setting procedure, to be used
 			-- when `default_setting' evaluates to true
 		do
