@@ -101,4 +101,37 @@ feature -- Basic operations
 			end
 		end
 
+	check_objects (a: ARRAY [ANY]; descriptions: ARRAY [STRING];
+		ok: FUNCTION [ANY, TUPLE [ANY], BOOLEAN]; handler:
+		PROCEDURE [ANY, TUPLE [LIST [STRING]]];
+		proc_arg: ANY; msg: STRING) is
+			-- For each "i" in `a.lower' to `a.upper', if a @ i is not `ok',
+			-- insert descriptions @ i into a list and execute `handler'
+			-- on the list.  `proc_arg' is an additional, optional (can
+			-- be Void) argument to `handler' and `msg' is an optional
+			-- error description to pass on to `handler'.
+		require
+			valid_args: a /= Void and descriptions /= Void and
+				a.count = descriptions.count
+		local
+			i: INTEGER
+			invalid_items: LINKED_LIST [STRING]
+		do
+			from
+				create invalid_items.make
+				i := a.lower
+			until
+				i = a.upper + 1
+			loop
+				--!!!When ready, change eval to item.
+				if not ok.eval ([a @ i]) then
+					invalid_items.extend (descriptions @ i)
+				end
+				i := i + 1
+			end
+			if not invalid_items.is_empty then
+				handler.call ([invalid_items, proc_arg])
+			end
+		end
+
 end -- class GENERAL_UTILITIES
