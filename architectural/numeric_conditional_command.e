@@ -1,6 +1,6 @@
 indexing
 	description: "Commands whose `value' is REAL and that depend on the %
-		%result of a boolean operator:  If the result is true, `value' is %
+		%result of a boolean operator:  If the result is True, `value' is %
 		%the result of executing `true_cmd'; else `value' is the result %
 		%of executing `false_cmd'."
 	author: "Jim Cochrane"
@@ -52,11 +52,11 @@ feature -- Access
 
 	true_cmd: RESULT_COMMAND [REAL]
 			-- Command that extracts the value to use if boolean_operator
-			-- evaluates as true
+			-- evaluates as True
 
 	false_cmd: RESULT_COMMAND [REAL]
 			-- Command that extracts the value to use if boolean_operator
-			-- evaluates as false
+			-- evaluates as False
 
 	children: LIST [COMMAND] is
 		do
