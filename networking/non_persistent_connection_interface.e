@@ -54,27 +54,27 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
-	Message_field_separator: STRING is
+	message_field_separator: STRING is
 			-- Field separator used to parse `message_body'
 		deferred
 		end
 
-	Message_record_separator: STRING is
+	message_record_separator: STRING is
 			-- Record separator used to parse `message_body'
 		deferred
 		end
 
-	Logout_request: INTEGER is
+	logout_request: INTEGER is
 			-- Code for a logout request
 		deferred
 		end
 
-	Login_request: INTEGER is
+	login_request: INTEGER is
 			-- Code for a login request
 		deferred
 		end
 
-	Error: INTEGER is
+	error: INTEGER is
 			-- Code indicating an error occurred while processing the
 			-- last client request
 		deferred
@@ -258,9 +258,9 @@ feature {NONE} -- Attributes
 
 feature {NONE} -- Constants
 
-	Maximum_client_message_size: INTEGER is 100000
+	maximum_client_message_size: INTEGER is 100000
 
-	Default_client_error_msg: STRING is
+	default_client_error_msg: STRING is
 		once
 			Result := "Invalid request"
 		end
