@@ -55,6 +55,11 @@ feature -- Access
 	input: INPUT_RECORD_SEQUENCE
 			-- Sequence used for input
 
+feature -- Status report
+
+	strict_error_checking: BOOLEAN
+			-- Should all records with errors be unconditionally discarded?
+
 feature -- Element change
 
 	set_tuple_maker (arg: FACTORY) is
@@ -85,6 +90,14 @@ feature -- Element change
 			input := arg
 		ensure
 			input_set: input = arg and input /= Void
+		end
+
+	set_strict_error_checking (arg: BOOLEAN) is
+			-- Set strict_error_checking to `arg'.
+		do
+			strict_error_checking := arg
+		ensure
+			strict_error_checking_set: strict_error_checking = arg
 		end
 
 feature -- Basic operations
@@ -272,7 +285,10 @@ feature {NONE}
 		do
 			error_list.extend (value_setters.item.last_error)
 			error_in_current_tuple := true
-			if value_setters.item.unrecoverable_error then
+			if
+				value_setters.item.unrecoverable_error or
+				strict_error_checking
+			then
 				discard_current_tuple := true
 			end
 		end
