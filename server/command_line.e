@@ -103,8 +103,6 @@ feature {NONE} -- Implementation
 			-- the debug setting from `contents' iff `contents' contains
 			-- "-" + Debug_string or "--" + Debug_string.  Descendant must
 			-- explicitly call this routine if the debugging state is desired.
-		local
-			i: INTEGER
 		do
 			if option_in_contents (Debug_string @ 1) then
 				if
@@ -144,10 +142,10 @@ feature {NONE} -- Implementation
 			end
 		ensure
 			cursor_set_if_true: Result = (not contents.exhausted and then
-				(contents.item.item (1) = option_sign and
+				((contents.item.item (1) = option_sign and
 				contents.item.item (2) = c) or (contents.item.item (1) =
 				option_sign and contents.item.item (2) = option_sign and
-				contents.item.item (3) = c))
+				contents.item.item (3) = c)))
 			exhausted_if_false: not Result = contents.exhausted
 		end
 
