@@ -9,7 +9,7 @@ indexing
 
 class ROUNDED_VALUE inherit
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_MATH_OPERATOR
 		redefine
 			operate
 		end
@@ -17,17 +17,6 @@ class ROUNDED_VALUE inherit
 creation
 
 	make
-
-feature -- Initialization
-
-	make (o: like operand) is
-		require
-			not_void: o /= Void
-		do
-			set_operand (o)
-		ensure
-			set: operand = o
-		end
 
 feature {NONE} -- Basic operations
 
@@ -37,4 +26,4 @@ feature {NONE} -- Basic operations
 			value := v.rounded
 		end
 
-end -- class ROUNDED_VALUE
+end
