@@ -15,7 +15,7 @@ feature -- Status report
 feature -- Basic operations
 
 	execute (arg: ANY) is
-		do
+		once
 			value := false
 		end
 
