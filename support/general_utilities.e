@@ -257,6 +257,11 @@ feature -- Logging
 
 feature -- Miscellaneous
 
+	microsleep (seconds, microseconds: INTEGER) is
+		external
+			 "C"
+		end
+
 	deep_copy_list (target, source: LIST [ANY]) is
 			-- Do a deep copy from `source' to `target' - work-around
 			-- for apparent bug in LINKED_LIST's deep_copy.
