@@ -234,8 +234,6 @@ feature {NONE} -- Implementation
 		end
 
 	handle_assertion_violation is
-		local
-			msg: STRING
 		do
 			log_error (error_information ("Assertion violation", true))
 			exit (Error_exit_status)
