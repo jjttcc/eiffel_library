@@ -4,24 +4,9 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class DB_INPUT_SEQUENCE inherit
+deferred class DB_INPUT_SEQUENCE inherit
 
 	INPUT_RECORD_SEQUENCE
-
-creation
-
-	make
-
-feature -- Initialization
-
-	make (ts: LINKED_LIST[DB_RESULT]) is
-		require
-			ts_not_void: ts /= Void
-		do
-			set_tuple_sequence (ts)
-		ensure
-			tuple_sequence = ts
-		end
 
 feature -- Access
 
@@ -33,28 +18,15 @@ feature -- Access
 
 	last_character: CHARACTER
 
+	last_string: STRING
+
 	name: STRING is "database input sequence"
 
 	field_index: INTEGER
 
-	record_index: INTEGER is
-		do
-			Result := tuple_sequence.index
-		end
-
-	tuple_sequence: LINKED_LIST[DB_RESULT]
-
 feature -- Status report
 
-	after_last_record: BOOLEAN is
-		do
-			Result := tuple_sequence.after
-		end
-
-	readable: BOOLEAN is
-		do
-			Result := not tuple_sequence.off
-		end
+	last_error_fatal: BOOLEAN
 
 feature -- Cursor movement
 
@@ -63,40 +35,9 @@ feature -- Cursor movement
 			field_index := field_index + 1
 		end
 
-	advance_to_next_record is
-		do
-			tuple_sequence.forth
-			if not after_last_record then
-				tuple ?= tuple_sequence.item.data			
-			end
-			field_index := 1
-		end
-
-	start is
-		do
-			tuple_sequence.start
-			field_index := 1
-		end
-
 	discard_current_record is
 		do
 			advance_to_next_record
-		end
-
-feature -- Element change
-
-	set_tuple_sequence(ts: LINKED_LIST[DB_RESULT]) is
-		require
-			valid_sequence: ts /= Void
-		do
-			tuple_sequence := ts
-			if ts.count > 0 then
-				tuple_sequence.start
-				check field_index = 1 end
-				tuple ?= tuple_sequence.item.data
-			end
-		ensure
-			tuple_sequence = ts
 		end
 
 feature -- Input
@@ -106,16 +47,21 @@ feature -- Input
 			i_ref: INTEGER_REF
 			dt: DATE_TIME
 		do
-			create i_ref
-			create dt.make_now
-			if tuple.item(field_index).conforms_to(dt) then
-				-- Dates must be converted to integers.
-				dt ?= tuple.item(field_index)
-				last_integer := ((dt.date.year * 10000) +
-					(dt.date.month * 100) + dt.date.day)
-			elseif tuple.item(field_index).conforms_to(i_ref) then
-				i_ref ?= tuple.item(field_index)
+			i_ref ?= current_field
+			if i_ref /= Void then
 				last_integer := i_ref.item
+			else
+				-- Dates currently must be converted to integers.
+				dt ?= current_field
+				if dt /= Void then
+					last_integer := ((dt.date.year * 10000) +
+						(dt.date.month * 100) + dt.date.day)
+				else
+					error_occurred := true
+					last_error_fatal := true
+					error_string :=
+						"Database error: wrong data type - integer expected"
+				end
 			end
 		end
 
@@ -123,10 +69,29 @@ feature -- Input
 		local
 			c_ref: CHARACTER_REF
 		do
-			create c_ref
-			if tuple.item(field_index).conforms_to(c_ref) then
-				c_ref ?= tuple.item(field_index)
+			c_ref ?= current_field
+			if c_ref /= Void then
 				last_character := c_ref.item
+			else
+				error_occurred := true
+				last_error_fatal := true
+				error_string :=
+					"Database error: wrong data type - character expected"
+			end
+		end
+
+	read_string is
+		local
+			string: STRING
+		do
+			string ?= current_field
+			if string /= Void then
+				last_string := string
+			else
+				error_occurred := true
+				last_error_fatal := true
+				error_string :=
+					"Database error: wrong data type - string expected"
 			end
 		end
 
@@ -134,27 +99,30 @@ feature -- Input
 		local
 			d_ref: DOUBLE_REF
 		do
-			create d_ref
-			if tuple.item(field_index).conforms_to(d_ref) then
-				d_ref ?= tuple.item(field_index)
+			d_ref ?= current_field
+			if d_ref /= Void then
 				last_double := d_ref.item
+			else
+				error_occurred := true
+				last_error_fatal := true
+				error_string :=
+					"Database error: wrong data type - double expected"
 			end
 		end
 
 	read_real is
 		do
-			-- Data from database is of type double (is this always
-			-- true regardless of RDBMS?).
+			-- Default implementation - for databases where real and double
+			-- is the same type
 			read_double
 			last_real := last_double.truncated_to_real
 		end
 
 feature {NONE} -- Implementation
 
-	tuple: DATABASE_DATA[DATABASE]
-
-invariant
-
-	tuple_sequence /= Void
+	current_field: ANY is
+			-- Current field value
+		deferred
+		end
 
 end -- class DB_INPUT_SEQUENCE
