@@ -52,7 +52,7 @@ feature -- Access
 	value_setters: LIST [VALUE_SETTER]
 			-- Used to scan input and set the appropriate tuple fields
 
-	input: INPUT_SEQUENCE
+	input: INPUT_RECORD_SEQUENCE
 			-- Sequence used for input
 
 feature -- Element change
@@ -102,13 +102,14 @@ feature -- Basic operations
 				input.start
 			invariant
 				-- product.count = number_of_records_in (
-				--	input @ 1 .. input @ (input.index - 1))
-			variant
-				input.count - input.index + 1
+				--	input @ 1 .. input @ (input.record_index - 1))
 			until
-				input.after or last_error_fatal
+				input.after_last_record or last_error_fatal
 			loop
 				make_tuple
+				if error_in_current_tuple then
+					handle_last_error
+				end
 				if not last_error_fatal then
 					advance_to_next_record
 				end
@@ -136,17 +137,18 @@ feature {NONE} -- Hook methods
 		local
 			tuple: ANY
 		do
+			error_in_current_tuple := false
+			discard_current_tuple := false
 			tuple_maker.execute
 			tuple := tuple_maker.product
 			open_tuple (tuple)
-			add_tuple (tuple)
 			from
 				value_setters.start
 				check not value_setters.after end
 				-- Set first field of tuple:
 				value_setters.item.set (input, tuple)
 				if value_setters.item.error_occurred then
-					error_list.extend (value_setters.item.last_error)
+					handle_error_for_current_tuple
 				end
 				value_setters.forth
 			invariant
@@ -154,26 +156,40 @@ feature {NONE} -- Hook methods
 			variant
 				value_setters.count - value_setters.index + 1
 			until
-				value_setters.after
+				value_setters.after or discard_current_tuple
 			loop
 				advance_to_next_field
-				value_setters.item.set (input, tuple)
-				if value_setters.item.error_occurred then
-					error_list.extend (value_setters.item.last_error)
+				if not discard_current_tuple then
+					value_setters.item.set (input, tuple)
+					if value_setters.item.error_occurred then
+						handle_error_for_current_tuple
+					end
 				end
 				value_setters.forth
 			end
-			close_tuple (tuple)
+			do_last_error_check (tuple)
+			if not discard_current_tuple then
+				close_tuple (tuple)
+				add_tuple (tuple)
+			else
+				discard_tuple (tuple)
+			end
 		ensure
 			--one_more: product.count = old product.count + 1 or
-			--		scanning_error_occurred
+			--		discard_current_tuple
 		end
 
 	open_tuple (t: ANY) is
 			-- Perform any initialization of `t' needed before setting
 			-- its fields.
 		require
-			t /= Void
+			t /= Void and not error_in_current_tuple
+		do
+		end
+
+	do_last_error_check (t: ANY) is
+			-- Perform final check for errors before closing the current
+			-- tuple.
 		do
 		end
 
@@ -181,14 +197,24 @@ feature {NONE} -- Hook methods
 			-- Perform any close/clean-up of `t' needed after setting
 			-- its fields.
 		require
-			t /= Void
+			tuple_ok: t /= Void and not discard_current_tuple
 		do
 		end
 
 	add_tuple (t: ANY) is
 			-- Add tuple to product - redefine if not needed.
+		require
+			tuple_ok: t /= Void and not discard_current_tuple
 		do
 			product.extend (t)
+		end
+
+	discard_tuple (t: ANY) is
+			-- Take appropriate action to discard the current tuple in
+			-- response to an unrecoverable scanning error.
+		require
+			not_ok: discard_current_tuple
+		do
 		end
 
 	handle_fatal_error is
@@ -196,6 +222,12 @@ feature {NONE} -- Hook methods
 			-- remove all elements of product.
 		do
 			product.wipe_out
+		end
+
+	handle_last_error is
+			-- Do any processing needed to handle errors that occurred
+			-- while scanning the current tuple.
+		do
 		end
 
 feature {NONE}
@@ -209,6 +241,8 @@ feature {NONE}
 			input.advance_to_next_field
 			if input.error_occurred then
 				error_list.extend (input.error_string)
+				discard_current_tuple := true
+				error_in_current_tuple := true
 			end
 		end
 
@@ -217,14 +251,38 @@ feature {NONE}
 			-- Call `input.advance_to_next_record' by default.  Can be
 			-- overridden in a descendant if different behavior is needed.
 		do
-			input.advance_to_next_record
+			if not discard_current_tuple then
+				input.advance_to_next_record
+			else
+				-- When discard_current_tuple, input may be at the beginning
+				-- of the current record rather than at the end (signified
+				-- by "value_setters.index = 2") -
+				-- input.advance_to_next_record may not work as expected in
+				-- this case.
+				input.discard_current_record
+			end
 			if input.error_occurred then
 				error_list.extend (input.error_string)
 			end
 		end
 
-	scanning_error_occurred: BOOLEAN
-			-- Did an error occur during the last scan (in make_tuple)?
+	handle_error_for_current_tuple is
+			-- Add the current error to `error_list' and set internal
+			-- error status variables.
+		do
+			error_list.extend (value_setters.item.last_error)
+			error_in_current_tuple := true
+			if value_setters.item.unrecoverable_error then
+				discard_current_tuple := true
+			end
+		end
+
+	error_in_current_tuple: BOOLEAN
+			-- Was an error encountered while scanning the current tuple?
+
+	discard_current_tuple: BOOLEAN
+			-- Should the current tuple be discarded due to incorrect or
+			-- corrupted data?
 
 invariant
 
