@@ -19,9 +19,12 @@ feature -- Basic operations
 			request_id := -1; session_key := -1; command_argument := Void
 			process_request
 			if is_logout_request (request_id) then
-				-- Logout requests are handled specially - simply remove the
-				-- client's session.
-				sessions.remove (session_key)
+				handle_logout
+				if sessions_used then
+					-- Logout requests are handled specially - simply remove
+					-- the client's session.
+					sessions.remove (session_key)
+				end
 			else
 				check
 					valid_request_id: not is_logout_request (request_id) and
@@ -30,6 +33,7 @@ feature -- Basic operations
 				cmd := request_handlers @ request_id
 				setup_command (cmd)
 				if
+					sessions_used and
 					not is_login_request (request_id) and not request_error
 					-- A session is not needed for the login request command,
 					-- since it will create one.
@@ -47,6 +51,12 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
+	sessions_used: BOOLEAN is
+			-- Is session management used in this implementation?
+		once
+			Result := True
+		end
+
 	process_request is
 			-- Input the next client request, blocking if necessary, and split
 			-- the received message into `request_id', `session_key',
@@ -61,8 +71,14 @@ feature {NONE} -- Hook routines
 			cmdarg_set: not is_logout_request (request_id) and then
 				(request_handlers @ request_id).arg_mandatory implies
 				command_argument /= Void
-			session_key_valid: not is_login_request (request_id) and
-				not request_error implies sessions.has (session_key)
+			session_key_valid: session_key_valid
+		end
+
+	handle_logout is
+			-- Do any necessary handling of a logout request.
+		require
+			logout: is_logout_request (request_id)
+		do
 		end
 
 	request_error: BOOLEAN is
@@ -88,17 +104,16 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	request_id_and_key_valid: BOOLEAN is
-			-- Is the combination of `request_id' and `session_key' valid?
+	session_key_valid: BOOLEAN is
+			-- Is `session_key' valid?
 		do
-			if
-				not sessions.has (session_key) and
-				not is_login_request (request_id)
-			then
-				Result := false
-			else
-				Result := true
-			end
+			Result := sessions_used and
+				not is_login_request (request_id) and
+				not request_error implies sessions.has (session_key)
+		ensure
+			definition: sessions_used and
+				not is_login_request (request_id) and
+				not request_error implies sessions.has (session_key)
 		end
 
 	request_handlers: HASH_TABLE [CLIENT_REQUEST_COMMAND, INTEGER]
@@ -125,6 +140,6 @@ feature {NONE} -- Implementation
 invariant
 
 	request_handlers_initialized: request_handlers /= Void
-	sessions_not_void: sessions /= Void
+	sessions_not_void_if_used: sessions_used implies sessions /= Void
 
 end -- class CLIENT_REQUEST_HANDLER
