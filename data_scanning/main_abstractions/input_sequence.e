@@ -10,7 +10,7 @@ deferred class INPUT_SEQUENCE inherit
 
 	BILINEAR [CHARACTER]
 		export {NONE}
-			has, index_of, search, occurrences, linear_representation
+			has, index_of, search, occurrences, linear_representation, item
 		end
 
 feature -- Access
@@ -22,11 +22,6 @@ feature -- Access
 
 	last_character: CHARACTER is
 			-- Last character read by `read_character'
-		deferred
-		end
-
-	last_string: STRING is
-			-- Last string read
 		deferred
 		end
 
@@ -101,24 +96,6 @@ feature -- Input
 		deferred
 		end;
 
-	read_stream (nb_char: INTEGER) is
-			-- Read a string of at most `nb_char' bound characters
-			-- or until end of medium is encountered.
-			-- Make result available in `last_string'.
-		require
-			is_readable: readable
-		deferred
-		end;
-
-	read_line is
-			-- Read characters until a new line or
-			-- end of medium.
-			-- Make result available in `last_string'.
-		require
-			is_readable: readable
-		deferred
-		end;
-
 feature -- Basic operations
 
 	advance_to_next_record is
@@ -129,6 +106,12 @@ feature -- Basic operations
 	advance_to_next_field is
 			-- Advance the cursor to the next field.
 		deferred
+		end
+
+feature {NONE} -- Inapplicable
+
+	item: CHARACTER is
+		do
 		end
 
 end -- class INPUT_SEQUENCE
