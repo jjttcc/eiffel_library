@@ -12,9 +12,17 @@ creation
 
 	make
 
+feature {NONE} -- Initialization
+
+	make is
+		do
+		ensure
+			target_void: target = Void
+		end
+
 feature -- Initialization
 
-	make (s: STRING) is
+	set_target (s: STRING) is
 			-- Set `target' to s
 		require
 			not_void: s /= Void
