@@ -35,7 +35,7 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute (arg: ANY) is
-			-- Call `do_execute' with `any' and then `respond_to_client'.
+			-- Call `do_execute' with `arg' and then `do_post_processing'.
 		local
 			exception_occurred: BOOLEAN
 		do
@@ -47,7 +47,7 @@ feature -- Basic operations
 			else
 				prepare_for_execution
 				do_execute (arg)
-				respond_to_client
+				do_post_processing
 			end
 		rescue
 			handle_exception ("responding to client request")
@@ -83,9 +83,9 @@ feature {NONE} -- Hook routines
 		do
 		end
 
-	respond_to_client is
-			-- Send needed response, if any, back to client.
-		deferred
+	do_post_processing is
+			-- Perform any needed processing after `do_execute' is called.
+		do
 		end
 
 end -- class CLIENT_REQUEST_COMMAND
