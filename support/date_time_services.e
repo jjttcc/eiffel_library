@@ -59,10 +59,12 @@ feature -- Access
 			-- result will be Void.
 		do
 			!!Result.make_now
-			if not Result.time_valid (value) then
+			if
+				not Result.time_valid (value, Result.time_default_format_string)
+			then
 				Result := Void
 			else
-				Result.make_from_string (value)
+				Result.make_from_string_default (value)
 			end
 		end
 
