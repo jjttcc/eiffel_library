@@ -9,7 +9,7 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class BOOLEAN_NUMERIC_CLIENT inherit
+class NUMERIC_CONDITIONAL_COMMAND inherit
 
 	RESULT_COMMAND [REAL]
 		redefine
@@ -129,4 +129,4 @@ invariant
 	true_cmd_not_void: true_cmd /= Void
 	false_cmd_not_void: false_cmd /= Void
 
-end -- class BOOLEAN_NUMERIC_CLIENT
+end -- class NUMERIC_CONDITIONAL_COMMAND
