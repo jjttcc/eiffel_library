@@ -1,13 +1,15 @@
 indexing
 	description: "Command-line user interface functionality"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	note:
 		"This class redefines print from GENERAL.  Classes that inherit from %
 		%this class and one or more other classes will need to undefine %
 		%the version of print inherited from the other classes."
 
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class COMMAND_LINE_UTILITIES [G] inherit
 

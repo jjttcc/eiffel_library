@@ -1,9 +1,10 @@
 indexing
 	description: "File name expansion for Windows systems"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others -%
-		%see file forum.txt"
+	author: "Eirik Mangseth"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Eirik Mangseth and Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class WINDOWS_FILE_NAME_EXPANDER inherit
 

@@ -2,9 +2,11 @@ indexing
 
 	description:
 		"An input sequence that supports bilinear iteration";
-	status: "Copyright 1999 - 2000: Jim Cochrane and others, see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class ITERABLE_INPUT_SEQUENCE inherit
 

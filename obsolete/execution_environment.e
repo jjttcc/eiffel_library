@@ -1,6 +1,10 @@
 indexing
-	description: "Work-around for ISE Eiffel 4.4 bug"
+	description: "Work-around for ISE Eiffel 4.4 bug in EXECUTION_ENVIRONMENT"
+	author: "Eirik Mangseth"
 	date: "$Date$"
+	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Eirik Mangseth and Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class MAS_EXECUTION_ENVIRONMENT inherit
 

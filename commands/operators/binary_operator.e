@@ -3,9 +3,11 @@ indexing
 		"Abstraction for a command that operates on two operands.  G is the %
 		%type of the 'value' query and H is the type of the 'value' query %
 		%for the two operands."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class BINARY_OPERATOR [G, H] inherit
 

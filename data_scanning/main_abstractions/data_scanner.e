@@ -11,9 +11,11 @@ indexing
 		%value_setters would contain instances of the classes (with names %
 		%such as) NAME_SETTER, ADDRESS_SETTER, and TELEPHONE_SETTER, %
 		%arranged in that order."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others, see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class DATA_SCANNER inherit
 
