@@ -60,18 +60,16 @@ feature {NONE} -- Basic operations
 			-- Publish error message `s'.
 		do
 			if non_empty_string (s) and has_error_subscribers then
-				current_error := s
-				error_subscribers.do_all (agent notify_of_current_error)
+				error_subscribers.do_all (
+					agent notify_of_current_error (?, s))
 			end
 		end
 
 feature {NONE} -- Implementation
 
-	current_error: STRING
-
-	notify_of_current_error (s: ERROR_SUBSCRIBER) is
+	notify_of_current_error (subs: ERROR_SUBSCRIBER; msg: STRING) is
 		do
-			s.notify (current_error)
+			subs.notify (msg)
 		end
 
 end
