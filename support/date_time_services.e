@@ -68,6 +68,16 @@ feature -- Access
 			end
 		end
 
+	current_date: DATE is
+		do
+			!!Result.make_now
+		end
+
+	current_time: TIME is
+		do
+			!!Result.make_now
+		end
+
 feature -- Status report
 
 	hour_valid (h: INTEGER): BOOLEAN is
