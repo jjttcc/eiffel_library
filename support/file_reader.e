@@ -36,7 +36,10 @@ feature -- Access
 		do
 			error := False
 			if file_contents = Void then
-				if target.exists and then target.is_readable then
+				if
+					target.exists and then target.is_readable and then
+					not target.is_directory
+				then
 					target.open_read
 					if not target.is_empty then
 						target.read_stream (target.count)
