@@ -13,6 +13,12 @@ class LOOP_COMMAND inherit
 			initialize, children
 		end
 
+	MATH_CONSTANTS
+		export
+			{NONE} all
+			{ANY} epsilon
+		end
+
 creation
 
 	make
@@ -72,8 +78,6 @@ feature -- Status report
 				termination_condition.arg_mandatory or body.arg_mandatory
 		end
 
-feature -- Status setting
-
 feature -- Basic operations
 
 	execute (arg: ANY) is
@@ -86,6 +90,9 @@ feature -- Basic operations
 				body.execute (arg)
 			end
 			value := body.value
+		ensure then
+			value_eq_body_value: (value - body.value).abs < epsilon
+			terminated: termination_condition.value
 		end
 
 feature {NONE} -- Implementation
