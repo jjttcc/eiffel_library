@@ -44,29 +44,29 @@ feature -- Access
 
 feature -- Status report
 
-	verbose: BOOLEAN is
+	verbose_reporting: BOOLEAN is
 			-- Should `error_information' include detailed
 			-- exception information?  (Defaults to True.)
 		do
-			Result := not not_verbose
+			Result := not not_verbose_reporting
 		end
 
 feature -- Status setting
 
-	set_verbose_on is
-			-- Set `verbose' to True.
+	set_verbose_reporting_on is
+			-- Set `verbose_reporting' to True.
 		do
-			not_verbose := False
+			not_verbose_reporting := False
 		ensure
-			verbose: verbose
+			verbose: verbose_reporting
 		end
 
-	set_verbose_off is
-			-- Set `verbose' to False.
+	set_verbose_reporting_off is
+			-- Set `verbose_reporting' to False.
 		do
-			not_verbose := True
+			not_verbose_reporting := True
 		ensure
-			not_verbose: not verbose
+			not_verbose: not verbose_reporting
 		end
 
 feature -- Basic operations
@@ -179,7 +179,7 @@ feature -- Basic operations
 				-- class_name) - so handle it separately.
 				Result := errtag + " occurred: " +
 					meaning (exception)
-				if verbose then
+				if verbose_reporting then
 					Result := Result + "%N[Exception trace:%N" +
 					exception_trace + "]%N"
 				end
@@ -187,7 +187,7 @@ feature -- Basic operations
 				Result := errtag + " occurred " +
 					exception_routine_string + tag_string + class_name_string +
 					exception_meaning_string (errname) + "%N"
-				if verbose then
+				if verbose_reporting then
 					if
 						recipient_name /= Void and
 						original_recipient_name /= Void and not
@@ -242,7 +242,7 @@ feature {NONE} -- Implementation
 	exception_routine_string: STRING is
 		do
 			Result := ""
-			if verbose then
+			if verbose_reporting then
 				Result := recipient_name
 				if Result /= Void and then not Result.is_empty then
 					Result := "in routine `" + Result + "' "
@@ -259,7 +259,7 @@ feature {NONE} -- Implementation
 			Result := ":%N%"" + tag_name + "%"%N"
 			if Result = Void then
 				Result := ""
-			elseif verbose and not Result.is_empty then
+			elseif verbose_reporting and not Result.is_empty then
 				Result := "with tag" + Result
 			end
 		ensure
@@ -269,7 +269,7 @@ feature {NONE} -- Implementation
 	class_name_string: STRING is
 		do
 			Result := ""
-			if verbose then
+			if verbose_reporting then
 				Result := class_name
 				if Result /= Void and not Result.is_empty then
 					Result := "from class %"" + Result + "%".%N"
@@ -284,7 +284,7 @@ feature {NONE} -- Implementation
 	exception_meaning_string (errname: STRING): STRING is
 		do
 			Result := ""
-			if verbose then
+			if verbose_reporting then
 				Result := meaning (exception)
 				if Result /= Void and not Result.is_empty then
 					if errname /= Void and not errname.is_empty then
@@ -322,9 +322,10 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation
 
-	not_verbose: BOOLEAN
+	not_verbose_reporting: BOOLEAN
 			-- Should `error_information' NOT include detailed
-			-- exception information?  (Allows defaulting to `verbose'.)
+			-- exception information?  (Allows defaulting to
+			-- `verbose_reporting'.)
 
 feature {NONE} -- Implementation - constants
 
@@ -335,6 +336,7 @@ feature {NONE} -- Implementation - constants
 
 invariant
 
-	verbose_not_verbose_are_opposites: verbose = not not_verbose
+	verbose_not_verbose_are_opposites:
+		verbose_reporting = not not_verbose_reporting
 
 end -- EXCEPTION_SERVICES
