@@ -17,8 +17,6 @@ creation
 feature -- Initialization
 
 	make (l: G; r: H) is
-		require
-			not_void: l /= Void and r /= Void
 		do
 			left := l
 			right := r
@@ -38,22 +36,18 @@ feature -- Element change
 
 	set_left (arg: G) is
 			-- Set left to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			left := arg
 		ensure
-			left_set: left = arg and left /= Void
+			left_set: left = arg
 		end
 
 	set_right (arg: H) is
 			-- Set right to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			right := arg
 		ensure
-			right_set: right = arg and right /= Void
+			right_set: right = arg
 		end
 
 end -- class PAIR
