@@ -491,6 +491,8 @@ feature {NONE} -- Implementation
 
 	output_date_field_separator: STRING is "/"
 
+	output_time_field_separator: STRING is ":"
+
 feature {NONE} -- Implementation - date-related routines
 
 	date_choice: DATE is
