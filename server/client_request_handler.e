@@ -66,7 +66,7 @@ feature {NONE} -- Hook routines
 				command_argument = Void
 		deferred
 		ensure
-			reqid_valid: not is_logout_request (request_id) implies
+			reqid_legal: not is_logout_request (request_id) implies
 				request_handlers.has (request_id)
 			cmdarg_set: not is_logout_request (request_id) and then
 				(request_handlers @ request_id).arg_mandatory implies
