@@ -515,7 +515,7 @@ feature -- Constants
 	Maximum_screen_width: INTEGER is
 			-- Maximum width for the text-based display screen
 		once
-			Result := 76
+			Result := 78
 		end
 
 end -- class GENERAL_UTILITIES
