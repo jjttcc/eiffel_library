@@ -8,6 +8,9 @@ deferred class NUMERIC_COMMAND inherit
 	COMMAND
 
 	MATH_CONSTANTS
+		export {NONE}
+			all
+		end
 
 feature -- Access
 

@@ -21,7 +21,24 @@ feature -- Basic operations
 	execute (arg: ANY) is
 			-- Execute the command with the specified argument.
 		require
-			arg_not_void: arg /= Void
+			arg_not_void_if_used: arg_used implies arg /= Void
+			execute_precondition: execute_precondition
+		deferred
+		ensure
+			execute_postcondition: execute_postcondition
+		end
+
+feature -- Status report
+
+	arg_used: BOOLEAN is
+		deferred
+		end
+
+	execute_precondition: BOOLEAN is
+		deferred
+		end
+
+	execute_postcondition: BOOLEAN is
 		deferred
 		end
 
