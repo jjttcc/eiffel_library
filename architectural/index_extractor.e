@@ -15,7 +15,8 @@ class INDEX_EXTRACTOR inherit
 	RESULT_COMMAND [REAL]
 		redefine
 			initialize, children, descendants_locked, lock_descendants,
-			unlock_descendants
+			unlock_descendants, suppliers_locked, lock_suppliers,
+			unlock_suppliers
 		end
 
 	STATE_SET
@@ -103,33 +104,38 @@ feature -- Basic operations
 		end
 
 feature {NONE} -- Hook routine implementation
+-- Since INDEX_EXTRACTORs are "allowed" to be part of a cycle, these hook
+-- routine definitions are needed to prevent infinite "recursive" calls
+-- in 'suppliers', 'descendants', ...
 
 	descendants_locked: BOOLEAN is
-			-- Implementation state to prevent infinite calls to descendants
-			-- when Current is part of a -time cycle.
 		do
 			Result := state_at (Descendants_locked_index)
 		end
 
 	lock_descendants is
 		do
-			set_descendants_locked (True)
+			put_state (True, Descendants_locked_index)
 		end
 
 	unlock_descendants is
 		do
-			set_descendants_locked (False)
+			put_state (False, Descendants_locked_index)
 		end
 
-	set_descendants_locked (arg: BOOLEAN) is
-			-- Set `descendants_locked' according to `arg'.
-		require
-			arg_not_void: arg /= Void
+	suppliers_locked: BOOLEAN is
 		do
-			put_state (arg, Descendants_locked_index)
-		ensure
-			descendants_locked_set: descendants_locked = arg and
-				descendants_locked /= Void
+			Result := state_at (Suppliers_locked_index)
+		end
+
+	lock_suppliers is
+		do
+			put_state (True, Suppliers_locked_index)
+		end
+
+	unlock_suppliers is
+		do
+			put_state (False, Suppliers_locked_index)
 		end
 
 feature {NONE} -- Implementation
@@ -151,9 +157,23 @@ feature {NONE} -- Implementation
 		end
 
 feature {NONE} -- Implementation - constants
+-- These "constants" are implemented as a routine instead of a constant
+-- to prevent the "persistent-object-incompatibility" problem when a
+-- constant is added or removed.
 
-	Initialized_state_index: INTEGER is 1
+	Initialized_state_index: INTEGER is
+		do
+			Result := 1
+		end
 
-	Descendants_locked_index: INTEGER is 2
+	Descendants_locked_index: INTEGER is
+		do
+			Result := 2
+		end
+
+	Suppliers_locked_index: INTEGER is
+		do
+			Result := 3
+		end
 
 end -- class INDEX_EXTRACTOR

@@ -42,21 +42,30 @@ feature -- Access
 		local
 			l: LIST [COMMAND]
 		do
-			l := descendants
-			if not l.is_empty then
-				Result := descendants.first.suppliers
-				from
-					l.go_i_th (2)
-				until
-					l.exhausted
-				loop
-					Result.fill (l.item.suppliers)
-					l.forth
+			if not suppliers_locked then
+				lock_suppliers -- Prevent following of a cycle.
+				l := children
+				if not l.is_empty then
+					Result := l.first.suppliers
+					from
+						l.go_i_th (2)
+					until
+						l.exhausted
+					loop
+						Result.fill (l.item.suppliers)
+						l.forth
+					end
+				else
+					create {LINKED_SET [ANY]} Result.make
 				end
+				Result.fill (root_suppliers)
+				unlock_suppliers
 			else
 				create {LINKED_SET [ANY]} Result.make
 			end
-			Result.fill (root_suppliers)
+		ensure
+			exists: Result /= Void
+			same_lock_state: suppliers_locked = old suppliers_locked
 		end
 
 	root_suppliers: SET [ANY] is
@@ -128,6 +137,25 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	name_implementation: STRING
+
+feature {NONE} -- Implementation - Hook routines
+
+	suppliers_locked: BOOLEAN is
+			-- Implementation state to prevent infinite calls to suppliers
+			-- when Current is part of a cycle - Redefine appropriately,
+			-- along with `lock_suppliers' and `unlock_suppliers',
+			-- if this functionality is required.
+		do
+			Result := False
+		end
+
+	lock_suppliers is
+		do
+		end
+
+	unlock_suppliers is
+		do
+		end
 
 feature {NONE} -- Implementation - Hook routine implementations
 
