@@ -23,8 +23,6 @@ deferred class SERVER inherit
 feature -- Initialization
 
 	make is
-		local
-			factory_builder: FACTORY_BUILDER
 		do
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",
