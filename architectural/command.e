@@ -1,5 +1,5 @@
 indexing
-	description: "Basic abstraciont for an executable command";
+	description: "Basic abstraction for an executable command";
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -18,7 +18,9 @@ feature -- Initialization
 feature -- Basic operations
 
 	execute (arg: ANY) is
-			-- Execute the command with the specified (optional) argument.
+			-- Execute the command with the specified argument.
+		require
+			arg_not_void: arg /= Void
 		deferred
 		end
 

@@ -7,6 +7,8 @@ deferred class NUMERIC_COMMAND inherit
 
 	COMMAND
 
+	MATH_CONSTANTS
+
 feature -- Access
 
 	value: REAL
