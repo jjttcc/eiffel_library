@@ -89,7 +89,7 @@ feature {NONE} -- Implementation - Hook routines
 			-- `do_customized_setting' be used, rather than the default one
 			-- [settings.replace (`value', `key')]?
 		require
-			key: key/= Void
+			args_exist: key/= Void and value /= Void
 		once
 			-- Default to always False - redefine if needed.
 			Result := False
@@ -98,6 +98,8 @@ feature {NONE} -- Implementation - Hook routines
 	do_customized_setting (key, value: STRING) is
 			-- Customized configuration setting procedure, to be used
 			-- when `default_setting' evaluates to true
+		require
+			args_exist: key/= Void and value /= Void
 		do
 			-- Default to null procedure - redefine if needed.
 		end
