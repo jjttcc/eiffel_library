@@ -19,7 +19,6 @@ feature {NONE} -- Initialization
 		require
 			valid_value: valid_value (value)
 		do
-io.error.print ("enum make called%N");
 			value_set := value_set_implementation
 			from
 				value_set.start
@@ -53,37 +52,24 @@ feature -- Access
 	name_set: CHAIN [STRING] is
 			-- Names corresponding to `value_set'
 		do
-print ("Warning: name_set called%N")
 			Result := value_name_map.linear_representation
 			Result.compare_objects
 		end
 
 	out: STRING is
 		do
-io.error.print ("[I am a " + Current.generator.out + "]%N")
-io.error.print ("vnm: " + value_name_map.out + "%N")
-io.error.print ("vs: " + value_set.out + "%N")
-io.error.print ("vs count, vnm count: " +
-value_set.count.out + ", " +
-value_set.count.out +
-"%N")
 			Result := ""
 			from
 				value_set.start
 			until
 				value_set.exhausted
 			loop
-if not value_name_map.has (value_set.item) then
-print ("No name for value " + value_set.item.out + "%N")
-value_set.finish
-else
 				Result := Result + value_set.item.out + " (" +
 					value_name_map @ value_set.item + ")"
 				value_set.forth
 				if not value_set.exhausted then
 					Result := Result + ", "
 				end
-end
 			end
 		end
 
@@ -147,7 +133,7 @@ invariant
 	name_exists: name /= Void and then not name.is_empty
 	sets_exist: value_set /= Void and name_set /= Void
 	value_set_not_empty: not value_set.is_empty
---	value_name_sets_correspond: value_set.count = name_set.count
+	value_name_sets_correspond: value_set.count = name_set.count
 	value_in_set: value_set.has (item)
 	name_in_set: name_set.has (name)
 	name_definition: name /= Void and then equal (name, value_name_map @ item)
