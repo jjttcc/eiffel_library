@@ -244,7 +244,7 @@ feature {NONE} -- Implementation
 
 	handle_assertion_violation is
 		do
-			log_error (error_information ("Assertion violation", true))
+			log_error (error_information (Assert_string, true))
 			exit (Error_exit_status)
 		end
 
@@ -260,5 +260,9 @@ feature {NONE} -- Implementation
 				Operating_system_exception, Retrieve_exception,
 				Developer_exception, Runtime_io_exception, Com_exception>>
 		end
+
+feature {NONE} -- Implementation - constants
+
+	Assert_string: STRING is "Assertion violation"
 
 end -- EXCEPTION_SERVICES
