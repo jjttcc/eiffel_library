@@ -66,13 +66,13 @@ feature -- Basic operations
 		local
 			fname: ANY
 		do
-print ("unlocking ")
-print (lock_file_name)
-print (".%N")
 			fname := lock_file_name.to_c
 			if remove_file ($fname) = -1 then
 				error_occurred := true
-				set_last_error ("Error occurred trying to unlock file: ")
+				set_last_error ("Error occurred trying to unlock item: ")
+				last_error.append (".%N(Could not remove lock file:%N")
+				last_error.append (lock_file_name)
+				last_error.append (".)%N")
 				raise (last_error)
 			end
 			locked := false
@@ -126,9 +126,6 @@ feature {NONE} -- Implementation
 			lock_file_name.insert (".", lock_file_name.last_index_of (
 				oe.Directory_separator, lock_file_name.count) + 1)
 			lock_file_name.append (".lock")
-print ("lock file name was set to: ")
-print (lock_file_name)
-print ("%N")
 		end
 
 	last_op_failed: BOOLEAN is
