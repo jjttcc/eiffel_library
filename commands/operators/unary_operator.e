@@ -18,13 +18,11 @@ feature -- Status report
 	arg_mandatory: BOOLEAN is
 		do
 			Result := operator.arg_mandatory
-		ensure then
-			operator_dependency: operator.arg_mandatory implies Result
 		end
 
 feature -- Status setting
 
-	set_operator (arg: NUMERIC_COMMAND) is
+	set_operator (arg: like operator) is
 			-- Set operator to `arg'.
 		require
 			arg /= Void
