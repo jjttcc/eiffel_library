@@ -10,6 +10,8 @@ class TYPED_EVENT inherit
 	EVENT
 		export {ANY}
 			set_description
+		redefine
+			out
 		end
 
 creation
@@ -33,6 +35,13 @@ feature -- Access
 
 	type: EVENT_TYPE
 			-- The type of the event
+
+	out: STRING is
+		do
+			Result := Precursor
+			Result.extend (' ')
+			Result.append (type.out)
+		end
 
 invariant
 

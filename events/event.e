@@ -6,9 +6,12 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class
+class EVENT inherit
 
-	EVENT
+	ANY
+		redefine
+			out
+		end
 
 feature -- Access
 
@@ -25,6 +28,17 @@ feature -- Access
 
 	time_stamp: DATE_TIME
 			-- Date and time that the event occurred
+
+	out: STRING is
+		do
+			Result := clone (ID.out)
+			Result.extend (' ')
+			Result.append (name)
+			Result.extend (' ')
+			Result.append (time_stamp.out)
+			Result.extend (' ')
+			Result.append (description)
+		end
 
 feature {NONE}
 

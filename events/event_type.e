@@ -5,9 +5,12 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class
+class EVENT_TYPE inherit
 
-	EVENT_TYPE
+	ANY
+		redefine
+			out
+		end
 
 creation
 
@@ -32,6 +35,13 @@ feature -- Access
 
 	name: STRING
 			-- Name of the event type
+
+	out: STRING is
+		do
+			Result := clone (ID.out)
+			Result.extend (' ')
+			Result.append (name)
+		end
 
 invariant
 

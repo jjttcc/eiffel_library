@@ -16,12 +16,9 @@ creation
 
 feature -- Initialization
 
-	make (q: QUEUE [EVENT]) is
+	make is
 		do
-			event_queue := q
 			!!registrants.make
-		ensure
-			set: event_queue = q
 		end
 
 feature -- Access
