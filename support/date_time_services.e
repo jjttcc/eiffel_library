@@ -40,11 +40,10 @@ feature -- Access
 			-- the format yyyy/mm/dd.  If the format of `d' is invalid,
 			-- the result will be Void.
 		local
-			sutil: STRING_UTILITIES
 			components: ARRAY [STRING]
 		do
-			create sutil.make (d)
-			components := sutil.tokens (separator)
+			string_tool.set_target (d)
+			components := string_tool.tokens (separator)
 			if
 				components.count = 3 and components.item(1).is_integer and
 						components.item(2).is_integer and
@@ -69,7 +68,7 @@ feature -- Access
 			h, m, s, count: INTEGER
 			tokens: LIST [STRING]
 		do
-			string_tool.make (value)
+			string_tool.set_target (value)
 			tokens := string_tool.tokens (separator)
 			count := tokens.count
 			if count = 2 or count = 3 then
@@ -225,7 +224,7 @@ feature  {NONE} -- Implementation
 
 	string_tool: STRING_UTILITIES is
 		once
-			create Result.make ("")
+			create Result.make
 		end
 
 end -- class DATE_TIME_SERVICES
