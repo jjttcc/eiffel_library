@@ -1,24 +1,33 @@
 indexing
 	description: "Command-line user interface functionality"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	note:
+		"This class redefines print from GENERAL.  Classes that inherit from %
+		%this class and one or more other classes will need to undefine %
+		%the version of print inherited from the other classes."
+
 	date: "$Date$";
 	revision: "$Revision$"
 
 class COMMAND_LINE_UTILITIES [G] inherit
 
-	STD_FILES
-		export
-			{NONE} all
+	ANY
+		redefine
+			print
 		end
 
 	PRINTING
 		export
 			{NONE} all
+		undefine
+			print
 		end
 
 	SINGLE_MATH
 		export {NONE}
 			all
+		undefine
+			print
 		end
 
 feature -- Access
@@ -32,8 +41,8 @@ feature -- Access
 				Result /= '%U'
 			loop
 				read_line
-				if laststring.count > 0 then
-					Result := laststring @ 1
+				if last_string.count > 0 then
+					Result := last_string @ 1
 				end
 			end
 		end
@@ -41,7 +50,7 @@ feature -- Access
 	integer_selection (msg: STRING): INTEGER is
 			-- User-selected integer value
 		do
-			print_list (<<"Enter an integer value for ", msg, ": ">>)
+			print_list (<<"Enter an integer value for ", msg, ": ", eot>>)
 			read_integer
 			Result := last_integer
 		end
@@ -49,7 +58,7 @@ feature -- Access
 	real_selection (msg: STRING): REAL is
 			-- User-selected real value
 		do
-			print_list (<<"Enter a real value for ", msg, ": ">>)
+			print_list (<<"Enter a real value for ", msg, ": ", eot>>)
 			read_real
 			Result := last_real
 		end
@@ -85,6 +94,7 @@ feature -- Access
 					-- startnum = the sum of the count of all `left' elements
 					-- of lists
 				end
+				print (eot)
 				read_integer
 				if
 					last_integer < 1 or
@@ -108,6 +118,43 @@ feature -- Access
 		do
 			!!Result.make (i)
 			Result.fill_blank
+		end
+
+feature -- Input
+
+	read_integer is
+			-- Input an integer (as a sequence of digits terminated with
+			-- a newline) and place the result in `last_integer'.  If
+			-- any non-digits are included in the input, last_integer is
+			-- set to 0.
+		do
+			io_device.read_line
+			if io_device.last_string.is_integer then
+				last_integer := io_device.last_string.to_integer
+			else
+				last_integer := 0
+			end
+		end
+
+	read_real is
+			-- Input a real (as a sequence of characters terminated with
+			-- a newline) and place the result in `last_real'.  If the
+			-- entered characters do not make up a real value, last_real is
+			-- set to 0.
+		do
+			io_device.read_line
+			if io_device.last_string.is_real then
+				last_real := io_device.last_string.to_real
+			else
+				last_real := 0
+			end
+		end
+
+	read_line is
+			-- Input a string and place it in `last_string'.
+		do
+			io_device.read_line
+			last_string := io_device.last_string
 		end
 
 feature -- Miscellaneous
@@ -260,23 +307,39 @@ feature -- Miscellaneous
 					choice_made
 				loop
 					print ("Select an item (0 to end):%N")
-					print_names_in_1_column (names, 1)
+					print_names_in_1_column (names, 1); print (eot)
 					read_integer
-					if last_integer <= -1 or last_integer > choices.count then
+					if
+						last_integer <= -1 or
+						last_integer > choices.count
+					then
 						print_list (<<"Selection must be between 0 and ",
 									choices.count, "%N">>)
 					elseif last_integer = 0 then
 						finished := true
 						choice_made := true
 					else
-						print_list (<<"Added %"", names @ last_integer,
-									"%"%N">>)
+						print_list (
+								<<"Added %"", names @ last_integer,
+								"%"%N">>)
 						choices.i_th (last_integer).set_right (true)
 						choice_made := true
 					end
 				end
 				slimit := slimit - 1
 			end
+		end
+
+feature -- Status setting
+
+	set_io_device (arg: IO_MEDIUM) is
+			-- Set io_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			io_device := arg
+		ensure
+			io_device_set: io_device = arg and io_device /= Void
 		end
 
 feature {NONE} -- Implementation - Hook methods
@@ -287,5 +350,56 @@ feature {NONE} -- Implementation - Hook methods
 			-- who don't need tool.
 		do
 		end
+
+feature {NONE} -- Implementation
+
+	io_device: IO_MEDIUM
+			-- Input/output medium to which all input will be sent and
+			-- from which output will be received
+
+	last_integer: INTEGER
+			-- Last integer input with `read_integer'
+
+	last_real: REAL
+			-- Last real input with `read_real'
+
+	last_string: STRING
+			-- Last string input with `read_line'
+
+	print (o: GENERAL) is
+			-- Redefinition of output method inherited from GENERAL to
+			-- send output to io_device
+		do
+			if o /= Void then
+				io_device.put_string (o.out)
+			end
+		end
+
+	eot: STRING is
+			-- End of transmission indicator - "<Ctl>G" for stream socket,
+			-- "" (empty string) for files and other types
+		local
+			file: FILE
+			stream_socket: STREAM_SOCKET
+		do
+			if eot_cache = Void then
+				file ?= io_device
+				stream_socket ?= io_device
+				if file /= Void then
+					eot_cache := ""
+				elseif stream_socket /= Void then
+					eot_cache := ""
+				else
+					eot_cache := ""
+				end
+			end
+			Result := eot_cache
+		end
+
+	eot_cache: STRING
+
+invariant
+
+	io_not_void: io_device /= Void
 
 end -- class COMMAND_LINE_UTILITIES
