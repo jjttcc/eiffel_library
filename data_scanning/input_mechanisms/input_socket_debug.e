@@ -48,7 +48,7 @@ feature -- Access
 
 	field_count: INTEGER is
 		do
-			if all_records /= Void then
+			if all_records /= Void and not all_records.is_empty then
 				if all_records.off then
 					all_records.start
 				end
@@ -58,7 +58,8 @@ feature -- Access
 				Result := current_record.count
 			end
 		ensure then
-			none_if_no_recs: all_records = Void implies Result = 0
+			none_if_no_recs: all_records = Void or all_records.is_empty implies
+				Result = 0
 		end
 
 feature -- Status report
@@ -84,6 +85,8 @@ feature -- Cursor movement
 
 	start is
 		do
+--!!!! These 3 lines are probably wrong.  `pre_process_input' is called
+--explicitly by INPUT_SOCKET_CLIENT and it should not be called again:
 			if all_records = Void and readable then
 				pre_process_input
 			end
@@ -106,7 +109,12 @@ feature {INPUT_SOCKET_CLIENT} -- Input
 		do
 			last_input_string := pending_input
 			if socket_ok then
-				all_records := last_input_string.split (record_separator @ 1)
+				if last_input_string.is_empty then
+					create {LINKED_LIST [STRING]} all_records.make
+				else
+					all_records :=
+						last_input_string.split (record_separator @ 1)
+				end
 			else
 				create {LINKED_LIST [STRING]} all_records.make
 				last_input_string := ""
@@ -116,7 +124,7 @@ feature {INPUT_SOCKET_CLIENT} -- Input
 		ensure
 			last_input_string_exists: last_input_string /= Void
 			all_records_exist: all_records /= Void
-			all_records_loaded: last_input_string.count > 0 implies
+			all_records_loaded: last_input_string.count > 0 =
 				not all_records.is_empty
 		end
 
