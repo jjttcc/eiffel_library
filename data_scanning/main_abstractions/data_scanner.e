@@ -158,7 +158,10 @@ feature -- Basic operations
 					(input.readable or else input.after_last_record)
 				end
 				if
-					start_input and then value_setters_used and
+					start_input
+-- !!!!!Comment out to expose other bug that needs fixing (See [TBD].):
+and not input.after_last_record
+					and then value_setters_used and
 					input.field_count /= value_setters.count
 				then
 					-- (If not `start_input', assume that the field count
