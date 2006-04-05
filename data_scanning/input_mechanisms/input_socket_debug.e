@@ -155,7 +155,7 @@ feature {NONE} -- Implementation
 	split_current_record is
 		do
 			current_record := all_records.item.split (field_separator @ 1)
-		ensure
+		ensure then
 			current_record_exists: current_record /= Void
 		end
 

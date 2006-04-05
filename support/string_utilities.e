@@ -16,7 +16,7 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-		ensure
+		ensure then
 			target_void: target = Void
 		end
 

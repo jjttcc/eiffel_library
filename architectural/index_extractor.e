@@ -148,12 +148,10 @@ feature {NONE} -- Implementation
 
 	set_initialized (arg: BOOLEAN) is
 			-- Set `initialized' according to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			put_state (arg, Initialized_state_index)
 		ensure
-			initialized_set: initialized = arg and initialized /= Void
+			initialized_set: initialized = arg
 		end
 
 feature {NONE} -- Implementation - constants

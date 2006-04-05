@@ -75,8 +75,6 @@ feature -- Status setting
 
 	set_raise_exception_on_div_by_0 (arg: BOOLEAN) is
 			-- Set raise_exception_on_div_by_0 to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			raise_exception_on_div_by_0 := arg
 		ensure
@@ -85,8 +83,6 @@ feature -- Status setting
 
 	set_epsilon (arg: REAL) is
 			-- Set epsilon to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			epsilon := arg
 		ensure
@@ -95,8 +91,6 @@ feature -- Status setting
 
 	set_div_by_0_result (arg: REAL) is
 			-- Set div_by_0_result to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			div_by_0_result := arg
 		ensure

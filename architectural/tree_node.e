@@ -194,7 +194,7 @@ feature {TREE_NODE} -- Implementation
 			end
 			-- Ensure that Current is the target for the call
 			-- of `report_function'.
-			create tuple.make; tuple.force (Current, 1)
+			create tuple.make; tuple.put (Current, 1)
 			report_function.set_operands (tuple)
 			report_function.apply
 			if

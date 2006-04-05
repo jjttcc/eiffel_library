@@ -48,12 +48,10 @@ feature -- Status setting
 
 	set_epsilon (arg: REAL) is
 			-- Set epsilon to `arg'.
-		require
-			arg /= Void
 		do
 			epsilon := arg
 		ensure
-			epsilon_set: epsilon = arg and epsilon /= Void
+			epsilon_set: epsilon = arg
 		end
 
 feature {NONE} -- Hook routine implementation
