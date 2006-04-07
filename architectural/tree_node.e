@@ -185,7 +185,6 @@ feature {TREE_NODE} -- Implementation
 			chl: LIST [TREE_NODE]
 			child_indent: INTEGER
 			i: INTEGER
-			tuple: TUPLE
 		do
 			create spaces.make (0)
 			from i := 1 until i > indent_size loop
@@ -194,8 +193,7 @@ feature {TREE_NODE} -- Implementation
 			end
 			-- Ensure that Current is the target for the call
 			-- of `report_function'.
-			create tuple.make; tuple.put (Current, 1)
-			report_function.set_operands (tuple)
+			report_function.set_operands ([Current])
 			report_function.apply
 			if
 				report_function.last_result /= Void and then
