@@ -94,7 +94,7 @@ feature {NONE} -- Hook routines implementations
 
 	request_error: BOOLEAN is
 		do
-			Result := request_id = Error
+			Result := request_id.is_equal (Error)
 		end
 
 	session: SESSION is
@@ -206,12 +206,12 @@ feature {NONE} -- Hook routines implementations
 
 	is_logout_request (id: like request_id): BOOLEAN is
 		do
-			Result := id = Logout_request
+			Result := id.is_equal (Logout_request)
 		end
 
 	is_login_request (id: like request_id): BOOLEAN is
 		do
-			Result := id = Login_request
+			Result := id.is_equal (Login_request)
 		end
 
 feature {NONE} -- Implementation
