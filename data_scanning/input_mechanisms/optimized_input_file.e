@@ -14,6 +14,8 @@ class OPTIMIZED_INPUT_FILE inherit
 			{NONE} all
 			{ANY} close, after, exists, open_read, is_closed, date, count,
 			position, is_open_read
+		undefine
+			make_create_read_write, make
 		redefine
 			start
 		end
@@ -35,7 +37,7 @@ class OPTIMIZED_INPUT_FILE inherit
 
 creation
 
-	make_open_read, make_create_read_write, make_open_read_write, make
+	make_create_read_write, make
 
 feature -- Access
 
@@ -185,9 +187,11 @@ feature -- Cursor movement
 			else
 				after_last_record := True
 			end
-if after_last_record then
-	print (generating_type + ": reached the last record" + "%N")
-end
+			debug ("optimized_input_file")
+				if after_last_record then
+					print (generating_type + ": reached the last record" + "%N")
+				end
+			end
 		end
 
 	discard_current_record is

@@ -24,6 +24,8 @@ class INPUT_FILE inherit
 			{ANY} after, open_read, date, count, position, back
 		undefine
 			read_integer, read_real, read_double
+		redefine
+			make, make_create_read_write
 		end
 
 	INPUT_MEDIUM
@@ -44,7 +46,25 @@ class INPUT_FILE inherit
 
 creation
 
-	make, make_open_read, make_create_read_write
+	make, make_create_read_write
+
+feature -- Initialization
+
+	make (fn: STRING) is
+		do
+			Precursor (fn)
+			field_separator := "%T"
+		ensure then
+			default_field_sep: field_separator.is_equal ("%T")
+		end
+
+	make_create_read_write (fn: STRING) is
+		do
+			Precursor (fn)
+			field_separator := "%T"
+		ensure then
+			default_field_sep: field_separator.is_equal ("%T")
+		end
 
 feature -- Status report
 
