@@ -205,6 +205,9 @@ feature -- Cursor movement
 				is_tab_space_or_newline (first_rsep_char)
 			then
 				back
+				check
+					readable1: readable
+				end
 				read_character
 				if last_character = first_rsep_char then
 					last_character_was_record_separator := True
@@ -212,19 +215,32 @@ feature -- Cursor movement
 			end
 			if not last_character_was_record_separator then
 				from
+					check
+						readable2: readable
+					end
 					read_character
 				until
 					last_character = first_rsep_char or end_of_file
 				loop
+					check
+						readable3: readable
+					end
 					read_character
 				end
 				if not is_tab_space_or_newline (last_character) then
 					back
 				end
 				advance_to_next_record
+			else
+				-- Since `advance_to_next_record', which increments the
+				-- record index, was not called, the record index needs to
+				-- be incremented explicitly - to fulfill the postcondition.
+				record_index_implementation := record_index_implementation + 1
 			end
-			-- If just before the end-of-file, force EOF.
-			read_character
+			if readable then
+				-- If just before the end-of-file, force EOF.
+				read_character
+			end
 			check
 				not_closed_or_empty: count > 0 and not is_closed
 			end
