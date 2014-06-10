@@ -1,4 +1,4 @@
-indexing
+note
 	description: "STRING manipulation utility routines";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,11 +10,11 @@ class STRING_UTILITIES inherit
 
 creation
 
-	make
+	make, default_create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 		ensure then
 			target_void: target = Void
@@ -22,7 +22,7 @@ feature {NONE} -- Initialization
 
 feature -- Initialization
 
-	set_target (s: STRING) is
+	set_target (s: STRING)
 			-- Set `target' to s
 		require
 			not_void: s /= Void
@@ -37,7 +37,7 @@ feature -- Access
 	target: STRING
 			-- The target string to operate on
 
-	tokens (fld_sep: STRING): ARRAYED_LIST [STRING] is
+	tokens (fld_sep: STRING): ARRAYED_LIST [STRING]
 			-- Tokenized list of all components of `target' separated by
 			-- `fld_sep'.  If `fld_sep' does not occur in `target' Result
 			-- will contain one element whose contents equal `target'.
@@ -86,7 +86,7 @@ feature -- Access
 
 feature -- Element change
 
-	tail (c: CHARACTER) is
+	tail (c: CHARACTER)
 			-- Remove all characters of `target' up to the last occurrence
 			-- of `c'.
 		require
@@ -117,7 +117,7 @@ feature -- Element change
 			no_c: not target.has (c)
 		end
 
-	head (c: CHARACTER) is
+	head (c: CHARACTER)
 			-- Remove all characters of `target' from `c' to the end.
 		require
 			target_not_void: target /= Void

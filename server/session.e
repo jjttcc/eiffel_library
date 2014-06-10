@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for holding session-specific data"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,19 +10,19 @@ deferred class SESSION inherit
 
 feature -- Access
 
-	login_date: DATE_TIME is
+	login_date: DATE_TIME
 			-- Date and time the session began
 		deferred
 		end
 
-	logoff_date: DATE_TIME is
+	logoff_date: DATE_TIME
 			-- Date and time the session ended
 		deferred
 		end
 
 feature -- Status report
 
-	logged_in: BOOLEAN is
+	logged_in: BOOLEAN
 			-- Is the session still in progress?
 		do
 			Result := logoff_date = Void

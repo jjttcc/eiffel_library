@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Information about the current version of an application"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,11 +15,11 @@ deferred class PRODUCT_INFO inherit
 
 feature -- Access
 
-	name: STRING is
+	name: STRING
 		deferred
 		end
 
-	number: STRING is
+	number: STRING
 			-- The version number as a string
 		local
 			i: INTEGER
@@ -37,18 +37,18 @@ feature -- Access
 			Result.append (number_components @ i)
 		end
 
-	number_components: ARRAY [STRING] is
+	number_components: ARRAY [STRING]
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		deferred
 		end
 
-	date: DATE is
+	date: DATE
 			-- The last date that `number' was updated
 		deferred
 		end
 
-	informal_date: STRING is
+	informal_date: STRING
 			-- Date in the format 'month, dd, yyyy', where month is a
 			-- month name in English - January, February, ...
 		once
@@ -56,17 +56,17 @@ feature -- Access
 						date.day, ", ", date.year>>)
 		end
 
-	copyright: STRING is
+	copyright: STRING
 			-- The copyright, if any, for the application
 		deferred
 		end
 
-	license_information: STRING is
+	license_information: STRING
 			-- The license, if any, for the application
 		deferred
 		end
 
-	assertion_report: STRING is
+	assertion_report: STRING
 			-- Report: Are assertions on or off?
 		local
 			assertions_on: BOOLEAN
@@ -85,7 +85,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	months: TABLE [STRING, INTEGER] is
+	months: TABLE [STRING, INTEGER]
 		local
 			r: ARRAY [STRING]
 		once
@@ -95,7 +95,7 @@ feature {NONE} -- Implementation
 			Result := r
 		end
 
-	violate_precondition is
+	violate_precondition
 			-- Tool for checking if assertions are on
 		require
 			impossible: False

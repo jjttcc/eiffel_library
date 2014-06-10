@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Command whose value is always True"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,11 +12,11 @@ class TRUE_COMMAND inherit
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		once
 			value := True
 		end

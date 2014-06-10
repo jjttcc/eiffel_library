@@ -1,9 +1,9 @@
-indexing
+note
 	description: "A non-functioning file locking implementation that always %
 		%succeeds in locking and unlocking the target file without actually %
 		%performing any action - intended for platforms where true file %
 		%locking has not yet been implemented"
-	note: "It is a good idea to document, for the platform this %
+	note1: "It is a good idea to document, for the platform this %
 		%implementation is being used on, any consequences of using this %
 		%implementation, such as, for example, safe editing not being %
 		%guaranteed for two processes running the same code that share %
@@ -24,23 +24,23 @@ creation
 
 feature -- Access
 
-	last_error: STRING is ""
+	last_error: STRING = ""
 
 feature -- Basic operations
 
-	try_lock is
+	try_lock
 			-- Always succeeds.
 		do
 			locked := True
 		end
 
-	lock is
+	lock
 			-- Always succeeds without blocking.
 		do
 			locked := True
 		end
 
-	unlock is
+	unlock
 		do
 			locked := False
 		end

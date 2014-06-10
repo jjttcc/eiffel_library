@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Useful mathematical constants not in ISE library";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,11 +12,11 @@ class MATH_CONSTANTS inherit
 
 feature -- Access
 
-	epsilon: REAL is 0.00001
+	epsilon: REAL = 0.00001
 
 feature -- Utility
 
-	reals_equal (r1, r2: REAL): BOOLEAN is
+	reals_equal (r1, r2: REAL): BOOLEAN
 			-- Is `r1' equal to `r2' within a tolerance of `epsilon'?
 		do
 			Result := rabs (r1 - r2) < epsilon

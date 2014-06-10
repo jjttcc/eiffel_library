@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects that are nodes in a hierarchical tree structure"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,14 +12,14 @@ deferred class TREE_NODE inherit
 
 feature -- Access
 
-	children: LIST [like Current] is
+	children: LIST [like Current]
 			-- Current's children
 		deferred
 		ensure
 			not_void: Result /= Void
 		end
 
-	descendants: LIST [like Current] is
+	descendants: LIST [like Current]
 			-- All of Current's descendants (excluding Current) - children,
 			-- children's children, etc., with duplicates removed
 		local
@@ -50,7 +50,7 @@ feature -- Access
 			same_lock_state: descendants_locked = old descendants_locked
 		end
 
-	name: STRING is
+	name: STRING
 			-- Current's name
 		do
 			-- Redefine as needed.
@@ -59,7 +59,7 @@ feature -- Access
 
 feature -- Status report
 
-	status: STRING is
+	status: STRING
 			-- Status of Current (not its desdendants) - for debugging
 		do
 			Result := status_tag + status_contents
@@ -67,21 +67,21 @@ feature -- Status report
 			Result_exists: Result /= Void
 		end
 
-	status_report: STRING is
+	status_report: STRING
 			-- Report on the status of Current and its descendants -
 			-- for debugging
 		do
 			Result := report (0, agent {TREE_NODE}.status)
 		end
 
-	node_names: STRING is
+	node_names: STRING
 			-- The name of this node and all descendants, formatted
 			-- according to the current tree hierarchy
 		do
 			Result := report (0, agent {TREE_NODE}.name)
 		end
 
-	tree_contains_cycle (visited: HASH_TABLE [BOOLEAN, STRING]): BOOLEAN is
+	tree_contains_cycle (visited: HASH_TABLE [BOOLEAN, STRING]): BOOLEAN
 			-- Does the tree with Current as the root contain a cycle?
 		require
 			arg_exists: visited /= Void
@@ -112,7 +112,7 @@ feature -- Status report
 
 feature {NONE} -- Implementation - Hook routines
 
-	copy_of_children: LIST [like Current] is
+	copy_of_children: LIST [like Current]
 			-- Copy of `children' - Default to a reference to `children'.
 			-- Redefine to use clone or deep_clone if needed.
 		do
@@ -121,14 +121,14 @@ feature {NONE} -- Implementation - Hook routines
 			result_exists: Result /= Void
 		end
 
-	descendant_comparison_is_by_objects: BOOLEAN is
+	descendant_comparison_is_by_objects: BOOLEAN
 			-- Should object_comparison be used (as opposed to reference
 			-- comparison) to remove duplicates from `descendants'?
 		do
 			-- Default to False - Redefine if object comparsion is needed.
 		end
 
-	status_tag: STRING is
+	status_tag: STRING
 		do
 			-- Default status tag - redefine as needed.
 			if name.is_empty then
@@ -138,26 +138,26 @@ feature {NONE} -- Implementation - Hook routines
 			end
 		end
 
-	status_contents: STRING is
+	status_contents: STRING
 		do
 			-- Default status contents - redefine as needed.
 			Result := "OK"
 		end
 
-	alternate_status_tag: STRING is
+	alternate_status_tag: STRING
 			-- Alternate status tag if `name' is empty
 		do
 			-- Redefine as needed.
 			Result := "status: "
 		end
 
-	empty_report_string: STRING is
+	empty_report_string: STRING
 			-- String to substitute for an empty report result
 		do
 			Result := ""
 		end
 
-	descendants_locked: BOOLEAN is
+	descendants_locked: BOOLEAN
 			-- Implementation state to prevent infinite calls to descendants
 			-- when Current is part of a cycle - Redefine appropriately,
 			-- along with `lock_descendants' and `unlock_descendants',
@@ -166,18 +166,18 @@ feature {NONE} -- Implementation - Hook routines
 			Result := False
 		end
 
-	lock_descendants is
+	lock_descendants
 		do
 		end
 
-	unlock_descendants is
+	unlock_descendants
 		do
 		end
 
 feature {TREE_NODE} -- Implementation
 
 	report (indent_size: INTEGER;
-		report_function: FUNCTION [ANY, TUPLE [], STRING]): STRING is
+		report_function: FUNCTION [ANY, TUPLE [], STRING]): STRING
 			-- Information about Current with hierarchical indenting, using
 			-- `report_function' for the report contents
 		local
@@ -218,7 +218,7 @@ feature {TREE_NODE} -- Implementation
 
 feature {NONE} -- Implementation - constants
 
-	Indent_increment: INTEGER is 3
+	Indent_increment: INTEGER = 3
 
 invariant
 

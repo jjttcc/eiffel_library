@@ -1,4 +1,4 @@
-indexing
+note
 	description: "data compression of STRINGs using zlib library";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target) is
+	make (tgt: like target)
 			-- Initialize with `tgt' as target.
 		do
 			target := tgt
@@ -34,7 +34,7 @@ feature -- Access
 
 	target: STRING
 
-	product: STRING is
+	product: STRING
 		local
 			raw: ANY
 		do
@@ -53,7 +53,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	compress_target is
+	compress_target
 		local
 			buffcount: INTEGER
 			src, dest: ANY
@@ -112,19 +112,19 @@ feature {NONE} -- Implementation
 
 	product_implementation: STRING
 
-	compression_level: INTEGER is 9
+	compression_level: INTEGER = 9
 			-- zlib compression level
 
 feature {NONE} -- Implementation - external routines
 
 	zlib_compress2 (destination: POINTER; destcount: POINTER;
-			source: POINTER; sourcecount, level: INTEGER): INTEGER is
+			source: POINTER; sourcecount, level: INTEGER): INTEGER
 		external
 			"C"
 		end
 
 	zlib_compress (destination: POINTER; destcount: POINTER;
-			source: POINTER; sourcecount: CHARACTER): INTEGER is
+			source: POINTER; sourcecount: CHARACTER): INTEGER
 		external
 			"C"
 		end

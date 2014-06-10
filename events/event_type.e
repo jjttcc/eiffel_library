@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An abstraction for the type of an event"
 	author: "Jim Cochrane"
@@ -20,7 +20,7 @@ creation
 
 feature -- Initialization
 
-	make (nm: STRING; type_ID: INTEGER) is
+	make (nm: STRING; type_ID: INTEGER)
 		require
 			not_void: nm /= Void
 		do
@@ -40,7 +40,7 @@ feature -- Access
 
 feature -- Status report
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			Result := other.ID = ID
 		end

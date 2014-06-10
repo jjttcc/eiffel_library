@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Boolean 'xor' operator"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: BOOLEAN) is
+	operate (v1, v2: BOOLEAN)
 		do
 			value := not (v1 = v2)
 		end

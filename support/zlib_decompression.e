@@ -1,4 +1,4 @@
-indexing
+note
 	description: "data decompression of STRINGs using zlib library";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target; tgt_count, max_prod_count: INTEGER) is
+	make (tgt: like target; tgt_count, max_prod_count: INTEGER)
 			-- tgt_count is the size in bytes of tgt;
 			-- max_prod_count is the maximum possible size in bytes of the
 			-- decompressed product.
@@ -57,7 +57,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	decompress_target is
+	decompress_target
 		local
 			buffer: TO_SPECIAL [CHARACTER]
 			cmpresult: INTEGER
@@ -87,7 +87,7 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation - external routines
 
 	zlib_uncompress (destination: POINTER; destsize: POINTER; source: POINTER;
-			sourcesize: INTEGER): INTEGER is
+			sourcesize: INTEGER): INTEGER
 		external
 			"C"
 		end

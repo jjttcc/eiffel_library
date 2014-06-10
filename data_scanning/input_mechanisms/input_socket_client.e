@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Clients with privileged access to INPUT_SOCKETs"
 	author: "Jim Cochrane"
 	date: "$Date$";

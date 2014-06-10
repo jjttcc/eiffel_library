@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction that scans input and uses it to set the appropriate %
 		%field of a `tuple'";
@@ -29,7 +29,7 @@ deferred class VALUE_SETTER inherit
 
 feature -- Basic operations
 
-	set (stream: INPUT_SEQUENCE; tuple: ANY) is
+	set (stream: INPUT_SEQUENCE; tuple: ANY)
 			-- Set the appropriate field of tuple using `stream' as input.
 			-- If `unrecoverable_error' occurs, no action is taken.
 		require
@@ -71,7 +71,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_dummyness (b: BOOLEAN) is
+	set_dummyness (b: BOOLEAN)
 			-- Set whether the associated field is to be regarded as a dummy.
 		do
 			is_dummy := b
@@ -81,12 +81,12 @@ feature -- Element change
 
 feature {NONE} -- Hook methods
 
-	read_value (stream: INPUT_SEQUENCE) is
+	read_value (stream: INPUT_SEQUENCE)
 			-- Read the next value (char or integer or etc.) from `stream'.
 		deferred
 		end
 
-	do_set (stream: INPUT_SEQUENCE; tuple: ANY) is
+	do_set (stream: INPUT_SEQUENCE; tuple: ANY)
 			-- Set appropriate field of `tuple' according
 			-- to the last value read in stream.
 		require
@@ -96,7 +96,7 @@ feature {NONE} -- Hook methods
 
 feature {NONE} -- Utility
 
-	handle_input_error (main_msg, msg2: STRING) is
+	handle_input_error (main_msg, msg2: STRING)
 			-- Instantiate last_error, append main_msg (and msg2 if
 			-- not Void) to last_error, and set error_occurred to True.
 		require

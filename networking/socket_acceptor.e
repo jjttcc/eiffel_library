@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Objects that 'accept' a server socket connection and %
 		%perform input/output operations on the resulting socket object"
@@ -22,7 +22,7 @@ deferred class SOCKET_ACCEPTOR inherit
 
 feature {NONE} -- Initialization
 
-	initialize_components (s: like server_socket) is
+	initialize_components (s: like server_socket)
 		do
 			server_socket := s
 			register_for_termination (Current)
@@ -51,21 +51,21 @@ feature -- Access
 
 feature -- Basic operations
 
-	process_socket is
+	process_socket
 		do
 			execute
 		end
 
 feature {NONE} -- Implementation
 
-	execute is
+	execute
 		do
 			initialize_for_execution
 			do_execute
 			post_process
 		end
 
-	initialize_for_execution is
+	initialize_for_execution
 			-- Perform initialization needed before calling `do_execute'.
 		do
 			server_socket.accept
@@ -83,7 +83,7 @@ feature {NONE} -- Implementation
 			accepted_socket_accepted: accepted_socket = server_socket.accepted
 		end
 
-	do_execute is
+	do_execute
 			-- Perform the main processing.
 		do
 			if is_non_persistent_connection then
@@ -104,7 +104,7 @@ feature {NONE} -- Implementation
 			interface.execute
 		end
 
-	cleanup is
+	cleanup
 		do
 			if
 				accepted_socket /= Void and then not accepted_socket.is_closed
@@ -116,7 +116,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	terminate_persistent_connection is
+	terminate_persistent_connection
 			-- Terminate the persistent connection.
 		require
 			persistent_connection: not is_non_persistent_connection
@@ -126,21 +126,21 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Hook routines
 
-	prepare_for_non_persistent_connection is
+	prepare_for_non_persistent_connection
 			-- Perform any needed specialized preparation for the
 			-- non-persistent connection.
 		do
 			-- Null action - redefine if needed.
 		end
 
-	prepare_for_persistent_connection is
+	prepare_for_persistent_connection
 			-- Perform any needed specialized preparation for the
 			-- persistent connection.
 		do
 			-- Null action - redefine if needed.
 		end
 
-	post_process is
+	post_process
 			-- Perform any processing needed after calling `do_execute'.
 		do
 			accepted_socket.close
@@ -148,12 +148,12 @@ feature {NONE} -- Implementation - Hook routines
 			accepted_socket_is_closed: accepted_socket.is_closed
 		end
 
-	Persistent_connection_flag: CHARACTER is
+	Persistent_connection_flag: CHARACTER
 			-- Character that "flags" the connection as being persistent
 		deferred
 		end
 
-	connection_termination_character: CHARACTER is
+	connection_termination_character: CHARACTER
 			-- Character that tells the client that the connection has
 			-- been terminated.
 		deferred

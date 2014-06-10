@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Input record sequences for a database implementation %
 		%using the ECLI package"
 	author: "Jim Cochrane"
@@ -17,7 +17,7 @@ creation
 
 feature -- Initialization
 
-	make (ts: ECLI_STATEMENT) is
+	make (ts: ECLI_STATEMENT)
 		require
 			ts_valid: ts /= Void and not ts.is_closed
 		do
@@ -33,45 +33,45 @@ feature -- Access
 
 	record_index: INTEGER
 
-	field_count: INTEGER is
+	field_count: INTEGER
 		do
 			Result := tuple_sequence.result_column_count
 		end
 
 feature -- Status report
 
-	after_last_record: BOOLEAN is
+	after_last_record: BOOLEAN
 		do
 			Result := tuple_sequence.after
 		end
 
-	readable: BOOLEAN is
+	readable: BOOLEAN
 		do
 			Result := not tuple_sequence.off
 		end
 
-	is_open: BOOLEAN is
+	is_open: BOOLEAN
 		do
 			Result := not tuple_sequence.is_closed
 		end
 
 feature -- Status setting
 
-	close is
+	close
 		do
 			tuple_sequence.close
 		end
 
 feature -- Cursor movement
 
-	advance_to_next_record is
+	advance_to_next_record
 		do
 			tuple_sequence.forth
 			field_index := 1
 			record_index := record_index + 1
 		end
 
-	start is
+	start
 		do
 			tuple_sequence.start
 			field_index := 1
@@ -81,7 +81,7 @@ feature -- Cursor movement
 
 feature -- Element change
 
-	set_tuple_sequence (ts: ECLI_STATEMENT) is
+	set_tuple_sequence (ts: ECLI_STATEMENT)
 		require
 			valid_sequence: ts /= Void
 		do
@@ -92,7 +92,7 @@ feature -- Element change
 
 feature {NONE} -- Implementation
 
-	current_field: ANY is
+	current_field: ANY
 		local
 			v: ECLI_VALUE
 		do

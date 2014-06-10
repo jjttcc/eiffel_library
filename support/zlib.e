@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Common facilities for zlib compression/decompression";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,24 +10,24 @@ class ZLIB
 
 feature -- Error status values
 
-	No_error: INTEGER is 0
+	No_error: INTEGER = 0
 			-- No error occurred
 
-	Memory_error: INTEGER is -4
+	Memory_error: INTEGER = -4
 			-- Out of memory
 
-	Buffer_error: INTEGER is -5
+	Buffer_error: INTEGER = -5
 			-- Output buffer was too small
 
-	Stream_error: INTEGER is -2
+	Stream_error: INTEGER = -2
 			-- Compression level was invalid
 
-	Data_error: INTEGER is -3
+	Data_error: INTEGER = -3
 			-- Input data for decompression was corrupted
 
 feature {NONE} -- Implementation
 
-	error_value (error_status: INTEGER): STRING is
+	error_value (error_status: INTEGER): STRING
 			-- Description of `error_status' value
 		do
 			inspect

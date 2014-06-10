@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands (which conform to RESULT_COMMAND [REAL])%
 		%with a REAL `value' that serve to wrap an `item' of type COMMAND %
 		%(that is, a possibly non-numeric command).  After executing %
@@ -28,7 +28,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (o: like item) is
+	make (o: like item)
 		require
 			not_void: o /= Void
 		do
@@ -39,7 +39,7 @@ feature {NONE} -- Initialization
 
 feature -- Initialization
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		do
 			item.initialize (arg)
 		end
@@ -48,7 +48,7 @@ feature -- Access
 
 	item: COMMAND
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.extend (item)
@@ -56,14 +56,14 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := item.arg_mandatory
 		end
 
 feature -- Element change
 
-	set_item (arg: like item) is
+	set_item (arg: like item)
 			-- Set item to `arg'.
 		require
 			arg /= Void
@@ -75,7 +75,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			item.execute (arg)
 			attemp_to_extract_result (item)
@@ -83,7 +83,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	attemp_to_extract_result (cmd: COMMAND) is
+	attemp_to_extract_result (cmd: COMMAND)
 			-- Attempt, after `cmd' has been executed, to extract its
 			-- result into `value'.
 		local

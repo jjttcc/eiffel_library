@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Value setter with read_value procedure defined to read the next %
 		%real value from the input"
@@ -21,12 +21,12 @@ deferred class REAL_SETTER inherit
 
 feature {NONE}
 
-	read_value (stream: INPUT_SEQUENCE) is
+	read_value (stream: INPUT_SEQUENCE)
 		do
 			stream.read_real
 		end
 
-	handle_le_0_error (field_name: STRING) is
+	handle_le_0_error (field_name: STRING)
 			-- Handle case where input value <= 0.
 		do
 			handle_input_error (concatenation (<<field_name,

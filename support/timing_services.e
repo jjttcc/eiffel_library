@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Utility services for use of TIMERs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,14 +18,14 @@ feature -- Access
 
 feature -- Status report
 
-	timing_on: BOOLEAN is
+	timing_on: BOOLEAN
 			-- Is timing being performed?
 		deferred
 		end
 
 feature -- Basic operations
 
-	start_timer is
+	start_timer
 			-- If `timing_on', start the timer; otherwise do nothing.
 		do
 			if timing_on then
@@ -37,7 +37,7 @@ feature -- Basic operations
 			end
 		end
 
-	report_timing is
+	report_timing
 			-- If `timing_on', print `timing_information' and then reset it
 			-- to empty.
 		do
@@ -47,7 +47,7 @@ feature -- Basic operations
 			end
 		end
 
-	add_timing_data (msg: STRING) is
+	add_timing_data (msg: STRING)
 			-- If `timing_on', add `msg' to `timing_information'.
 		do
 			if timing_on and then timing_information /= Void then

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Services for cleanup registration and execution"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ class CLEANUP_SERVICES inherit
 
 feature -- Utility
 
-	register_for_termination (v: TERMINABLE) is
+	register_for_termination (v: TERMINABLE)
 			-- Add `v' to termination_registrants.
 		require
 			not_registered: not termination_registrants.has (v)
@@ -28,7 +28,7 @@ feature -- Utility
 			termination_registrants.extend (v)
 		end
 
-	unregister_for_termination (v: TERMINABLE) is
+	unregister_for_termination (v: TERMINABLE)
 			-- Remove (all occurrences of) `v' from termination_registrants.
 		do
 			termination_registrants.prune_all (v)
@@ -36,7 +36,7 @@ feature -- Utility
 			not_registered: not termination_registrants.has (v)
 		end
 
-	termination_cleanup is
+	termination_cleanup
 			-- Send cleanup notification to all members of
 			-- `termination_registrants' in the order they were added
 			-- (with `register_for_termination').
@@ -53,7 +53,7 @@ feature -- Utility
 
 feature -- Access
 
-	termination_registrants: LIST [TERMINABLE] is
+	termination_registrants: LIST [TERMINABLE]
 			-- Registrants for termination cleanup notification
 		once
 			create {LINKED_LIST [TERMINABLE]} Result.make

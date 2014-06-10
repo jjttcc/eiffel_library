@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated types"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ deferred class ENUMERATED [G -> HASHABLE] inherit
 
 feature {ENUMERATED} -- Initialization
 
-	make (value: G) is
+	make (value: G)
 		require
 			valid_value: valid_value (value)
 		do
@@ -34,7 +34,7 @@ feature {ENUMERATED} -- Initialization
 
 feature {NONE} -- Initialization
 
-	new_instance (value: G): like Current is
+	new_instance (value: G): like Current
 			-- A new instance of this 'ENUMERATED' with the specified `value'
 		do
 			Result := clone (Current)
@@ -43,13 +43,13 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	item: G is
+	item: G
 			-- Integer value of Current
 		do
 			Result := allowable_values @ item_index
 		end
 
-	name: STRING is
+	name: STRING
 			-- Name of Current
 		do
 			Result := value_name_map @ item
@@ -58,14 +58,14 @@ feature -- Access
 	value_set: LINKED_SET [G]
 			-- Set of allowable values
 
-	name_set: CHAIN [STRING] is
+	name_set: CHAIN [STRING]
 			-- Names corresponding to `value_set'
 		do
 			Result := value_name_map.linear_representation
 			Result.compare_objects
 		end
 
-	all_members: LINKED_SET [ENUMERATED [G]] is
+	all_members: LINKED_SET [ENUMERATED [G]]
 			-- All members of the set of allowed values for this enumeration
 		local
 			values: LINKED_SET [G]
@@ -85,7 +85,7 @@ feature -- Access
 			valid_count: Result.count = value_set.count
 		end
 
-	out: STRING is
+	out: STRING
 		do
 			Result := ""
 			from
@@ -104,7 +104,7 @@ feature -- Access
 
 feature -- Status report
 
-	valid_value (v: G): BOOLEAN is
+	valid_value (v: G): BOOLEAN
 			-- Is `v' a valid value for this enumeration?
 		do
 			Result := allowable_values.has (v)
@@ -112,7 +112,7 @@ feature -- Status report
 
 feature {NONE} -- Implementation
 
-	value_set_implementation: LINKED_SET [G] is
+	value_set_implementation: LINKED_SET [G]
 			-- Implementation of `value_set', for convenience
 		local
 			i: INTEGER
@@ -128,12 +128,12 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	value_name_map: HASH_TABLE [STRING, G] is
+	value_name_map: HASH_TABLE [STRING, G]
 			-- Mapping of values to names
 		deferred
 		end
 
-	allowable_values: ARRAY [G] is
+	allowable_values: ARRAY [G]
 			-- Allowable values as an array - used for implementation
 			-- efficiency and ease of implementation.
 		do
@@ -148,7 +148,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Initialization utilities
 
-	initial_allowable_values: ARRAY [G] is
+	initial_allowable_values: ARRAY [G]
 			-- Used to initialize `allowable_values'.
 		deferred
 		ensure

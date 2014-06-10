@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Binary operator whose result is the n-th root (specified %
 		%by the right operand) of its left operand"
 	author: "Jim Cochrane"
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL) is
+	operate (v1, v2: REAL)
 		do
 			value := v1 ^ (1 / v2)
 		end

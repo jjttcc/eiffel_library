@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Basic abstraction for factories that produce a result by %
 		%calling execute"
@@ -14,14 +14,14 @@ deferred class
 
 feature -- Access
 
-	product: ANY is
+	product: ANY
 			-- The object manufactured by calling execute
 		deferred
 		end
 
 feature -- Status report
 
-	execute_precondition: BOOLEAN is
+	execute_precondition: BOOLEAN
 			-- Precondition for `execute'
 		do
 			-- Satisfied by all states - redefine if a stronger precondition
@@ -31,7 +31,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Produce a result, stored in `product'.
 		require
 			execute_precondition: execute_precondition

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands that emulate a loop construct"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -26,7 +26,7 @@ creation
 feature -- Initialization
 
 	make (init_cmd: like initialization;
-			term_cond: like termination_condition; bdy: like body) is
+			term_cond: like termination_condition; bdy: like body)
 		require
 			args_not_void: init_cmd /= Void and term_cond /= Void and
 				bdy /= Void
@@ -42,7 +42,7 @@ feature -- Initialization
 			body_set: body = bdy and body /= Void
 		end
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		do
 			initialization.initialize (arg)
 			termination_condition.initialize (arg)
@@ -62,7 +62,7 @@ feature -- Access
 			-- Command that executes the body of the loop, after which
 			-- `value' is set to `body.value'
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.extend (initialization)
@@ -72,7 +72,7 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := initialization.arg_mandatory or
 				termination_condition.arg_mandatory or body.arg_mandatory
@@ -80,7 +80,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			from
 				initialization.execute (arg)
@@ -97,7 +97,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	terminate (arg: ANY): BOOLEAN is
+	terminate (arg: ANY): BOOLEAN
 			-- Does termination_condition produce a result of true?
 		do
 			termination_condition.execute (arg)

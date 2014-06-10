@@ -1,4 +1,4 @@
-indexing
+note
 	description: "General user-validation utilities"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	valid_email_address (addr: STRING): BOOLEAN is
+	valid_email_address (addr: STRING): BOOLEAN
 			-- Is `addr' a valid email address?
 		local
 			regex: expanded REGULAR_EXPRESSION_UTILITIES
@@ -23,7 +23,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	email_address_pattern: STRING is
+	email_address_pattern: STRING
 		"^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$"
 
 end

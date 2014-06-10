@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Basic file locking implementation based on the creation %
 		%and deletion of an external file";
 	author: "Jim Cochrane"
@@ -30,7 +30,7 @@ creation
 
 feature -- Initialization
 
-	make (fpath: STRING) is
+	make (fpath: STRING)
 		do
 			Precursor (fpath)
 			set_lock_file_name
@@ -38,7 +38,7 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	try_lock is
+	try_lock
 		local
 			fname: ANY
 			suffix: STRING
@@ -63,7 +63,7 @@ feature -- Basic operations
 			end
 		end
 
-	lock is
+	lock
 		local
 			fname: ANY
 		do
@@ -77,7 +77,7 @@ feature -- Basic operations
 			locked := True
 		end
 
-	unlock is
+	unlock
 		local
 			fname: ANY
 			i: INTEGER
@@ -99,34 +99,34 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	try_to_open (fname : POINTER; wait: INTEGER): INTEGER is
+	try_to_open (fname : POINTER; wait: INTEGER): INTEGER
 		external
 			 "C"
 		end
 
-	remove_file (fname : POINTER): INTEGER is
+	remove_file (fname : POINTER): INTEGER
 		external
 			 "C"
 		end
 
-	close_file (fdescriptor : INTEGER): INTEGER is
+	close_file (fdescriptor : INTEGER): INTEGER
 		external
 			 "C"
 		end
 
-	open_file_exists: INTEGER is
+	open_file_exists: INTEGER
 		external
 			 "C"
 		end
 
-	error_on_last_operation: INTEGER is
+	error_on_last_operation: INTEGER
 		external
 			 "C"
 		end
 
 	last_error: STRING
 
-	set_last_error (pre_fix, suffix: STRING) is
+	set_last_error (pre_fix, suffix: STRING)
 		do
 			create last_error.make (0)
 			last_error.from_c (last_c_error)
@@ -138,20 +138,20 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	last_c_error: POINTER is
+	last_c_error: POINTER
 		external
 			 "C"
 		end
 
-	False_value: INTEGER is 0
+	False_value: INTEGER = 0
 
-	True_value: INTEGER is 1
+	True_value: INTEGER = 1
 
 	lock_file_name: STRING
 
 	lock_file_descriptor: INTEGER
 
-	set_lock_file_name is
+	set_lock_file_name
 		local
 			oe: expanded OPERATING_ENVIRONMENT
 		do
@@ -161,7 +161,7 @@ feature {NONE} -- Implementation
 			lock_file_name.append (".lock")
 		end
 
-	last_op_failed: BOOLEAN is
+	last_op_failed: BOOLEAN
 		do
 			Result := error_on_last_operation /= 0
 		end

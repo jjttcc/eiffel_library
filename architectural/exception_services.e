@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Facilities for exception handling and program termination -%
 	% intended to be used via inheritance"
 	author: "Jim Cochrane"
@@ -30,13 +30,13 @@ class EXCEPTION_SERVICES inherit
 
 feature -- Access
 
-	Error_exit_status: INTEGER is 1
+	Error_exit_status: INTEGER = 1
 			-- Error status for exit
 
 	no_cleanup: BOOLEAN
 			-- Should `termination_cleanup' NOT be called by `exit'?
 
-	last_exception_status: EXCEPTION_STATUS is
+	last_exception_status: EXCEPTION_STATUS
 			-- Status of last exception that occurred, if any
 		once
 			create Result.make
@@ -44,7 +44,7 @@ feature -- Access
 
 feature -- Status report
 
-	verbose_reporting: BOOLEAN is
+	verbose_reporting: BOOLEAN
 			-- Should `error_information' include detailed
 			-- exception information?  (Defaults to True.)
 		do
@@ -53,7 +53,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_verbose_reporting_on is
+	set_verbose_reporting_on
 			-- Set `verbose_reporting' to True.
 		do
 			not_verbose_reporting := False
@@ -61,7 +61,7 @@ feature -- Status setting
 			verbose: verbose_reporting
 		end
 
-	set_verbose_reporting_off is
+	set_verbose_reporting_off
 			-- Set `verbose_reporting' to False.
 		do
 			not_verbose_reporting := True
@@ -71,7 +71,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	handle_exception (routine_description: STRING) is
+	handle_exception (routine_description: STRING)
 		local
 			error_msg: STRING
 			fatal: BOOLEAN
@@ -118,7 +118,7 @@ feature -- Basic operations
 			end
 		end
 
-	exit (status: INTEGER) is
+	exit (status: INTEGER)
 			-- Exit the application with the specified status.  If `no_cleanup'
 			-- is False, call `termination_cleanup'.
 		do
@@ -149,21 +149,21 @@ feature -- Basic operations
 			end_program (status)
 		end
 
-	end_program (i: INTEGER) is
+	end_program (i: INTEGER)
 			-- Replacement for `die', since it appears to sometimes fail to
 			-- exit
 		external
 			"C"
 		end
 
-	fatal_exception (e: INTEGER): BOOLEAN is
+	fatal_exception (e: INTEGER): BOOLEAN
 			-- Is `e' an exception that is considered fatal?
 		do
 			Result := exception_list.has (e) and not (e = External_exception
 				or e = Floating_point_exception or e = Routine_failure)
 		end
 
-	error_information (errname: STRING; stack_trace: BOOLEAN): STRING is
+	error_information (errname: STRING; stack_trace: BOOLEAN): STRING
 			-- Information about the current exception, with a stack
 			-- trace if `stack_trace'
 		local
@@ -235,7 +235,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - Hook routines
 
-	application_name: STRING is
+	application_name: STRING
 			-- The name of the application to be used for error reporting
 		once
 			Result := "server"
@@ -243,7 +243,7 @@ feature {NONE} -- Implementation - Hook routines
 
 feature {NONE} -- Implementation
 
-	exception_routine_string: STRING is
+	exception_routine_string: STRING
 		do
 			Result := ""
 			if verbose_reporting then
@@ -258,7 +258,7 @@ feature {NONE} -- Implementation
 			Result_exists: Result /= Void
 		end
 
-	tag_string: STRING is
+	tag_string: STRING
 		local
 			tgname: STRING
 		do
@@ -275,7 +275,7 @@ feature {NONE} -- Implementation
 			Result_exists: Result /= Void
 		end
 
-	class_name_string: STRING is
+	class_name_string: STRING
 		do
 			Result := ""
 			if verbose_reporting then
@@ -290,7 +290,7 @@ feature {NONE} -- Implementation
 			Result_exists: Result /= Void
 		end
 
-	exception_meaning_string (errname: STRING): STRING is
+	exception_meaning_string (errname: STRING): STRING
 		do
 			Result := ""
 			if verbose_reporting then
@@ -310,13 +310,13 @@ feature {NONE} -- Implementation
 			Result_exists: Result /= Void
 		end
 
-	handle_assertion_violation is
+	handle_assertion_violation
 		do
 			log_error (error_information (Assert_string, True))
 			exit (Error_exit_status)
 		end
 
-	exception_list: ARRAY [INTEGER] is
+	exception_list: ARRAY [INTEGER]
 			-- List of all known exception types
 		once
 			Result := <<Void_call_target, No_more_memory, Precondition,
@@ -338,9 +338,9 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - constants
 
-	Assert_string: STRING is "Assertion violation"
+	Assert_string: STRING = "Assertion violation"
 
-	Default_errname: STRING is "Error"
+	Default_errname: STRING = "Error"
 			-- Default `errname' for `error_information' if none supplied
 
 invariant

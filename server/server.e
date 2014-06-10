@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Framework for a root class for a server application that responds %
 		%to requests from clients"
@@ -27,7 +27,7 @@ deferred class SERVER inherit
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",
@@ -64,47 +64,47 @@ feature -- Initialization
 
 feature {NONE} -- Hook routines
 
-	initialize is
+	initialize
 			-- Perform any needed initialization before
 			-- calling `prepare_for_listening'.
 		do
 			-- Null action - redefine if needed.
 		end
 
-	prepare_for_listening is
+	prepare_for_listening
 			-- Do any necessary set-up before listening for client requests.
 		deferred
 		end
 
-	listen is
+	listen
 			-- Listen for and respond to client requests.
 		deferred
 		end
 
-	pre_listen is
+	pre_listen
 			-- Perform any needed preparation before the next call to `listen'.
 		do
 			-- Null procedure - redefine if needed.
 		end
 
-	post_listen is
+	post_listen
 			-- Perform any needed post-processing after the last call
 			-- to `listen'.
 		do
 			-- Null procedure - redefine if needed.
 		end
 
-	version: PRODUCT_INFO is
+	version: PRODUCT_INFO
 			-- Version information
 		deferred
 		end
 
-	command_line_options: COMMAND_LINE is
+	command_line_options: COMMAND_LINE
 			-- Command-line argument services
 		deferred
 		end
 
-	configuration_error: BOOLEAN is
+	configuration_error: BOOLEAN
 			-- Is there an error in the MAS configuration?  If so,
 			-- a description is placed into config_error_description.
 		deferred
@@ -117,7 +117,7 @@ feature {NONE}
 
 	config_error_description: STRING
 
-	command_line_error_description: STRING is
+	command_line_error_description: STRING
 		do
 			if non_empty_string (command_line_options.error_description) then
 				Result := "%N" + command_line_options.error_description +

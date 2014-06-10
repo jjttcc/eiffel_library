@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Extra exception status information (in addition to %
 		%what is available in class EXCEPTIONS)";
 	author: "Jim Cochrane"
@@ -15,7 +15,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create description.make (0)
 		end
@@ -33,7 +33,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_fatal (arg: BOOLEAN) is
+	set_fatal (arg: BOOLEAN)
 			-- Set fatal to `arg'.
 		do
 			fatal := arg
@@ -41,7 +41,7 @@ feature -- Status setting
 			fatal_set: fatal = arg
 		end
 
-	set_description (arg: STRING) is
+	set_description (arg: STRING)
 			-- Set description to `arg'.
 		require
 			arg_not_void: arg /= Void

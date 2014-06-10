@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Generic parser of command-line arguments for an application"
 	author: "Jim Cochrane"
@@ -16,7 +16,7 @@ deferred class COMMAND_LINE inherit
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			i: INTEGER
 		do
@@ -57,20 +57,20 @@ feature -- Access
 	error_description: STRING
 			-- Description of error, if available
 
-	usage: STRING is
+	usage: STRING
 			-- Message: how to invoke the program from the command-line
 		deferred
 		end
 
 feature -- Basic operations
 
-	print_usage is
+	print_usage
 			-- Print `usage' message.
 		do
 			print (usage)
 		end
 
-	check_for_invalid_flags is
+	check_for_invalid_flags
 			-- Check for invalid arguments - that is, items in
 			-- `contents' that begin with '-' that remain after the valid
 			-- arguments have been processed and removed from `contents'.
@@ -99,7 +99,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - argument processing
 
-	process_arguments (setup_procedures: LINEAR [PROCEDURE [ANY, TUPLE []]]) is
+	process_arguments (setup_procedures: LINEAR [PROCEDURE [ANY, TUPLE []]])
 		do
 			from
 				setup_procedures.start
@@ -121,7 +121,7 @@ feature {NONE} -- Implementation - argument processing
 			end
 		end
 
-	initial_setup_procedures: LINEAR [PROCEDURE [ANY, TUPLE []]] is
+	initial_setup_procedures: LINEAR [PROCEDURE [ANY, TUPLE []]]
 			-- Setup procedures used to process arguments
 		local
 			a: ARRAY [PROCEDURE [ANY, TUPLE []]]
@@ -136,28 +136,28 @@ feature {NONE} -- Implementation - argument processing
 
 feature {NONE} -- Implementation - Hook routines
 
-	prepare_for_argument_processing is
+	prepare_for_argument_processing
 			-- Do any needed preparations before processing arguments.
 		deferred
 		end
 
-	finish_argument_processing is
+	finish_argument_processing
 			-- Do any needed cleanup after processing arguments.
 		deferred
 		end
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- Setup procedures used to process arguments
 		deferred
 		end
 
-	ambiguous_characters: LINEAR [CHARACTER] is
+	ambiguous_characters: LINEAR [CHARACTER]
 		once
 			-- Default to an empty list.
 			create {LINKED_LIST [CHARACTER]} Result.make
 		end
 
-	handle_ambiguous_option is
+	handle_ambiguous_option
 			-- Handle the ambiguous option in `contents.item'.
 		do
 			-- Redefine if different behavior is needed.
@@ -170,14 +170,14 @@ feature {NONE} -- Implementation
 
 	contents: LINKED_LIST [STRING]
 
-	help_character: CHARACTER is
+	help_character: CHARACTER
 		once
 			Result := 'h'
 		end
 
-	question_mark: CHARACTER is '?'
+	question_mark: CHARACTER = '?'
 
-	set_help is
+	set_help
 		do
 			if option_in_contents (Help_character) then
 				help := True
@@ -193,7 +193,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_version_request is
+	set_version_request
 		do
 			if option_in_contents ('v') then
 				version_request := True
@@ -202,7 +202,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_debug is
+	set_debug
 			-- Set `is_debug' to True and remove the item that contains
 			-- the debug setting from `contents' iff `contents' contains
 			-- "-" + Debug_string or "--" + Debug_string.  Descendant must
@@ -221,7 +221,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	option_in_contents (c: CHARACTER): BOOLEAN is
+	option_in_contents (c: CHARACTER): BOOLEAN
 			-- Is option `c' in `contents'?  (If so, position `contents'
 			-- cursor to the matching item.)
 		do
@@ -254,7 +254,7 @@ feature {NONE} -- Implementation
 			exhausted_if_false: not Result = contents.exhausted
 		end
 
-	option_string_in_contents (s: STRING): BOOLEAN is
+	option_string_in_contents (s: STRING): BOOLEAN
 			-- Is option `c' in `contents'?
 		local
 			scount: INTEGER
@@ -288,7 +288,7 @@ feature {NONE} -- Implementation
 				contents.item.substring (3, s.count + 2).is_equal (s))
 		end
 
-	one_character_option (c: CHARACTER): BOOLEAN is
+	one_character_option (c: CHARACTER): BOOLEAN
 			-- Does `c' occur in `contents' as a one-character option
 			-- (e.g., "-x")?
 		do
@@ -299,7 +299,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	check_for_ambiguous_options is
+	check_for_ambiguous_options
 			-- Check for ambiguous options
 		do
 			from
@@ -315,7 +315,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	remaining_flags: LINKED_LIST [STRING] is
+	remaining_flags: LINKED_LIST [STRING]
 			-- Arguments remaining in `contents' that begin with '-' -
 			-- Intended to be used to find invalid arguments after the valid
 			-- arguments have been processed and removed from `contents'.
@@ -337,12 +337,12 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Constants
 
-	debug_string: STRING is
+	debug_string: STRING
 		once
 			Result := "debug"
 		end
 
-	ambiguous_option_message: STRING is
+	ambiguous_option_message: STRING
 		once
 			Result := "Ambiguous option"
 		end

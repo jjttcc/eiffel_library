@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for receiving and servicing client requests"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ deferred class
 
 feature -- Basic operations
 
-	execute is
+	execute
 		local
 			cmd: CLIENT_REQUEST_COMMAND
 		do
@@ -54,13 +54,13 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	sessions_used: BOOLEAN is
+	sessions_used: BOOLEAN
 			-- Is session management used in this implementation?
 		once
 			Result := True
 		end
 
-	process_request is
+	process_request
 			-- Input the next client request, blocking if necessary, and use
 			-- it to set `request_id', `command_argument', and, if
 			-- `sessions_used', `session'.
@@ -77,55 +77,55 @@ feature {NONE} -- Hook routines
 			session_valid: session_valid
 		end
 
-	handle_logout_separately: BOOLEAN is
+	handle_logout_separately: BOOLEAN
 		once
 			Result := True
 		end
 
-	initialization_needed: BOOLEAN is
+	initialization_needed: BOOLEAN
 			-- Is initialization needed before calling `process_request'?
 		once
 			Result := True
 		end
 
-	handle_logout is
+	handle_logout
 			-- Do any necessary handling of a logout request.
 		require
 			logout: is_logout_request (request_id)
 		do
 		end
 
-	request_error: BOOLEAN is
+	request_error: BOOLEAN
 			-- Did an error occur, such as an invalid request, in
 			-- `process_request'?
 		deferred
 		end
 
-	setup_command (cmd: CLIENT_REQUEST_COMMAND) is
+	setup_command (cmd: CLIENT_REQUEST_COMMAND)
 			-- Perform any needed setup on `cmd' before executing it.
 		do
 		end
 
-	cleanup_session is
+	cleanup_session
 			-- Perform needed cleanup on `session'.
 		require
 			valid_session: session /= Void
 		do
 		end
 
-	is_logout_request (id: like request_id): BOOLEAN is
+	is_logout_request (id: like request_id): BOOLEAN
 			-- Is `id' the request_id for a logout request?
 		deferred
 		end
 
-	is_login_request (id: like request_id): BOOLEAN is
+	is_login_request (id: like request_id): BOOLEAN
 			-- Is `id' the request_id for a login request?
 		deferred
 		end
 
 feature {NONE} -- Implementation
 
-	session_valid: BOOLEAN is
+	session_valid: BOOLEAN
 			-- Is `session' valid?
 		do
 			Result := sessions_used and
@@ -148,7 +148,7 @@ feature {NONE} -- Implementation
 			-- Argument for the current client request command, extracted
 			-- by `process_request'
 
-	session: SESSION is
+	session: SESSION
 			-- The current log-in session
 		do
 			-- Needs to be redefined if `sessions_used' is True.

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Interface for a %"persistent%" connection"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,19 +12,19 @@ deferred class PERSISTENT_CONNECTION_INTERFACE inherit
 
 feature -- Access
 
-	input_device: IO_MEDIUM is
+	input_device: IO_MEDIUM
 			-- Input device used for persistent communication
 		deferred
 		end
 
-	output_device: IO_MEDIUM is
+	output_device: IO_MEDIUM
 			-- Output device used for persistent communication
 		deferred
 		end
 
 feature -- Status setting
 
-	set_input_device (arg: IO_MEDIUM) is
+	set_input_device (arg: IO_MEDIUM)
 			-- Set input_device to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -33,7 +33,7 @@ feature -- Status setting
 			input_device_set: input_device = arg and input_device /= Void
 		end
 
-	set_output_device (arg: IO_MEDIUM) is
+	set_output_device (arg: IO_MEDIUM)
 			-- Set output_device to `arg'.
 		require
 			arg_not_void: arg /= Void

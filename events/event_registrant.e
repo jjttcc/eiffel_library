@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction that registers to be notified of specific types of %
 		%events and that processes each event of which it was notified"
@@ -14,28 +14,28 @@ deferred class
 
 feature -- Access
 
-	name: STRING is
+	name: STRING
 			-- Name of the registrant
 		deferred
 		end
 
 feature -- Status report
 
-	is_interested_in (e: EVENT): BOOLEAN is
+	is_interested_in (e: EVENT): BOOLEAN
 			-- Is this registrant interested in `e'?
 		deferred
 		end
 
 feature -- Basic operations
 
-	notify (e: EVENT) is
+	notify (e: EVENT)
 			-- Notify this registrant of event `e'.
 		require
 			e_wanted: is_interested_in (e)
 		deferred
 		end
 
-	end_notification is
+	end_notification
 			-- In case the event notifications are being cached, send
 			-- a message that the there are no more events for the
 			-- current processing session.

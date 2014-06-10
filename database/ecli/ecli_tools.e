@@ -1,4 +1,4 @@
-indexing
+note
 	description: "ECLI/database tools"
 	author: "Jim Cochrane"
 	date: "$Date$"
@@ -16,7 +16,7 @@ feature -- Access
 
 feature -- Access - Queries
 
-	string_list_from_query (q: STRING): LIST [STRING] is
+	string_list_from_query (q: STRING): LIST [STRING]
 			-- A list of STRING resulting from SQL query `q'
 		require
 			q_exists: q /= Void and then not q.is_empty
@@ -57,7 +57,7 @@ feature -- Access - Queries
 			empty_on_error: error_occurred implies Result.is_empty
 		end
 
-	integer_list_from_query (q: STRING): LIST [INTEGER] is
+	integer_list_from_query (q: STRING): LIST [INTEGER]
 			-- An INTEGER resulting from SQL query `q'
 		require
 			q_exists: q /= Void and then not q.is_empty
@@ -98,7 +98,7 @@ feature -- Access - Queries
 			empty_on_error: error_occurred implies Result.is_empty
 		end
 
-	integer_from_query (q: STRING): INTEGER is
+	integer_from_query (q: STRING): INTEGER
 			-- An INTEGER resulting from SQL query `q'
 		require
 			q_exists: q /= Void and then not q.is_empty
@@ -120,7 +120,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute_sql_commands (cmdlist: LINEAR [SQL_COMMAND [ANY]]) is
+	execute_sql_commands (cmdlist: LINEAR [SQL_COMMAND [ANY]])
 			-- Execute each SQL command in `cmdlist' within a transaction.
 		require
 			cmdlist_exists: cmdlist /= Void
@@ -146,7 +146,7 @@ feature -- Basic operations
 			end
 		end
 
-	execute_commands (cmdlist: LINEAR [STRING]) is
+	execute_commands (cmdlist: LINEAR [STRING])
 			-- Execute each SQL command in `cmdlist' within a transaction.
 		require
 			cmdlist_exists: cmdlist /= Void
@@ -181,7 +181,7 @@ feature -- Basic operations
 			end
 		end
 
-	execute_command_array (cmdlist: ARRAY [STRING]) is
+	execute_command_array (cmdlist: ARRAY [STRING])
 			-- Execute each SQL command in `cmdlist' within a transaction.
 		require
 			cmdlist_exists: cmdlist /= Void
@@ -190,7 +190,7 @@ feature -- Basic operations
 		end
 
 	input_statement (query: STRING; value_holders: ARRAY [ECLI_VALUE]):
-				ECLI_STATEMENT is
+				ECLI_STATEMENT
 			-- Executed input ECLI_STATEMENT constructed with `query'
 			-- and `value_holders'
 		do
@@ -209,7 +209,7 @@ feature -- Basic operations
 			end
 		end
 
-	execute_statement (stmt: ECLI_STATEMENT) is
+	execute_statement (stmt: ECLI_STATEMENT)
 			-- Execute `stmt' and set error status if it fails.
 		require
 			stmt_valid: stmt /= Void and then stmt.sql /= Void and then
@@ -233,11 +233,11 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	session: ECLI_SESSION is
+	session: ECLI_SESSION
 		deferred
 		end
 
-	connect_session is
+	connect_session
 			-- Connect to the database.
 		local
 			error: BOOLEAN
@@ -267,7 +267,7 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	cleanup is
+	cleanup
 		do
 			if session.is_connected then session.disconnect end
 			if session.is_valid and not session.is_closed then

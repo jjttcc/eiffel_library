@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Debugging facilities for SOCKETs";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature
 
-	make_with_socket (s: SOCKET) is
+	make_with_socket (s: SOCKET)
 			-- Initialize and start the timer.
 		require
 			s_exists: s /= Void
@@ -33,7 +33,7 @@ feature -- Access
 
 feature -- Status report
 
-	report (s: SOCKET): STRING is
+	report (s: SOCKET): STRING
 			-- Report on the state of: `s' if exists; otherwise,
 			-- `target_socket'.
 		require
@@ -172,7 +172,7 @@ end
 
 feature {NONE} -- Implementation
 
-	nss_report (s: NETWORK_STREAM_SOCKET): STRING is
+	nss_report (s: NETWORK_STREAM_SOCKET): STRING
 			-- Report on network stream socket `s'.
 		require
 			s_exists: s /= Void

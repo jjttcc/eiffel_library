@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Generic sorting-related utilities"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	sorted_list (l: LINEAR [G]): PART_SORTED_TWO_WAY_LIST [G] is
+	sorted_list (l: LINEAR [G]): PART_SORTED_TWO_WAY_LIST [G]
 			-- All elements of `l', sorted
 		require
 			not_void: l /= Void
@@ -30,7 +30,7 @@ feature -- Access
 			sorted: Result.sorted
 		end
 
-	sorted_set (l: LINEAR [G]): PART_SORTED_SET [G] is
+	sorted_set (l: LINEAR [G]): PART_SORTED_SET [G]
 			-- All elements of `l', sorted, with duplicates removed
 		require
 			not_void: l /= Void
@@ -46,7 +46,7 @@ feature -- Access
 			end
 		end
 
-	duplicates (l: LIST [H]): BOOLEAN is
+	duplicates (l: LIST [H]): BOOLEAN
 			-- Are there any items with duplicates in `l'?
 		local
 			tbl: HASH_TABLE [H, H]
@@ -66,7 +66,7 @@ feature -- Access
 			end
 		end
 
-	is_sorted_ascending (l: LINEAR [PART_COMPARABLE]): BOOLEAN is
+	is_sorted_ascending (l: LINEAR [PART_COMPARABLE]): BOOLEAN
 			-- Is `l' sorted in ascending order?
 		local
 			prev: PART_COMPARABLE
@@ -89,7 +89,7 @@ feature -- Access
 			end
 		end
 
-	is_sorted_descending (l: LINEAR [PART_COMPARABLE]): BOOLEAN is
+	is_sorted_descending (l: LINEAR [PART_COMPARABLE]): BOOLEAN
 			-- Is `l' sorted in descending order?
 		local
 			prev: PART_COMPARABLE

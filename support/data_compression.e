@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Common features for data compression and decompression";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ deferred class DATA_COMPRESSION inherit
 
 feature -- Access
 
-	product_count: INTEGER is
+	product_count: INTEGER
 			-- Size of the processed product
 		deferred
 		end
@@ -30,7 +30,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Unlock the file.
 		do
 			error_occurred := False
@@ -44,7 +44,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	process_target is
+	process_target
 		require
 			no_error: error_occurred = False
 		deferred

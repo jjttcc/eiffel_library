@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Binary operator whose result is its left operand to the %
 		%power of its right operand"
 	author: "Jim Cochrane"
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL) is
+	operate (v1, v2: REAL)
 		do
 			value := v1 ^ v2
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A SERVER that polls for available IO_MEDIUMs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,7 +17,7 @@ deferred class POLLING_SERVER inherit
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create errors.make (0)
 			server_make
@@ -25,7 +25,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Hook routine implementation
 
-	prepare_for_listening is
+	prepare_for_listening
 		do
 			create poller.make_read_only
 			make_current_media
@@ -45,7 +45,7 @@ feature {NONE} -- Hook routine implementation
 			poller_exists: poller /= Void
 		end
 
-	listen is
+	listen
 			-- Listen for and respond to client requests.
 		do
 			check
@@ -54,7 +54,7 @@ feature {NONE} -- Hook routine implementation
 			poller.execute (15, Polling_timeout_milliseconds)
 		end
 
-	cleanup is
+	cleanup
 			-- Close all unclosed IO_MEDIUMs.
 		local
 			ex_srv: expanded EXCEPTION_SERVICES
@@ -84,12 +84,12 @@ feature {NONE} -- Hook routine implementation
 			end
 		end
 
-	notify (msg: STRING) is
+	notify (msg: STRING)
 		do
 			errors.append (msg + "%N")
 		end
 
-	exit (status: INTEGER) is
+	exit (status: INTEGER)
 		do
 			if command_line_options.error_occurred then
 				errors := errors + command_line_options.error_description
@@ -98,7 +98,7 @@ feature {NONE} -- Hook routine implementation
 			Precursor (status)
 		end
 
-	log_errors (a: ARRAY [ANY]) is
+	log_errors (a: ARRAY [ANY])
 		local
 			l: LINEAR [ANY]
 		do
@@ -116,25 +116,25 @@ feature {NONE} -- Hook routine implementation
 
 feature {NONE} -- Implementation - Hook routines
 
-	make_current_media is
+	make_current_media
 			-- Create and fill `current_media'.
 		deferred
 		ensure
 			current_media_exist: current_media /= Void
 		end
 
-	read_command_for (medium: IO_MEDIUM): POLL_COMMAND is
+	read_command_for (medium: IO_MEDIUM): POLL_COMMAND
 			-- A poll command for reading `medium'
 		deferred
 		end
 
-	additional_read_commands: LINEAR [POLL_COMMAND] is
+	additional_read_commands: LINEAR [POLL_COMMAND]
 			-- Read commands to be used in addition to those associated with
 			-- the elements of `current_media'
 		deferred
 		end
 
-	Polling_timeout_milliseconds: INTEGER is
+	Polling_timeout_milliseconds: INTEGER
 			-- Polling timeout value, in milliseconds
 		once
 			Result := 20000
@@ -142,7 +142,7 @@ feature {NONE} -- Implementation - Hook routines
 
 feature {NONE} -- Implementation
 
-	report_errors (errs: STRING) is
+	report_errors (errs: STRING)
 			-- Report `errors' to any interested clients.
 		do
 			-- Null action - redefine as needed.

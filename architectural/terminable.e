@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Interface for cleanup notification before termination"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ deferred class
 
 feature -- Utility
 
-	cleanup is
+	cleanup
 			-- Perform any needed cleanup actions before program termination.
 		deferred
 		end

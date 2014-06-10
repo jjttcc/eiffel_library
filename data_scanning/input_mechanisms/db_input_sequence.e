@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Input record sequences for a database implementation"
 	author: "Eirik Mangseth"
 	date: "$Date$";
@@ -24,7 +24,7 @@ feature -- Access
 
 	last_date: DATE
 
-	name: STRING is "database input sequence"
+	name: STRING = "database input sequence"
 
 	field_index: INTEGER
 
@@ -32,14 +32,14 @@ feature -- Status report
 
 	last_error_fatal: BOOLEAN
 
-	is_open: BOOLEAN is
+	is_open: BOOLEAN
 			-- Is the input sequence open for use?
 		deferred
 		end
 
 feature -- Status setting
 
-	close is
+	close
 			-- Perform any needed cleanup operations.  Should be called
 			-- after input facilities have finished being used.
 		require
@@ -51,19 +51,19 @@ feature -- Status setting
 
 feature -- Cursor movement
 
-	advance_to_next_field is
+	advance_to_next_field
 		do
 			field_index := field_index + 1
 		end
 
-	discard_current_record is
+	discard_current_record
 		do
 			advance_to_next_record
 		end
 
 feature -- Input
 
-	read_integer is
+	read_integer
 		local
 			i_ref: INTEGER_REF
 			dt: DATE_TIME
@@ -87,7 +87,7 @@ feature -- Input
 			end
 		end
 
-	read_character is
+	read_character
 		local
 			c_ref: CHARACTER_REF
 		do
@@ -103,7 +103,7 @@ feature -- Input
 			end
 		end
 
-	read_string is
+	read_string
 		local
 			string: STRING
 		do
@@ -119,7 +119,7 @@ feature -- Input
 			end
 		end
 
-	read_date is
+	read_date
 		local
 			date: DT_DATE
 		do
@@ -135,7 +135,7 @@ feature -- Input
 			end
 		end
 
-	read_double is
+	read_double
 		local
 			d_ref: DOUBLE_REF
 		do
@@ -151,7 +151,7 @@ feature -- Input
 			end
 		end
 
-	read_real is
+	read_real
 		do
 			-- Default implementation - for databases where real and double
 			-- is the same type
@@ -161,12 +161,12 @@ feature -- Input
 
 feature {NONE} -- Implementation
 
-	current_field: ANY is
+	current_field: ANY
 			-- Current field value
 		deferred
 		end
 
-	reset_error_state is
+	reset_error_state
 		do
 			error_occurred := False
 			last_error_fatal := False

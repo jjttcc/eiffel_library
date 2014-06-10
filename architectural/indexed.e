@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects with an index feature"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ deferred class
 
 feature -- Access
 
-	index: INTEGER is
+	index: INTEGER
 		deferred
 		end
 

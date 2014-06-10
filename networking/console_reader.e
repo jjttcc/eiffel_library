@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"POLL_COMMANDs whose `active_medium' (output_device) is the console";
@@ -21,7 +21,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	initialize is
+	initialize
 		do
 			input_device := io.input
 			output_device := io.output
@@ -39,14 +39,14 @@ feature -- Access
 
 feature {NONE} -- Implementation - Hook routines
 
-	welcome_message: STRING is
+	welcome_message: STRING
 			-- Welcome message to display to the user on startup
 		deferred
 		end
 
 feature {NONE} -- Utilities
 
-	output_welcome_message is
+	output_welcome_message
 			-- Output a welcome message on the console.
 		do
 			output_device.put_string (
@@ -55,6 +55,6 @@ feature {NONE} -- Utilities
 
 feature {NONE} -- Constants
 
-	Hit_enter_msg: STRING is " (Hit <Enter> to continue)%N"
+	Hit_enter_msg: STRING = " (Hit <Enter> to continue)%N"
 
 end

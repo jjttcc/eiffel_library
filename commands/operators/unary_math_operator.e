@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"UNARY_OPERATORs that implement a standard mathematical function"
 	author: "Jim Cochrane"
@@ -21,7 +21,7 @@ deferred class UNARY_MATH_OPERATOR inherit
 
 feature -- Initialization
 
-	make (o: like operand) is
+	make (o: like operand)
 		require
 			not_void: o /= Void
 		do

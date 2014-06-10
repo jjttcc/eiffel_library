@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Mathematical ceiling operator"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature {NONE} -- Basic operations
 
-	operate (v: REAL) is
+	operate (v: REAL)
 			-- Null action by default
 		do
 			value := ceiling (v)

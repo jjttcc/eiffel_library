@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Utility for storing a set of boolean states"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,10 +12,10 @@ class
 
 feature -- Access
 
-	state_count: INTEGER is 32
+	state_count: INTEGER = 32
 			-- Total number of states
 
-	state_at (i: INTEGER): BOOLEAN is
+	state_at (i: INTEGER): BOOLEAN
 			-- The state at position `i'
 		require
 			index_large_enough: i >= 1
@@ -26,7 +26,7 @@ feature -- Access
 			Result := x.one.bit_shift_left (i - 1) & bits /= 0
 		end
 
-	put_state (value: BOOLEAN; i: INTEGER) is
+	put_state (value: BOOLEAN; i: INTEGER)
 			-- Set the `i'th bit: 1 if `value' = True, 0 if `value' = False.
 		require
 			index_large_enough: i >= 1
@@ -42,7 +42,7 @@ feature -- Access
 			end
 		end
 
-	state_set_status: STRING is
+	state_set_status: STRING
 			-- Report of all states as a string ordered from right to left,
 			-- where 0 represents false and 1 represents True - e.g.:
 			-- "00000000000000000000000000001010" shows state_at (2) and

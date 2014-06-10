@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Interface for a client connection"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ deferred class CONNECTION_INTERFACE inherit
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Initiate the conversation with the client.
 		deferred
 		end

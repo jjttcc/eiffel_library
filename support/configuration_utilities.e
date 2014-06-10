@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Utilities for system configuration based on parsing a %
 		%configuration file"
 	author: "Jim Cochrane and Eirik Mangseth"
@@ -16,7 +16,7 @@ deferred class CONFIGURATION_UTILITIES inherit
 
 feature -- Initialization
 
-	make is
+	make
 			-- Initialize settings from configuration file.
 			-- If an error occurs reading the file, all query values
 			-- will be empty strings.
@@ -31,7 +31,7 @@ feature  -- Access
 	settings: HASH_TABLE [STRING, STRING]
 			-- All current settings
 
-	settings_report: STRING is
+	settings_report: STRING
 			-- `settings' formatted as a STRING
 		do
 			if settings_report_cache = Void then
@@ -43,7 +43,7 @@ feature  -- Access
 			Result := settings_report_cache
 		end
 
-	setting_report (key: STRING): STRING is
+	setting_report (key: STRING): STRING
 			-- Setting for `key' formatted as a string
 		require
 			valid_key: key /= Void and then settings.has (key)
@@ -53,7 +53,7 @@ feature  -- Access
 			exists: Result /= Void
 		end
 
-	additional_settings_report: STRING is
+	additional_settings_report: STRING
 			-- Additional settings, if any, formatted as a string
 		deferred
 		ensure
@@ -62,7 +62,7 @@ feature  -- Access
 
 feature {NONE} -- Implementation - Hook routines
 
-	initialize is
+	initialize
 			-- Initialize the `settings' table and any other items needing
 			-- initialization.
 		deferred
@@ -70,51 +70,51 @@ feature {NONE} -- Implementation - Hook routines
 			settings_created: settings /= Void
 		end
 
-	configuration_type: STRING is
+	configuration_type: STRING
 			-- The type of configuration - e.g., "database" configuration
 		deferred
 		end
 
-	comment_character: CHARACTER is
+	comment_character: CHARACTER
 			-- The character that, when at the beginning of a "line",
 			-- indicates that the "line" is a comment
 		deferred
 		end
 
-	key_index: INTEGER is
+	key_index: INTEGER
 			-- Index of the settings key within the current record
 		deferred
 		end
 
-	value_index: INTEGER is
+	value_index: INTEGER
 			-- Index of the settings value within the current record
 		deferred
 		end
 
-	new_file_reader: FILE_READER is
+	new_file_reader: FILE_READER
 		deferred
 		end
 
-	post_process_settings is
+	post_process_settings
 			-- Do any needed post-processing of the settings after
 			-- the configuration file has been read and processed.
 		do
 			-- Null procedure - redefine if needed
 		end
 
-	check_results is
+	check_results
 			-- Check if all needed fields were set and make any needed
 			-- settings adjustments.
 		deferred
 		end
 
-	cleanup is
+	cleanup
 			-- Perform any needed cleanup after processing is complete.
 		do
 			-- Null routine - redefined if needed.
 		end
 
-	handle_file_read_error (msg: STRING) is
+	handle_file_read_error (msg: STRING)
 			-- Handle failure to read the configuration file - defaults
 			-- to outputting `msg' and aborting - redefine if needed.
 		require
@@ -127,7 +127,7 @@ feature {NONE} -- Implementation - Hook routines
 			ex_srv.handle_exception (msg)
 		end
 
-	use_customized_setting (key, value: STRING): BOOLEAN is
+	use_customized_setting (key, value: STRING): BOOLEAN
 			-- Should the customized configuration setting procedure
 			-- `do_customized_setting' be used, rather than the default one
 			-- [settings.replace (`value', `key')]?
@@ -138,7 +138,7 @@ feature {NONE} -- Implementation - Hook routines
 			Result := False
 		end
 
-	do_customized_setting (key, value: STRING) is
+	do_customized_setting (key, value: STRING)
 			-- Customized configuration setting procedure, to be used
 			-- when `default_setting' evaluates to True
 		require
@@ -149,25 +149,25 @@ feature {NONE} -- Implementation - Hook routines
 
 feature {NONE} -- Implementation
 
-	field_separator: STRING is
+	field_separator: STRING
 			-- Field separator - redefine if needed
 		once
 			Result := "%T"
 		end
 
-	Record_separator: STRING is
+	Record_separator: STRING
 			-- Record separator - redefine if needed
 		once
 			Result := "%N"
 		end
 
-	Continuation_character: CHARACTER is
+	Continuation_character: CHARACTER
 			-- Character that indicates continuation onto next "line"
 		once
 			Result := '\'
 		end
 
-	current_tokens: LIST [STRING] is
+	current_tokens: LIST [STRING]
 			-- Tokens for the current "line" of `file_reader'
 		local
 			s, line: STRING
@@ -205,7 +205,7 @@ feature {NONE} -- Implementation
 			Result := su.tokens (Field_separator)
 		end
 
-	process_configuration_file is
+	process_configuration_file
 		local
 			tokens: LIST [STRING]
 			key_token, value_token, errmsg: STRING
@@ -259,7 +259,7 @@ feature {NONE} -- Implementation
 			cleanup
 		end
 
-	check_for_missing_specs (ftbl: ARRAY[ANY]; ignore_if_all_true: BOOLEAN) is
+	check_for_missing_specs (ftbl: ARRAY[ANY]; ignore_if_all_true: BOOLEAN)
 			-- Check for missing field specs in `ftbl'.   If
 			-- `ignore_if_all_true' and all 'missing' flags in ftl are
 			-- True, do not consider it an error.  Expected
@@ -310,7 +310,7 @@ feature {NONE} -- Implementation - attributes
 
 	settings_report_cache: STRING
 
-	add_setting_report (key: STRING) is
+	add_setting_report (key: STRING)
 			-- Add `setting_report' for key to settings_report_cache.
 		require
 			valid_key: key /= Void and then settings.has (key)

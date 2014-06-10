@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Boolean 'or' operator"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 			-- Optimized to not execute operand2 if the result from
 			-- operand1 is True.
 			-- A system exception may occur (most likely caused by division
@@ -47,7 +47,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: BOOLEAN) is
+	operate (v1, v2: BOOLEAN)
 			-- (Not used.)
 		do
 		end

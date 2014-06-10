@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Text files/record sequences used only for input - Performs %
 		%a little better than its relative, INPUT_FILE"
 	author: "Jim Cochrane"
@@ -43,7 +43,7 @@ feature -- Access
 
 	field_index: INTEGER
 
-	field_count: INTEGER is
+	field_count: INTEGER
 		local
 			fcount: INTEGER
 			s: STRING
@@ -94,7 +94,7 @@ feature -- Access
 
 feature -- Cursor movement
 
-	advance_to_next_field is
+	advance_to_next_field
 			-- Advance the cursor to the next field.
 			-- Set error_occurred and error_string if an error is encountered.
 		local
@@ -133,7 +133,7 @@ feature -- Cursor movement
 			field_index := field_index + 1
 		end
 
-	advance_to_next_record is
+	advance_to_next_record
 			-- Advance the cursor to the next record.
 			-- Set error_occurred and error_string if an error is encountered.
 		local
@@ -194,7 +194,7 @@ feature -- Cursor movement
 			end
 		end
 
-	discard_current_record is
+	discard_current_record
 		local
 			first_rsep_char: CHARACTER
 			last_character_was_record_separator: BOOLEAN
@@ -251,15 +251,15 @@ feature -- Cursor movement
 			end
 		end
 
-	start is
+	start
 		do
-			{PLAIN_TEXT_FILE} Precursor
+			Precursor {PLAIN_TEXT_FILE}
 			field_index := 1
 			record_index_implementation := 1
 			after_last_record := count = 0
 		end
 
-	position_cursor (p: INTEGER) is
+	position_cursor (p: INTEGER)
 		do
 			go (p)
 			field_index := 1
@@ -269,7 +269,7 @@ feature -- Cursor movement
 
 feature -- Input
 
-	read_string is
+	read_string
 		do
 			create last_string.make (0)
 			from
@@ -293,7 +293,7 @@ feature -- Input
 
 feature {NONE} -- Implementation
 
-	current_string_matches (s: STRING): BOOLEAN is
+	current_string_matches (s: STRING): BOOLEAN
 			-- Does the string at the current cursor match `s'?
 		local
 			i: INTEGER

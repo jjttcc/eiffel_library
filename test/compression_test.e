@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Test class for compression"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,7 +23,7 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	execute (n: INTEGER) is
+	execute (n: INTEGER)
 			-- Execute the compression test `n' times.
 		local
 			i: INTEGER
@@ -37,7 +37,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	report_zlib_error (item: DATA_COMPRESSION) is
+	report_zlib_error (item: DATA_COMPRESSION)
 		do
 			if item.error_occurred then
 				print_list (<<"Error occurred in compression: ",
@@ -45,7 +45,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	zlib_testrun is
+	zlib_testrun
 		local
 			c: ZLIB_COMPRESSION
 			d: ZLIB_DECOMPRESSION
@@ -80,7 +80,7 @@ feature {NONE} -- Implementation
 				c.target.is_equal (d.product).out, "%N">>)
 		end
 
-	largestring: STRING is
+	largestring: STRING
 		local
 			i: INTEGER
 			zero: CHARACTER
@@ -133,7 +133,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	a_eq_b (a, b: SPECIAL [CHARACTER]; size: INTEGER): BOOLEAN is
+	a_eq_b (a, b: SPECIAL [CHARACTER]; size: INTEGER): BOOLEAN
 		local
 			i: INTEGER
 		do

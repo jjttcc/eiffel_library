@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Input-record sequences that split a string into records and %
 		%fields according to specified field and record separators"
@@ -18,7 +18,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (s, field_separator, record_separator: STRING) is
+	make (s, field_separator, record_separator: STRING)
 			-- Use `field_separator' and `record_separator' to produce
 			-- `contents' from `s' by splitting `s' into fields and
 			-- records.
@@ -46,7 +46,7 @@ feature {NONE} -- Initialization
 				contents.count > 0 and then contents.first.count > 0
 		end
 
-	make_contents (records: LIST [STRING]; field_separator: STRING) is
+	make_contents (records: LIST [STRING]; field_separator: STRING)
 		local
 			splitter: expanded STRING_UTILITIES
 			fields: ARRAYED_LIST [STRING]
@@ -96,32 +96,32 @@ feature -- Access
 
 	last_date: DATE
 
-	field_index: INTEGER is
+	field_index: INTEGER
 		do
 			if readable then
 				Result := contents.item.index
 			end
 		end
 
-	record_index: INTEGER is
+	record_index: INTEGER
 		do
 			Result := contents.index
 		end
 
 	field_count: INTEGER
 
-	name: STRING is "Input-sequence as a string"
+	name: STRING = "Input-sequence as a string"
 
 feature -- Status report
 
-	after_last_record: BOOLEAN is
+	after_last_record: BOOLEAN
 		do
 			Result := contents.after
 		end
 
 	last_error_fatal: BOOLEAN
 
-	readable: BOOLEAN is
+	readable: BOOLEAN
 		do
 			Result := not contents.off and then not contents.item.off
 		ensure
@@ -131,14 +131,14 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	advance_to_next_field is
+	advance_to_next_field
 		do
 			last_error_fatal := False
 			error_occurred := False
 			contents.item.forth
 		end
 
-	advance_to_next_record is
+	advance_to_next_record
 		do
 			last_error_fatal := False
 			error_occurred := False
@@ -148,12 +148,12 @@ feature -- Cursor movement
 			end
 		end
 
-	discard_current_record is
+	discard_current_record
 		do
 			advance_to_next_record
 		end
 
-	start is
+	start
 		do
 			contents.start
 			contents.item.start
@@ -161,7 +161,7 @@ feature -- Cursor movement
 
 feature -- Element change
 
-	set_date_field_separator (arg: STRING) is
+	set_date_field_separator (arg: STRING)
 			-- Set `date_field_separator' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -174,13 +174,13 @@ feature -- Element change
 
 feature -- Input
 
-	read_string is
+	read_string
 		do
 			error_occurred := False
 			last_string := contents.item.item
 		end
 
-	read_character is
+	read_character
 		do
 			error_occurred := False
 			last_character := '%U'
@@ -189,7 +189,7 @@ feature -- Input
 			end
 		end
 
-	read_integer is
+	read_integer
 		local
 			s: STRING
 		do
@@ -203,7 +203,7 @@ feature -- Input
 			end
 		end
 
-	read_real is
+	read_real
 		local
 			s: STRING
 		do
@@ -217,7 +217,7 @@ feature -- Input
 			end
 		end
 
-	read_double is
+	read_double
 		local
 			s: STRING
 		do
@@ -231,7 +231,7 @@ feature -- Input
 			end
 		end
 
-	read_date is
+	read_date
 		local
 			splitter: expanded STRING_UTILITIES
 			ymd: ARRAY [STRING]
@@ -276,12 +276,12 @@ feature -- Input
 
 feature {NONE} -- Implementation
 
-	work_date: DATE is
+	work_date: DATE
 		once
 			create Result.make_now
 		end
 
-	make_error (s: STRING; append: BOOLEAN) is
+	make_error (s: STRING; append: BOOLEAN)
 			-- Set `error_string' to `s' - if append, append `s' to end
 			-- of `error_string'.
 		do
@@ -296,7 +296,7 @@ feature {NONE} -- Implementation
 			error_string_exists: error_string /= Void
 		end
 
-	index_info: STRING is
+	index_info: STRING
 		do
 			if contents.valid_index (contents.index) then
 				Result := "record " + contents.index.out

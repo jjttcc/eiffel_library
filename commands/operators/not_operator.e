@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A unary operator that provides the logical negation of its %
 		%operand's value"
@@ -21,7 +21,7 @@ creation
 
 feature -- Initialization
 
-	make (o: like operand) is
+	make (o: like operand)
 		require
 			not_void: o /= Void
 		do
@@ -32,7 +32,7 @@ feature -- Initialization
 
 feature {NONE} -- Basic operations
 
-	operate (v: BOOLEAN) is
+	operate (v: BOOLEAN)
 			-- Null action by default
 		do
 			value := not v

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Event dispatcher - accepts event registrants and dispatches events %
 		%from an event queue to all registrants."
@@ -18,7 +18,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			create registrants.make
 		end
@@ -33,7 +33,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_event_queue (arg: QUEUE [EVENT]) is
+	set_event_queue (arg: QUEUE [EVENT])
 			-- Set event_queue to `arg'.
 		require
 			arg /= Void
@@ -45,7 +45,7 @@ feature -- Status setting
 
 feature -- Element change
 
-	register (r: EVENT_REGISTRANT) is
+	register (r: EVENT_REGISTRANT)
 			-- Register `r' for event notification.
 		do
 			registrants.extend (r)
@@ -56,7 +56,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Dispatch all events in the `event_queue' to all registrants.
 		require
 			queue_set: event_queue /= Void
@@ -80,7 +80,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook methods
 
-	finished_processing: BOOLEAN is
+	finished_processing: BOOLEAN
 			-- Is there no more processing to do on the event_queue?
 			-- Answer: True if event_queue is empty - redefine in
 			-- descendants for specialized behavior.
@@ -88,7 +88,7 @@ feature {NONE} -- Hook methods
 			Result := event_queue.is_empty
 		end
 
-	dispatch (e: EVENT) is
+	dispatch (e: EVENT)
 			-- Dispatch event `e' to applicable registrants.
 		require
 			not_void: e /= Void
@@ -105,7 +105,7 @@ feature {NONE} -- Hook methods
 			end
 		end
 
-	cleanup is
+	cleanup
 			-- Perform any needed cleanup operations.
 			-- Default: Send end_notification messages to all registrants
 		do
@@ -119,7 +119,7 @@ feature {NONE} -- Hook methods
 			end
 		end
 
-	empty_queue_action is
+	empty_queue_action
 			-- Action to perform when event_queue is empty.
 			-- Null action by default - descendants redefine as needed.
 		do

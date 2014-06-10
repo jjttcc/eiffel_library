@@ -1,4 +1,4 @@
-indexing
+note
 	description: "File name expansion for Windows systems"
 	author: "Eirik Mangseth"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class WINDOWS_FILE_NAME_EXPANDER inherit
 
 feature -- Basic operations
 
-	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
+	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF)
 			-- Expand all arguments that to not start with `option_sign'
 			-- and remove each expanded argument from `args'.
 		do
@@ -43,7 +43,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implemetation
 
-	expand_file_names (s: STRING) is
+	expand_file_names (s: STRING)
 		local
 			e: expanded EXECUTION_ENVIRONMENT
 			o: expanded OPERATING_ENVIRONMENT
@@ -78,7 +78,7 @@ feature {NONE} -- Implemetation
 			end
 		end
 
-	read_file_names is
+	read_file_names
 		local
 			f: PLAIN_TEXT_FILE
 			fname: STRING
@@ -109,11 +109,11 @@ feature {NONE} -- Implemetation
 			end
 		end
 
-	work_file: STRING is "files.mas-tmp-expand"
+	work_file: STRING = "files.mas-tmp-expand"
 
 	working_directory: STRING
 
-	dir_cmd: STRING is " /C DIR /B "
+	dir_cmd: STRING = " /C DIR /B "
 
 	output_redirect: STRING IS " > "
 

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Media used only for input"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -30,19 +30,19 @@ feature -- Access
 	record_separator: STRING
 			-- Record separator used in `advance_to_next_record'
 
-	field_index: INTEGER is
+	field_index: INTEGER
 		do
 			if current_record /= Void then
 				Result := current_record.index
 			end
 		end
 
-	record_index: INTEGER is
+	record_index: INTEGER
 		do
 			Result := record_index_implementation
 		end
 
-	field_count: INTEGER is
+	field_count: INTEGER
 		do
 			if current_record = Void then
 				split_current_record
@@ -62,7 +62,7 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	advance_to_next_field is
+	advance_to_next_field
 			-- Advance the cursor to the next field.
 			-- Set error_occurred and error_string if an error is encountered.
 		do
@@ -76,7 +76,7 @@ feature -- Cursor movement
 			end
 		end
 
-	advance_to_next_record is
+	advance_to_next_record
 			-- Advance the cursor to the next record.
 			-- Set error_occurred and error_string if an error is encountered.
 		do
@@ -94,7 +94,7 @@ feature -- Cursor movement
 			end
 		end
 
-	discard_current_record is
+	discard_current_record
 		do
 print ("discard current record called" + "%N")
 --!!!Kept as a separate routine from `advance_to_next_record',
@@ -102,7 +102,7 @@ print ("discard current record called" + "%N")
 			advance_to_next_record
 		end
 
-	start is
+	start
 		do
 			implementation_start
 			record_index_implementation := 1
@@ -120,7 +120,7 @@ print ("discard current record called" + "%N")
 
 feature -- Element change
 
-	set_field_separator (arg: STRING) is
+	set_field_separator (arg: STRING)
 			-- Set field_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -131,7 +131,7 @@ feature -- Element change
 				field_separator /= Void
 		end
 
-	set_record_separator (arg: STRING) is
+	set_record_separator (arg: STRING)
 			-- Set record_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -144,7 +144,7 @@ feature -- Element change
 
 feature -- Input
 
-	read_integer is
+	read_integer
 		do
 			if not current_record.exhausted then
 				if current_record.item.is_integer then
@@ -159,7 +159,7 @@ feature -- Input
 			end
 		end
 
-	read_real is
+	read_real
 		do
 			if not current_record.exhausted then
 				if current_record.item.is_real then
@@ -174,7 +174,7 @@ feature -- Input
 			end
 		end
 
-	read_double is
+	read_double
 		do
 			if not current_record.exhausted then
 				if current_record.item.is_double then
@@ -189,7 +189,7 @@ feature -- Input
 			end
 		end
 
-	read_string is
+	read_string
 		do
 			if not current_record.exhausted then
 				last_string := current_record.item
@@ -198,12 +198,12 @@ feature -- Input
 			end
 		end
 
-	read_date is
+	read_date
 		do
 			-- @@Stub
 		end
 
-	read_line is
+	read_line
 			-- Read characters until a new line or end of medium.
 			-- Make result available in `last_string'.
 		deferred
@@ -211,24 +211,24 @@ feature -- Input
 
 feature {NONE} -- Hook routines
 
-	implementation_start is
+	implementation_start
 			-- Implementation-dependent behavior needed for `start'
 		do
 			do_nothing	 -- Redefine if needed.
 		end
 
-	data_available: BOOLEAN is
+	data_available: BOOLEAN
 			-- Are data currently available for input?
 		deferred
 		end
 
-	at_end_of_input: BOOLEAN is
+	at_end_of_input: BOOLEAN
 			-- Has the end of the input stream been reached?
 		do
 				Result := current_record.count <= 1
 		end
 
-	split_current_record_on_start: BOOLEAN is
+	split_current_record_on_start: BOOLEAN
 			-- Should `split_current_record' be called by `start'?
 		once
 			Result := True	-- Redefine if needed.
@@ -242,7 +242,7 @@ feature {NONE} -- Implementation
 	record_index_implementation: INTEGER
 
 --!!!Perhaps this should be called split_next_record?
-	split_current_record is
+	split_current_record
 			-- Scan the current line (data record) and split the result into
 			-- `current_record'.
 		require
@@ -262,7 +262,7 @@ print ("OH-OH!!!: " + error_string + "%N")
 		end
 
 --!!!This feature needs to be moved to a utility class:
-	is_tab_space_or_newline (c: CHARACTER): BOOLEAN is
+	is_tab_space_or_newline (c: CHARACTER): BOOLEAN
 			-- Is `c' a tab, space, or newline character?
 		do
 			Result := c = '%T' or c = ' ' or c = '%N' or c = '%R'
@@ -270,13 +270,13 @@ print ("OH-OH!!!: " + error_string + "%N")
 
 feature {NONE} -- Implementation - error messages
 
-	too_few_fields_msg: STRING is
+	too_few_fields_msg: STRING
 		do
 			Result := "Not enough fields in record # " + record_index.out +
 				": " + current_record.count.out
 		end
 
-	non_real_msg: STRING is
+	non_real_msg: STRING
 		require
 			current_field_exists: current_record /= Void and then
 				not current_record.exhausted
@@ -284,7 +284,7 @@ feature {NONE} -- Implementation - error messages
 			Result := "Real value expected, got" + current_record.item
 		end
 
-	non_integer_msg: STRING is
+	non_integer_msg: STRING
 		require
 			current_field_exists: current_record /= Void and then
 				not current_record.exhausted
@@ -292,7 +292,7 @@ feature {NONE} -- Implementation - error messages
 			Result := "Integer value expected, got" + current_record.item
 		end
 
-	medium_not_readable_msg: STRING is
+	medium_not_readable_msg: STRING
 		do
 			Result := "Input medium (" + generating_type + ") is not readable"
 		end

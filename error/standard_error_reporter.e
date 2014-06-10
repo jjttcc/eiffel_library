@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Error subsciber that prints its error notifications to %
 		%standard error (stderr)"
 	author: "Jim Cochrane"
@@ -13,7 +13,7 @@ class STANDARD_ERROR_REPORTER inherit
 
 feature -- Basic operations
 
-	notify (s: STRING) is
+	notify (s: STRING)
 			-- Publish error message `s'.
 		do
 			io.error.put_string (s)

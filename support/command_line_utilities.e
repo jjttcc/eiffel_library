@@ -1,6 +1,6 @@
-indexing
+note
 	description: "Command-line user interface functionality"
-	note:
+	note1:
 		"This class redefines print from GENERAL.  Classes that inherit from %
 		%this class and one or more other classes will need to undefine %
 		%the version of print inherited from the other classes."
@@ -33,7 +33,7 @@ class COMMAND_LINE_UTILITIES inherit
 
 feature {NONE} -- Access
 
-	character_selection (msg: STRING): CHARACTER is
+	character_selection (msg: STRING): CHARACTER
 			-- User-selected character
 		do
 			current_lines_read := 0
@@ -52,7 +52,7 @@ feature {NONE} -- Access
 			end
 		end
 
-	integer_selection (msg: STRING): INTEGER is
+	integer_selection (msg: STRING): INTEGER
 			-- User-selected integer value
 		do
 			current_lines_read := 0
@@ -63,7 +63,7 @@ feature {NONE} -- Access
 			Result := last_integer
 		end
 
-	real_selection (msg: STRING): REAL is
+	real_selection (msg: STRING): REAL
 			-- User-selected real value
 		do
 			current_lines_read := 0
@@ -74,7 +74,7 @@ feature {NONE} -- Access
 			Result := last_real
 		end
 
-	string_selection (msg: STRING): STRING is
+	string_selection (msg: STRING): STRING
 			-- User-selected real value
 		do
 			current_lines_read := 0
@@ -87,7 +87,7 @@ feature {NONE} -- Access
 			Result_exists: Result /= Void
 		end
 
-	list_selection (l: LIST [STRING]; general_msg: STRING): INTEGER is
+	list_selection (l: LIST [STRING]; general_msg: STRING): INTEGER
 			-- User's selection from an element of `l'
 		do
 			current_lines_read := 0
@@ -120,7 +120,7 @@ feature {NONE} -- Access
 		end
 
 	backoutable_selection (l: LIST [STRING]; msg: STRING;
-				exit_value: INTEGER): INTEGER is
+				exit_value: INTEGER): INTEGER
 			-- User's selection from an element of `l', which can be
 			-- backed out of by entering 0 - `exit_value' is the value to
 			-- return to indicate the the user has backed out.
@@ -163,7 +163,7 @@ feature {NONE} -- Access
 		end
 
 	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
-				general_msg: STRING): INTEGER is
+				general_msg: STRING): INTEGER
 			-- User's selection of one element from one of the `lists'.
 			-- Display all lists in `lists' that are not empty and return
 			-- the relative position of the selected item.  For example,
@@ -228,7 +228,7 @@ feature {NONE} -- Access
 
 feature {NONE} -- Input
 
-	read_integer is
+	read_integer
 			-- Input an integer (as a sequence of digits terminated with
 			-- a newline) and place the result in `last_integer'.  If
 			-- any non-digits are included in the input or the input
@@ -242,7 +242,7 @@ feature {NONE} -- Input
 			end
 		end
 
-	read_real is
+	read_real
 			-- Input a real (as a sequence of characters terminated with
 			-- a newline) and place the result in `last_real'.  If the
 			-- entered characters do not make up a real value, last_real is
@@ -256,14 +256,14 @@ feature {NONE} -- Input
 			end
 		end
 
-	read_line is
+	read_line
 			-- Input a string and place it in `last_string'.
 		do
 			read_input_line
 			last_string := input_device.last_string
 		end
 
-	read_input_line is
+	read_input_line
 			-- If `Line_limit' is less than 0 or `current_lines_read' <
 			-- `Line_limit', read the next line from `input_device'.
 			-- If `Line_limit' is greater than 0 and `current_lines_read' >=
@@ -281,14 +281,14 @@ feature {NONE} -- Input
 
 feature {NONE} -- Miscellaneous
 
-	print_message (msg: STRING) is
+	print_message (msg: STRING)
 			-- Print `msg' to standard out, appending a newline.
 		do
 			print_list (<<msg, "%N">>)
 		end
 
 	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
-				allowed_selections: INTEGER) is
+				allowed_selections: INTEGER)
 			-- Implementation, needed by some children, of procedure for
 			-- obtaining a desired list of selections from the user -
 			-- resulting in the right member of each pair in `choices'
@@ -355,7 +355,7 @@ feature {NONE} -- Implementation
 	last_string: STRING
 			-- Last string input with `read_line'
 
-	Line_limit: INTEGER is
+	Line_limit: INTEGER
 			-- Maximum number of lines that will be read - until
 			-- current_lines_read is reset to 0 - before a
 			-- `Line_limit_reached' exception is thrown - A value
@@ -365,13 +365,13 @@ feature {NONE} -- Implementation
 			Result := 1000
 		end
 
-	Line_limit_reached: STRING is "Input line limit reached"
+	Line_limit_reached: STRING = "Input line limit reached"
 			-- Name of line-limit-reached exception
 
 	current_lines_read: INTEGER
 			-- Current number of lines read in one input attempt
 
-	print (o: ANY) is
+	print (o: ANY)
 			-- Redefinition of output method inherited from GENERAL to
 			-- send output to output_device
 		do
@@ -380,13 +380,13 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	eom: STRING is
+	eom: STRING
 			-- End-of-message string - redefine if needed
 		once
 			Result := ""
 		end
 
-	input_not_readable_error_message: STRING is
+	input_not_readable_error_message: STRING
 		do
 			Result := "Input"
 			if

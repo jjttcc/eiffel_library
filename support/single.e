@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A (container of a) single object"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,11 +16,11 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 		end
 
-	make_item (o: G) is
+	make_item (o: G)
 		do
 			item := o
 		ensure
@@ -34,7 +34,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_item (arg: G) is
+	set_item (arg: G)
 			-- Set `item' to `arg'.
 		require
 			arg_not_void: arg /= Void

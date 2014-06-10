@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Binary operator that implements multiplication"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,7 +18,7 @@ creation
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL) is
+	operate (v1, v2: REAL)
 		do
 			value := v1 * v2
 		end

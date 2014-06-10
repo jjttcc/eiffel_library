@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Equal-to operator.  Returns True if the absolute value of %
 	%the difference of the two operands is less than epsilon."
 	author: "Jim Cochrane"
@@ -27,7 +27,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (op1: like operand1; op2: like operand2) is
+	make (op1: like operand1; op2: like operand2)
 			-- Set the operands to the specified values and initialize epsilon.
 		require
 			not_void: op1 /= Void and op2 /= Void
@@ -46,7 +46,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_epsilon (arg: REAL) is
+	set_epsilon (arg: REAL)
 			-- Set epsilon to `arg'.
 		do
 			epsilon := arg
@@ -56,7 +56,7 @@ feature -- Status setting
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL) is
+	operate (v1, v2: REAL)
 		do
 			value := rabs (v1 - v2) < epsilon
 		end

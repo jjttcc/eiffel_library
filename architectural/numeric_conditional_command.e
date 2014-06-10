@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands whose `value' is REAL and that depend on the %
 		%result of a boolean operator:  If the result is True, `value' is %
 		%the result of executing `true_cmd'; else `value' is the result %
@@ -23,7 +23,7 @@ creation
 feature -- Initialization
 
 	make (bool_oper: like boolean_operator; true_command, false_command:
-			like true_cmd) is
+			like true_cmd)
 		require
 			args_not_void: bool_oper /= Void and true_command /= Void and
 				false_command /= Void
@@ -38,7 +38,7 @@ feature -- Initialization
 			false_cmd_set: false_cmd = false_command and false_cmd /= Void
 		end
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		do
 			boolean_operator.initialize (arg)
 			true_cmd.initialize (arg)
@@ -58,7 +58,7 @@ feature -- Access
 			-- Command that extracts the value to use if boolean_operator
 			-- evaluates as False
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.extend (boolean_operator)
@@ -68,7 +68,7 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := boolean_operator.arg_mandatory or
 				true_cmd.arg_mandatory or false_cmd.arg_mandatory
@@ -76,7 +76,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_boolean_operator (arg: like boolean_operator) is
+	set_boolean_operator (arg: like boolean_operator)
 			-- Set boolean_operator to `arg'.
 		require
 			arg /= Void
@@ -87,7 +87,7 @@ feature -- Status setting
 									boolean_operator /= Void
 		end
 
-	set_true_cmd (arg: like true_cmd) is
+	set_true_cmd (arg: like true_cmd)
 			-- Set true_cmd to `arg'.
 		require
 			arg /= Void
@@ -98,7 +98,7 @@ feature -- Status setting
 								true_cmd /= Void
 		end
 
-	set_false_cmd (arg: like false_cmd) is
+	set_false_cmd (arg: like false_cmd)
 			-- Set false_cmd to `arg'.
 		require
 			arg /= Void
@@ -111,7 +111,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			boolean_operator.execute (arg)
 			if boolean_operator.value then

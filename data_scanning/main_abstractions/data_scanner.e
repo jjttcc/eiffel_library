@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction that provides a top level data scanning algorithm, %
 		%configured by providing different types in the tuple_maker and %
@@ -26,7 +26,7 @@ deferred class DATA_SCANNER inherit
 
 feature -- Initialization
 
-	make (in: like input; tm: like tuple_maker; vs: like value_setters) is
+	make (in: like input; tm: like tuple_maker; vs: like value_setters)
 		require
 			args_not_void: in /= Void and tm /= Void and vs /= Void
 			vs_not_empty: not vs.is_empty
@@ -66,14 +66,14 @@ feature -- Status report
 	strict_error_checking: BOOLEAN
 			-- Should all records with errors be unconditionally discarded?
 
-	execute_precondition: BOOLEAN is
+	execute_precondition: BOOLEAN
 		do
 			Result := input /= Void and then input.readable
 		ensure then
 			Result = (input /= Void and then input.readable)
 		end
 
-	start_input: BOOLEAN is
+	start_input: BOOLEAN
 			-- Is 'input.start' to be called by `execute' before
 			-- scanning the data?
 		do
@@ -82,7 +82,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	turn_start_input_off is
+	turn_start_input_off
 			-- Set `start_input' to False.
 		do
 			do_not_start_input_before_scanning := True
@@ -90,7 +90,7 @@ feature -- Status setting
 			not_start_input: not start_input
 		end
 
-	turn_start_input_on is
+	turn_start_input_on
 			-- Set `start_input' to True.
 		do
 			do_not_start_input_before_scanning := False
@@ -100,7 +100,7 @@ feature -- Status setting
 
 feature -- Element change
 
-	set_tuple_maker (arg: FACTORY) is
+	set_tuple_maker (arg: FACTORY)
 			-- Set tuple_maker to `arg'.
 		require
 			arg /= Void
@@ -110,7 +110,7 @@ feature -- Element change
 			tuple_maker_set: tuple_maker = arg and tuple_maker /= Void
 		end
 
-	set_value_setters (arg: LIST [VALUE_SETTER]) is
+	set_value_setters (arg: LIST [VALUE_SETTER])
 			-- Set value_setters to `arg'.
 		require
 			arg /= Void
@@ -120,7 +120,7 @@ feature -- Element change
 			value_setters_set: value_setters = arg and value_setters /= Void
 		end
 
-	set_input (arg: like input) is
+	set_input (arg: like input)
 			-- Set input to `arg'.
 		require
 			arg /= Void
@@ -130,7 +130,7 @@ feature -- Element change
 			input_set: input = arg and input /= Void
 		end
 
-	set_strict_error_checking (arg: BOOLEAN) is
+	set_strict_error_checking (arg: BOOLEAN)
 			-- Set strict_error_checking to `arg'.
 		do
 			strict_error_checking := arg
@@ -140,7 +140,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Scan input and create tuples from it.  If `start_input',
 			-- call 'input.start' before scanning.
 		do
@@ -196,14 +196,14 @@ and not input.after_last_record
 
 feature {NONE} -- Hook methods
 
-	create_product is
+	create_product
 			-- Instantiate product as an effective descendant.
 		deferred
 		ensure
 			product /= Void
 		end
 
-	make_tuple is
+	make_tuple
 			-- Create a tuple and initialize it with the data from
 			-- the current record in `input'.  Default implementation.
 		local
@@ -251,14 +251,14 @@ feature {NONE} -- Hook methods
 			--		discard_current_tuple
 		end
 
-	value_setters_used: BOOLEAN is
+	value_setters_used: BOOLEAN
 			-- Is `value_setters' used?  (Will be True if `make_tuple' is
 			-- not redefined.)
 		once
 			Result := True	-- Redefine if they are not used.
 		end
 
-	open_tuple (t: ANY) is
+	open_tuple (t: ANY)
 			-- Perform any initialization of `t' needed before setting
 			-- its fields.
 		require
@@ -266,13 +266,13 @@ feature {NONE} -- Hook methods
 		do
 		end
 
-	do_last_error_check (t: ANY) is
+	do_last_error_check (t: ANY)
 			-- Perform final check for errors before closing the current
 			-- tuple.
 		do
 		end
 
-	close_tuple (t: ANY) is
+	close_tuple (t: ANY)
 			-- Perform any close/clean-up of `t' needed after setting
 			-- its fields.
 		require
@@ -280,7 +280,7 @@ feature {NONE} -- Hook methods
 		do
 		end
 
-	add_tuple (t: ANY) is
+	add_tuple (t: ANY)
 			-- Add tuple to product - redefine if not needed.
 		require
 			tuple_ok: t /= Void and not discard_current_tuple
@@ -288,7 +288,7 @@ feature {NONE} -- Hook methods
 			product.extend (t)
 		end
 
-	discard_tuple (t: ANY) is
+	discard_tuple (t: ANY)
 			-- Take appropriate action to discard the current tuple in
 			-- response to an unrecoverable scanning error.
 		require
@@ -296,14 +296,14 @@ feature {NONE} -- Hook methods
 		do
 		end
 
-	handle_fatal_error is
+	handle_fatal_error
 			-- Clean up after fatal error.  Default implementation -
 			-- remove all elements of product.
 		do
 			product.wipe_out
 		end
 
-	handle_last_error is
+	handle_last_error
 			-- Do any processing needed to handle errors that occurred
 			-- while scanning the current tuple.
 		do
@@ -311,7 +311,7 @@ feature {NONE} -- Hook methods
 
 feature {NONE}
 
-	advance_to_next_field is
+	advance_to_next_field
 			-- Advance to the next field in the input.
 			-- Call `input.advance_to_next_field' by default.  Can be
 			-- overridden in a descendant if different behavior is needed.
@@ -327,7 +327,7 @@ feature {NONE}
 			end
 		end
 
-	advance_to_next_record is
+	advance_to_next_record
 			-- Advance to the next record in the input.
 			-- Call `input.advance_to_next_record' by default.  Can be
 			-- overridden in a descendant if different behavior is needed.
@@ -350,7 +350,7 @@ feature {NONE}
 			end
 		end
 
-	handle_error_for_current_tuple is
+	handle_error_for_current_tuple
 			-- Add the current error to `error_list' and set internal
 			-- error status variables.
 		do
@@ -378,7 +378,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation constants
 
-	Wrong_field_count_message (count, expected_count: INTEGER): STRING is
+	Wrong_field_count_message (count, expected_count: INTEGER): STRING
 			-- Error message for initial field count check - redefine if needed
 		do
 			Result := "Wrong number of fields in first record - expected " +

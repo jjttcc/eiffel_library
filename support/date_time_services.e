@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Utility services related to dates and times"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	date_from_number (value: INTEGER): DATE is
+	date_from_number (value: INTEGER): DATE
 			-- Date produced from `value', which must be in the form
 			-- yyyymmdd.  If `value' specifies an invalid date, the
 			-- result will be Void.
@@ -30,7 +30,7 @@ feature -- Access
 			end
 		end
 
-	date_from_y_m_d (y, m, d: INTEGER): DATE is
+	date_from_y_m_d (y, m, d: INTEGER): DATE
 			-- Date produced from `y', `m', `d' - year, month date
 			-- If any of `y', `m', or `d' are invalid, the
 			-- result will be Void.
@@ -46,7 +46,7 @@ feature -- Access
 			end
 		end
 
-	date_from_string (d, separator: STRING): DATE is
+	date_from_string (d, separator: STRING): DATE
 			-- Date from `d' in the form yyyyXmmXdd, where X is the
 			-- value of `separator' - for example, "/" when `d' is in
 			-- the format yyyy/mm/dd.  If the format of `d' is invalid,
@@ -54,23 +54,23 @@ feature -- Access
 		require
 			args_exist: d /= Void and separator /= Void
 		local
-			components: ARRAY [STRING]
+			components: LIST [STRING]
 		do
 			string_tool.set_target (d)
 			components := string_tool.tokens (separator)
 			if
-				components.count = 3 and components.item(1).is_integer and
-						components.item(2).is_integer and
-						components.item(3).is_integer
+				components.count = 3 and (components @ (1)).is_integer and
+						(components @ (2)).is_integer and
+						(components @ (3)).is_integer
 			then
-				create Result.make (components.item(1).to_integer,
-								components.item(2).to_integer, 
-								components.item(3).to_integer)
+				create Result.make ((components @ (1)).to_integer,
+								(components @ (2)).to_integer, 
+								(components @ (3)).to_integer)
 			end
 		end
 
 	date_from_formatted_string (d, field_separator: STRING; y_index,
-		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER): DATE is
+		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER): DATE
 			-- Date from the string `d' in the form [field1]X[field2]X[field3],
 			-- where X is the value of `field_separator' and `y_index`,
 			-- `m_index', and `d_index' specify which of "field1", "field2",
@@ -99,7 +99,7 @@ feature -- Access
 		end
 
 	date_from_month_abbrev_string (d, field_separator: STRING; y_index,
-		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER): DATE is
+		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER): DATE
 			-- Date from the string `d' (where the month field is a 3-letter
 			-- abbreviation - "Jan", etc.) in the form
 			-- [field1]X[field2]X[field3], where X is the value of
@@ -129,7 +129,7 @@ feature -- Access
 				m_index = d_index) implies Result = Void
 		end
 
-	time_from_string (t, separator: STRING): TIME is
+	time_from_string (t, separator: STRING): TIME
 			-- Time produced from `t', which must be in the form
 			-- hhXmm[Xss], where X denotes the character specified by
 			-- `separator' and [Xss] means that the seconds component is
@@ -165,7 +165,7 @@ feature -- Access
 			end
 		end
 
-	month_from_3_letter_abbreviation (m: STRING): INTEGER is
+	month_from_3_letter_abbreviation (m: STRING): INTEGER
 			-- Month as an integer from the 3-letter abbreviation specified
 			-- by `m'
 		require
@@ -178,7 +178,7 @@ feature -- Access
 			definition: Result = month_table @ m
 		end
 
-	day_of_week_from_3_letter_abbreviation (d: STRING): INTEGER is
+	day_of_week_from_3_letter_abbreviation (d: STRING): INTEGER
 			-- Weekday as an integer from the 3-letter abbreviation specified
 			-- by `d', where 1 is Sunday .. 7 is Saturday
 		require
@@ -191,7 +191,7 @@ feature -- Access
 			definition: Result = day_of_week_table @ d
 		end
 
-	adjusted_2_digit_year (year, two_digit_year_partition: INTEGER): INTEGER is
+	adjusted_2_digit_year (year, two_digit_year_partition: INTEGER): INTEGER
 			-- Year value adjusted for 2-digit years according to
 			-- `two_digit_year_partition'
 		require
@@ -213,8 +213,8 @@ feature -- Access
 				year <= two_digit_year_partition implies Result >= 2000
 		end
 
-	year_month_day (date_components: ARRAY [STRING]; y_index, m_index,
-		d_index: INTEGER; three_letter_month: BOOLEAN): ARRAY [INTEGER] is
+	year_month_day (date_components: LIST [STRING]; y_index, m_index,
+		d_index: INTEGER; three_letter_month: BOOLEAN): ARRAY [INTEGER]
 			-- `date_components' as a 3-element array, where:
 			-- Result @ 1 is the year
 			-- Result @ 2 is the month
@@ -260,23 +260,23 @@ feature -- Access
 				Result.upper = 3
 		end
 
-	current_date: DATE is
+	current_date: DATE
 		do
 			create Result.make_now
 		end
 
-	current_time: TIME is
+	current_time: TIME
 		do
 			create Result.make_now
 		end
 
-	date_as_yyyymmdd (date: DATE): STRING is
+	date_as_yyyymmdd (date: DATE): STRING
 			-- `date' formatted as yyyymmdd
 		do
 			Result := formatted_date (date, 'y', 'm', 'd', "")
 		end
 
-	formatted_date (date: DATE; f1, f2, f3: CHARACTER; fs: STRING): STRING is
+	formatted_date (date: DATE; f1, f2, f3: CHARACTER; fs: STRING): STRING
 			-- Formatted `date', with year, month, and day in the order
 			-- specified by `f1', `f2', and `f3', separated by `fs'.  If
 			-- `fs' is empty, no field separator is used.
@@ -324,7 +324,7 @@ feature -- Access
 			Result.append (fmtr.formatted (i3))
 		end
 
-	formatted_time (time: TIME; f1, f2, f3: CHARACTER; fs: STRING): STRING is
+	formatted_time (time: TIME; f1, f2, f3: CHARACTER; fs: STRING): STRING
 			-- Formatted `time', with hour, minute, and second in the order
 			-- specified by `f1', `f2', and `f3', separated by `fs'.  If
 			-- `fs' is empty, no field separator is used.
@@ -372,7 +372,7 @@ feature -- Access
 			Result.append (fmtr.formatted (i3))
 		end
 
-	month_table: HASH_TABLE [INTEGER, STRING] is
+	month_table: HASH_TABLE [INTEGER, STRING]
 			-- Table of 3-letter month abbreviations mapped to the
 			-- respective integer value for the month
 		local
@@ -388,7 +388,7 @@ feature -- Access
 			end
 		end
 
-	day_of_week_table: HASH_TABLE [INTEGER, STRING] is
+	day_of_week_table: HASH_TABLE [INTEGER, STRING]
 			-- Table of 3-letter day-of-week abbreviations mapped to the
 			-- respective integer value for the days of the week
 		local
@@ -408,7 +408,7 @@ feature -- Access
 			end
 		end
 
-	date_time_duration_in_minutes (d: DATE_TIME_DURATION): INTEGER is
+	date_time_duration_in_minutes (d: DATE_TIME_DURATION): INTEGER
 			-- Total number of minutes in `d', ignoring `d.month' and
 			-- `d.year', and `d.second'
 		require
@@ -420,7 +420,7 @@ feature -- Access
 			end
 		end
 
-	time_duration_in_minutes (d: TIME_DURATION): INTEGER is
+	time_duration_in_minutes (d: TIME_DURATION): INTEGER
 			-- Total number of minutes in `d', ignoring `d.second'
 		require
 			d_exists: d /= Void
@@ -430,19 +430,19 @@ feature -- Access
 
 feature -- Status report
 
-	hour_valid (h: INTEGER): BOOLEAN is
+	hour_valid (h: INTEGER): BOOLEAN
 			-- Is `h' a valid hour?
 		do
 			Result := h >= 0 and h < work_time.hours_in_day
 		end
 
-	minute_valid (m: INTEGER): BOOLEAN is
+	minute_valid (m: INTEGER): BOOLEAN
 			-- Is `m' a valid minute?
 		do
 			Result := m >= 0 and m < work_time.minutes_in_hour
 		end
 
-	second_valid (s: INTEGER): BOOLEAN is
+	second_valid (s: INTEGER): BOOLEAN
 			-- Is `s' a valid second?
 		do
 			Result := s >= 0 and s < work_time.seconds_in_minute
@@ -450,19 +450,19 @@ feature -- Status report
 
 feature  {NONE} -- Implementation
 
-	work_time: TIME is
+	work_time: TIME
 		once
 			create Result.make (0, 0, 0)
 		end
 
-	string_tool: STRING_UTILITIES is
+	string_tool: STRING_UTILITIES
 		once
 			create Result.make
 		end
 
 	date_from_string_implementation (d, field_separator: STRING; y_index,
 		m_index, d_index: INTEGER; two_digit_year_partition: INTEGER;
-		three_letter_month: BOOLEAN): DATE is
+		three_letter_month: BOOLEAN): DATE
 			-- Implementation of `date_from_2_digit_year_string' and
 			-- `date_from_month_abbrev_string'
 		require
@@ -470,7 +470,7 @@ feature  {NONE} -- Implementation
 			partition_valid: two_digit_year_partition = -1 or
 				two_digit_year_partition > 0
 		local
-			components: ARRAY [STRING]
+			components: LIST [STRING]
 			su: expanded STRING_UTILITIES
 			date: ARRAY [INTEGER]
 		do

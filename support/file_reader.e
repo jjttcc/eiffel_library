@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Facilities for reading and tokenizing a text file"
 	author: "Eirik Mangseth"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature
 
-	make (file_name: STRING) is
+	make (file_name: STRING)
 		require
 			file_name /= Void
 		do
@@ -31,7 +31,7 @@ feature -- Access
 	item: STRING
 			-- Current field
 
-	contents: STRING is
+	contents: STRING
 			-- Contents of the entire file
 		do
 			error := False
@@ -77,7 +77,7 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	forth is
+	forth
 			-- Move to next field; if no next field,
 			-- ensure that exhausted will be True.
 		do
@@ -94,7 +94,7 @@ feature -- Cursor movement
 
 feature -- Basic operations
 
-	tokenize (separator: STRING) is
+	tokenize (separator: STRING)
 			-- Tokenize the file contents based on `separator'.
 		do
 			if contents /= Void then

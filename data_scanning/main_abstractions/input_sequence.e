@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"A read-only sequence of CHARACTERs";
@@ -12,32 +12,32 @@ deferred class INPUT_SEQUENCE inherit
 
 feature -- Access
 
-	last_character: CHARACTER is
+	last_character: CHARACTER
 			-- Last character read by `read_character'
 		deferred
 		end
 
-	last_integer: INTEGER is
+	last_integer: INTEGER
 			-- Last integer read by `read_integer'
 		deferred
 		end
 
-	last_real: REAL is
+	last_real: REAL
 			-- Last real read by `read_real'
 		deferred
 		end
 
-	last_double: DOUBLE is
+	last_double: DOUBLE
 			-- Last double read by `read_double'
 		deferred
 		end
 
-	last_string: STRING is
+	last_string: STRING
 			-- Last string read by `read_string'
 		deferred
 		end
 
-	last_date: DATE is
+	last_date: DATE
 			-- Last date read by `read_date'
 		deferred
 		end
@@ -45,7 +45,7 @@ feature -- Access
 	error_string: STRING
 			-- Description of last error
 
-	name: STRING is
+	name: STRING
 			-- Name of the sequence
 		deferred
 		end
@@ -57,14 +57,14 @@ feature -- Status report
 
 feature -- Status report
 
-	readable: BOOLEAN is
+	readable: BOOLEAN
 			-- Is there a current item that may be read?
 		deferred
 		end
 
 feature -- Input
 
-	read_real is
+	read_real
 			-- Read a new real.
 			-- Make result available in `last_real'.
 		require
@@ -72,7 +72,7 @@ feature -- Input
 		deferred
 		end
 
-	read_double is
+	read_double
 			-- Read a new double.
 			-- Make result available in `last_double'.
 		require
@@ -80,7 +80,7 @@ feature -- Input
 		deferred
 		end
 
-	read_character is
+	read_character
 			-- Read a new character.
 			-- Make result available in `last_character'.
 		require
@@ -88,7 +88,7 @@ feature -- Input
 		deferred
 		end
 
-	read_integer is
+	read_integer
 			-- Read a new integer.
 			-- Make result available in `last_integer'.
 		require
@@ -96,7 +96,7 @@ feature -- Input
 		deferred
 		end
 
-	read_string is
+	read_string
 			-- Read a new string.
 			-- Make result available in `last_string'.
 		require
@@ -104,7 +104,7 @@ feature -- Input
 		deferred
 		end
 
-	read_date is
+	read_date
 			-- Read a new date.
 			-- Make result available in `last_date'.
 		require

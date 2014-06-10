@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to a client request"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -22,7 +22,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_session (arg: like session) is
+	set_session (arg: like session)
 			-- Set session to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -34,7 +34,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 			-- Call `do_execute' with `arg' and then `do_post_processing'.
 		local
 			exception_occurred: BOOLEAN
@@ -64,7 +64,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	do_execute (arg: ANY) is
+	do_execute (arg: ANY)
 			-- Produce response from `arg'.
 		require
 			arg_not_void_if_mandatory: arg_mandatory implies arg /= Void
@@ -72,12 +72,12 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
-	prepare_for_execution (arg: ANY) is
+	prepare_for_execution (arg: ANY)
 			-- Perform any needed preparation before `do_execute' is called.
 		do
 		end
 
-	exception_cleanup, failure_cleanup (arg: ANY) is
+	exception_cleanup, failure_cleanup (arg: ANY)
 			-- Perform any needed cleanup after an exception or failer
 			-- has occurred.
 		do
@@ -86,12 +86,12 @@ feature {NONE} -- Hook routines
 			-- redefine them separately.
 		end
 
-	do_post_processing (arg: ANY) is
+	do_post_processing (arg: ANY)
 			-- Perform any needed processing after `do_execute' is called.
 		do
 		end
 
-	do_execute_precondition: BOOLEAN is
+	do_execute_precondition: BOOLEAN
 			-- Precondition for `do_execute'
 		once
 			Result := True
@@ -102,7 +102,7 @@ feature {NONE} -- Implementation
 	execution_retries: INTEGER
 			-- Number of times `execute' caught an exception and retried
 
-	Maximum_execution_tries: INTEGER is
+	Maximum_execution_tries: INTEGER
 			-- Maximum number of times for `execute' to retry before aborting
 		once
 			-- Redefine as needed.

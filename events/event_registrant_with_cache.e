@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An event registrant that keeps a record of past events received %
 		%and that keeps track of what types of events it is interested in"
@@ -17,7 +17,7 @@ deferred class EVENT_REGISTRANT_WITH_CACHE inherit
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create event_cache.make
 		ensure
@@ -26,7 +26,7 @@ feature {NONE} -- Initialization
 
 feature -- Status report
 
-	is_interested_in (e: EVENT): BOOLEAN is
+	is_interested_in (e: EVENT): BOOLEAN
 			-- Is this registrant interested in `e'?  (Yes)
 		once
 			Result := True
@@ -34,12 +34,12 @@ feature -- Status report
 
 feature -- Basic operations
 
-	notify (e: TYPED_EVENT) is
+	notify (e: TYPED_EVENT)
 		do
 			event_cache.extend (e)
 		end
 
-	end_notification is
+	end_notification
 		do
 			if not event_cache.is_empty then
 				perform_notify
@@ -49,7 +49,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	perform_notify is
+	perform_notify
 			-- Notify the registrant that event processing has completed
 			-- and `event_cache' holds the resulting new events.
 		require

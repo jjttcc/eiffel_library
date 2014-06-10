@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An event that has an explicit type"
 	author: "Jim Cochrane"
@@ -21,7 +21,7 @@ feature -- Access
 
 feature -- Comparison
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			Result := other.type = type and
 						other.time_stamp.is_equal (time_stamp)

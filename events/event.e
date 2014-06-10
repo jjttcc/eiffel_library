@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An event that occurs in the system that requires some action or set %
 		%of actions to be taken"
@@ -17,34 +17,34 @@ feature -- Access
 	name: STRING
 			-- Name of the event
 
-	description: STRING is
+	description: STRING
 			-- Description of the event
 		deferred
 		end
 
-	time_stamp: DATE_TIME is
+	time_stamp: DATE_TIME
 			-- Date and time that the event occurred
 		deferred
 		end
 
-	date: DATE is
+	date: DATE
 			-- Date to use for reporting
 		deferred
 		end
 
-	time: TIME is
+	time: TIME
 			-- Time to use for reporting
 		deferred
 		end
 
-	unique_id: STRING is
+	unique_id: STRING
 			-- String that uniquely identifies the current instance
 		deferred
 		end
 
 feature -- Comparison
 
-	infix "<" (other: EVENT): BOOLEAN is
+	infix "<" (other: EVENT): BOOLEAN
 		do
 			if date = Void or other.date = Void then
 				Result := date = Void and other.date /= Void

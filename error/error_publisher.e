@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Publisher of error reports"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ feature -- Access
 
 feature -- Status report
 
-	has_error_subscribers: BOOLEAN is
+	has_error_subscribers: BOOLEAN
 			-- Are there currently one or more error-subscribers?
 		do
 			Result := error_subscribers /= Void and then
@@ -29,7 +29,7 @@ feature -- Status report
 
 feature -- Element change
 
-	add_error_subscriber (s: ERROR_SUBSCRIBER) is
+	add_error_subscriber (s: ERROR_SUBSCRIBER)
 			-- Add error-subscriber `s'.
 		require
 			s_exists: s /= Void
@@ -42,7 +42,7 @@ feature -- Element change
 			s_added: error_subscribers.has (s)
 		end
 
-	remove_error_subscriber (s: ERROR_SUBSCRIBER) is
+	remove_error_subscriber (s: ERROR_SUBSCRIBER)
 			-- Remove subscriber `s' (reference comparison).
 		require
 			s_exists: s /= Void
@@ -56,7 +56,7 @@ feature -- Element change
 
 feature {NONE} -- Basic operations
 
-	publish_error (s: STRING) is
+	publish_error (s: STRING)
 			-- Publish error message `s'.
 		do
 			if non_empty_string (s) and has_error_subscribers then
@@ -67,7 +67,7 @@ feature {NONE} -- Basic operations
 
 feature {NONE} -- Implementation
 
-	notify_of_current_error (subs: ERROR_SUBSCRIBER; msg: STRING) is
+	notify_of_current_error (subs: ERROR_SUBSCRIBER; msg: STRING)
 		do
 			subs.notify (msg)
 		end

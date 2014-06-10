@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An event registrant that keeps a record of past events received %
 		%and that keeps track of what types of events it is interested in"
@@ -14,7 +14,7 @@ deferred class EVENT_REGISTRANT_WITH_HISTORY inherit
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create {LINKED_SET [EVENT_TYPE]} event_types.make
 			create event_history.make (0)
@@ -30,7 +30,7 @@ feature -- Access
 
 feature -- Status report
 
-	is_interested_in (e: TYPED_EVENT): BOOLEAN is
+	is_interested_in (e: TYPED_EVENT): BOOLEAN
 			-- Is this registrant interested in `e'?
 		do
 			Result := event_types.has (e.type) and then
@@ -39,7 +39,7 @@ feature -- Status report
 
 feature -- Element change
 
-	add_event_type (arg: EVENT_TYPE) is
+	add_event_type (arg: EVENT_TYPE)
 			-- Add `arg' to `event_types'.
 		require
 			arg_not_void: arg /= Void
@@ -49,7 +49,7 @@ feature -- Element change
 			event_type_added: event_types.has (arg)
 		end
 
-	remove_event_type (arg: EVENT_TYPE) is
+	remove_event_type (arg: EVENT_TYPE)
 			-- Remove `arg' from `event_types'.
 		require
 			arg_not_void: arg /= Void
@@ -61,12 +61,12 @@ feature -- Element change
 
 feature -- Basic operations
 
-	notify (e: TYPED_EVENT) is
+	notify (e: TYPED_EVENT)
 		do
 			event_history.extend (e, e.unique_id)
 		end
 
-	load_history is
+	load_history
 			-- Load the `event_history' from persistent store.
 		deferred
 		ensure

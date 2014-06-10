@@ -1,8 +1,8 @@
-indexing
+note
 	description:
 		"RESULT_COMMANDs that extract the current index from an %
 		%INDEXED object"
-	note: "indexable must be attached to a non-void object before execute %
+	note1: "indexable must be attached to a non-void object before execute %
 		%is called."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -30,7 +30,7 @@ creation
 
 feature -- Initialization
 
-	make (i: INDEXED) is
+	make (i: INDEXED)
 		do
 			indexable := i
 		ensure
@@ -38,7 +38,7 @@ feature -- Initialization
 			not_initialized: not initialized
 		end
 
-	set_indexable (arg: INDEXED) is
+	set_indexable (arg: INDEXED)
 			-- Set `indexable' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -48,7 +48,7 @@ feature -- Initialization
 			indexable_set: indexable = arg and indexable /= Void
 		end
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		local
 			cmd: COMMAND
 		do
@@ -69,7 +69,7 @@ feature -- Access
 
 	indexable: INDEXED
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		local
 			cmd: COMMAND
 		do
@@ -82,14 +82,14 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := False
 		end
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			-- @@ Check if indexable.execute should be called here - Since
 			-- the indexable's index is being used instead of its value,
@@ -108,45 +108,45 @@ feature {NONE} -- Hook routine implementation
 -- routine definitions are needed to prevent infinite "recursive" calls
 -- in 'suppliers', 'descendants', ...
 
-	descendants_locked: BOOLEAN is
+	descendants_locked: BOOLEAN
 		do
 			Result := state_at (Descendants_locked_index)
 		end
 
-	lock_descendants is
+	lock_descendants
 		do
 			put_state (True, Descendants_locked_index)
 		end
 
-	unlock_descendants is
+	unlock_descendants
 		do
 			put_state (False, Descendants_locked_index)
 		end
 
-	suppliers_locked: BOOLEAN is
+	suppliers_locked: BOOLEAN
 		do
 			Result := state_at (Suppliers_locked_index)
 		end
 
-	lock_suppliers is
+	lock_suppliers
 		do
 			put_state (True, Suppliers_locked_index)
 		end
 
-	unlock_suppliers is
+	unlock_suppliers
 		do
 			put_state (False, Suppliers_locked_index)
 		end
 
 feature {NONE} -- Implementation
 
-	initialized: BOOLEAN is
+	initialized: BOOLEAN
 			-- Implementation state to prevent infinite initialization cycle
 		do
 			Result := state_at (Initialized_state_index)
 		end
 
-	set_initialized (arg: BOOLEAN) is
+	set_initialized (arg: BOOLEAN)
 			-- Set `initialized' according to `arg'.
 		do
 			put_state (arg, Initialized_state_index)
@@ -159,17 +159,17 @@ feature {NONE} -- Implementation - constants
 -- to prevent the "persistent-object-incompatibility" problem when a
 -- constant is added or removed.
 
-	Initialized_state_index: INTEGER is
+	Initialized_state_index: INTEGER
 		do
 			Result := 1
 		end
 
-	Descendants_locked_index: INTEGER is
+	Descendants_locked_index: INTEGER
 		do
 			Result := 2
 		end
 
-	Suppliers_locked_index: INTEGER is
+	Suppliers_locked_index: INTEGER
 		do
 			Result := 3
 		end

@@ -1,11 +1,11 @@
-indexing
+note
 	description: "Text files/record-sequences used only for input"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
-	note: "This version reads one line/record at a time and 'split's it into %
+	note1: "This version reads one line/record at a time and 'split's it into %
 		%its component fields."
 
 --!!!!Note: This file should be used exclusively for file-based input for the
@@ -32,7 +32,9 @@ class INPUT_FILE inherit
 		rename
 			handle as descriptor, handle_available as descriptor_available
 		undefine
-			implementation_start
+			implementation_start,
+			read_line_thread_aware,		-- !!!check!!!
+			read_stream_thread_aware	-- !!!check!!!
 		select
 			start
 		end
@@ -50,7 +52,7 @@ creation
 
 feature -- Initialization
 
-	make (fn: STRING) is
+	make (fn: STRING)
 		do
 			Precursor (fn)
 			field_separator := "%T"
@@ -58,7 +60,7 @@ feature -- Initialization
 			default_field_sep: field_separator.is_equal ("%T")
 		end
 
-	make_create_read_write (fn: STRING) is
+	make_create_read_write (fn: STRING)
 		do
 			Precursor (fn)
 			field_separator := "%T"
@@ -68,7 +70,7 @@ feature -- Initialization
 
 feature -- Status report
 
-	data_available: BOOLEAN is
+	data_available: BOOLEAN
 		do
 			Result := not off
 		ensure then
@@ -77,7 +79,7 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	position_cursor (p: INTEGER) is
+	position_cursor (p: INTEGER)
 			-- Move the file cursor to the absolute position `p' and
 			-- initialize `field_index' and `record_index' to 1.
 			-- (The first cursor position is 0.)
@@ -100,12 +102,12 @@ feature -- Cursor movement
 
 feature {NONE} -- Implementation
 
-	save_position is
+	save_position
 		do
 			saved_position := position
 		end
 
-	restore_position (offset: INTEGER) is
+	restore_position (offset: INTEGER)
 			-- Restore `position' to `saved_position' + offset
 		do
 			file_go (file_pointer, saved_position + offset)

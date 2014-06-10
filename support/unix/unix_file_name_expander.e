@@ -1,4 +1,4 @@
-indexing
+note
 	description: "File name expansion for UNIX systems"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class UNIX_FILE_NAME_EXPANDER inherit
 
 feature -- Basic operations
 
-	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF) is
+	execute (args: LINKED_LIST [STRING]; option_sign: CHARACTER_REF)
 		do
 			from
 				create {LINKED_LIST [STRING]} results.make
@@ -31,7 +31,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implemention
 
-	expanded_names (expr: STRING): LIST [STRING] is
+	expanded_names (expr: STRING): LIST [STRING]
 		local
 			process: EPX_EXEC_PROCESS
 			output: POSIX_FILE_DESCRIPTOR
@@ -64,7 +64,7 @@ feature {NONE} -- Implemention
 			end
 		end
 
-	contains_meta_characters (expr: STRING): BOOLEAN is
+	contains_meta_characters (expr: STRING): BOOLEAN
 			-- Does `expr' contain any shell metacharacters
 		local
 			i: INTEGER
@@ -83,17 +83,17 @@ feature {NONE} -- Implemention
 			end
 		end
 
-	Max_output_length: INTEGER is 5000000
+	Max_output_length: INTEGER = 5000000
 
-	Default_default_shell: STRING is "/bin/sh"
+	Default_default_shell: STRING = "/bin/sh"
 
-	Expansion_command (expr: STRING): ARRAY [STRING] is
+	Expansion_command (expr: STRING): ARRAY [STRING]
 		do
 			Result := <<"-c", "echo " + expr>>
 		ensure
 			arg_exists: Result /= Void
 		end
 
-	Shell_meta_characters: STRING is "[?*"
+	Shell_meta_characters: STRING = "[?*"
 
 end -- class UNIX_FILE_NAME_EXPANDER

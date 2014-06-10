@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Test of file locking";
 	author: "Jim Cochrane"
 	date: "$Date$"
@@ -23,7 +23,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		local
 			file: FILE
 			lock: FILE_LOCK
@@ -59,12 +59,12 @@ feature -- Initialization
 			print_list (<<"Unlocked at ", time.out, ".%N">>)
 		end
 
-	the_lock (fname: STRING): FILE_LOCK is
+	the_lock (fname: STRING): FILE_LOCK
 		do
 			create {BASIC_FILE_LOCK} Result.make (fname)
 		end
 
-	sleep (seconds: INTEGER) is
+	sleep (seconds: INTEGER)
 		do
 			system (concatenation (<<"sleep ", seconds.out>>))
 		end

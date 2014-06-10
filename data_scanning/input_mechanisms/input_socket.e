@@ -1,7 +1,7 @@
-indexing
+note
 	description: "Network stream sockets used only for input"
 	author: "Jim Cochrane"
-	note: "The expected protocol from the server socket from which %
+	note1: "The expected protocol from the server socket from which %
 		%INPUT_SOCKETs get their input is that the end of the data stream %
 		%is indicated by an empty line - that is, two newlines in a row. %
 		%To use a different protocol, a descendant class that implements %
@@ -39,7 +39,7 @@ creation
 
 feature -- Initialization
 
-	make_client_by_port (port_num: INTEGER; host: STRING) is
+	make_client_by_port (port_num: INTEGER; host: STRING)
 			-- Create the socket with `port_num', `host', and `connection'.
 		do
 			Precursor (port_num, host)
@@ -49,14 +49,14 @@ feature -- Initialization
 
 feature -- Status report
 
-	data_available: BOOLEAN is
+	data_available: BOOLEAN
 		do
 			Result := is_open_read and readable
 		end
 
 feature -- Input
 
-	read_line, readline is
+	read_line, readline
 local
 sdb: SOCKET_DEBUGGER
 		do
@@ -78,7 +78,7 @@ create sdb.make_with_socket (Current)
 
 feature {NONE} -- Hook routine implementations
 
-	split_current_record_on_start: BOOLEAN is
+	split_current_record_on_start: BOOLEAN
 		do
 			Result := current_record = Void
 		end

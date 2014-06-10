@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"An input sequence that includes the concept of records and fields"
@@ -14,36 +14,36 @@ deferred class INPUT_RECORD_SEQUENCE inherit
 
 feature -- Access
 
-	field_index: INTEGER is
+	field_index: INTEGER
 			-- Index of the current field - starts at 1.
 		deferred
 		end
 
-	record_index: INTEGER is
+	record_index: INTEGER
 			-- Index of the current record - starts at 1.
 		deferred
 		end
 
-	field_count: INTEGER is
+	field_count: INTEGER
 			-- Number of fields per record
 		deferred
 		end
 
 feature -- Status report
 
-	after_last_record: BOOLEAN is
+	after_last_record: BOOLEAN
 			-- Is the cursor after the last record?
 		deferred
 		end
 
-	last_error_fatal: BOOLEAN is
+	last_error_fatal: BOOLEAN
 			-- Was the last error unrecoverable?
 		deferred
 		end
 
 feature -- Cursor movement
 
-	start is
+	start
 			-- Place cursor on the first record.
 		deferred
 		ensure
@@ -51,7 +51,7 @@ feature -- Cursor movement
 				(field_index = 1 and record_index = 1)
 		end
 
-	advance_to_next_record is
+	advance_to_next_record
 			-- Advance the cursor to the next record.
 		require
 			not_after: not after_last_record
@@ -61,7 +61,7 @@ feature -- Cursor movement
 				(record_index = old record_index + 1)
 		end
 
-	advance_to_next_field is
+	advance_to_next_field
 			-- Advance the cursor to the next field.
 		require
 			not_after: not after_last_record
@@ -72,7 +72,7 @@ feature -- Cursor movement
 				(field_index = old field_index + 1)
 		end
 
-	discard_current_record is
+	discard_current_record
 			-- Discard the current record - place cursor on the next
 			-- record.
 		require

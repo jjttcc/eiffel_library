@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to a client log-in request"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ feature -- Status report
 
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING) is
+	do_execute (msg: STRING)
 			-- Create a new session and add it to `sessions', process `msg',
 			-- and send a unique session ID to the requesting client.
 			-- If a protocol error is encountered in `msg', an error
@@ -54,7 +54,7 @@ feature {NONE} -- Basic operations
 				session /= Void and sessions.has_item (session)
 		end
 
-	add_session (session_id: INTEGER) is
+	add_session (session_id: INTEGER)
 			-- Add `session' to `sessions'.
 		require
 			session_exists: session /= Void
@@ -69,7 +69,7 @@ feature {NONE} -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	pre_process_session is
+	pre_process_session
 			-- Perform any needed processing before adding `session'
 			-- to `sessions'.
 		require
@@ -78,7 +78,7 @@ feature {NONE} -- Hook routines
 			-- Null routine - redefine if needed.
 		end
 
-	post_process_session is
+	post_process_session
 			-- Perform any needed processing after adding `session'
 			-- to `sessions'.
 		require
@@ -87,14 +87,14 @@ feature {NONE} -- Hook routines
 			-- Null routine - redefine if needed.
 		end
 
-	process (message: STRING) is
+	process (message: STRING)
 			-- Process `message' received from the client.
 		require
 			message_exists: message /= Void and not message.is_empty
 		deferred
 		end
 
-	put_session_state is
+	put_session_state
 			-- Send any needed "session state" information (formatted according
 			-- to the client/server communication protocol) to the client.
 		require
@@ -103,12 +103,12 @@ feature {NONE} -- Hook routines
 			-- Null routine - redefine if needed.
 		end
 
-	sessions: HASH_TABLE [SESSION, INTEGER] is
+	sessions: HASH_TABLE [SESSION, INTEGER]
 			-- Registered client sessions
 		deferred
 		end
 
-	create_session is
+	create_session
 			-- Create `session'.
 		deferred
 		ensure
@@ -117,7 +117,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	new_key: INTEGER is
+	new_key: INTEGER
 			-- A new key not currently used in `sessions'
 		local
 			keys: ARRAY [INTEGER]

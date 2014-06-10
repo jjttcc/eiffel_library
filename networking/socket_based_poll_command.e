@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "POLL_COMMANDs whose `active_medium' is a %
 		%NETWORK_STREAM_SOCKET - server socket - and that delegates accepting %
@@ -26,7 +26,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (s: like acceptor) is
+	make (s: like acceptor)
 		do
 			acceptor := s
 			pc_make (acceptor.server_socket)
@@ -44,7 +44,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			acceptor.process_socket
 		end

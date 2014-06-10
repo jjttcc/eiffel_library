@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"An input sequence that supports bilinear iteration";

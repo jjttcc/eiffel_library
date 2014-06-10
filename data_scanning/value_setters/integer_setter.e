@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Value setter with read_value procedure defined to read the next %
 		%integer value from the input"
@@ -14,7 +14,7 @@ deferred class INTEGER_SETTER inherit
 
 feature {NONE}
 
-	read_value (stream: INPUT_SEQUENCE) is
+	read_value (stream: INPUT_SEQUENCE)
 		do
 			stream.read_integer
 		end

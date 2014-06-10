@@ -1,8 +1,8 @@
-indexing
+note
 	description: "Interface for a %"non-persistent%" connection"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "It is expected that, before `execute' is called, the first %
+	note1: "It is expected that, before `execute' is called, the first %
 		%character of the input of io_medium has been read."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
@@ -24,14 +24,14 @@ feature -- Access
 
 	io_medium: SOCKET
 
-	sessions: HASH_TABLE [SESSION, INTEGER] is
+	sessions: HASH_TABLE [SESSION, INTEGER]
 			-- Registered GUI Client sessions
 		deferred
 		end
 
 feature -- Element change
 
-	set_io_medium (arg: like io_medium) is
+	set_io_medium (arg: like io_medium)
 			-- Set io_medium to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -44,72 +44,72 @@ feature -- Element change
 
 feature {NONE} -- Hook routines
 
-	post_process_io_medium is
+	post_process_io_medium
 			-- Perform any postprocessing needed after setting `io_medium'.
 		deferred
 		end
 
-	end_of_message (c: CHARACTER): BOOLEAN is
+	end_of_message (c: CHARACTER): BOOLEAN
 			-- Does `c' designate the end of a message?
 		deferred
 		end
 
-	message_field_separator: STRING is
+	message_field_separator: STRING
 			-- Field separator used to parse `message_body'
 		deferred
 		end
 
-	message_record_separator: STRING is
+	message_record_separator: STRING
 			-- Record separator used to parse `message_body'
 		deferred
 		end
 
-	logout_request: INTEGER is
+	logout_request: INTEGER
 			-- Code for a logout request
 		deferred
 		end
 
-	login_request: INTEGER is
+	login_request: INTEGER
 			-- Code for a login request
 		deferred
 		end
 
-	error: INTEGER is
+	error: INTEGER
 			-- Code indicating an error occurred while processing the
 			-- last client request
 		deferred
 		end
 
-	log_error (msg: STRING) is
+	log_error (msg: STRING)
 			-- Log `msg' as an error.
 		deferred
 		end
 
 feature {NONE} -- Hook routines implementations
 
-	setup_command (cmd: IO_BASED_CLIENT_REQUEST_COMMAND) is
+	setup_command (cmd: IO_BASED_CLIENT_REQUEST_COMMAND)
 		do
 			cmd.set_output_medium (io_medium)
 		end
 
-	request_error: BOOLEAN is
+	request_error: BOOLEAN
 		do
 			Result := request_id.is_equal (Error)
 		end
 
-	session: SESSION is
+	session: SESSION
 		do
 			if sessions.has (session_key) then
 				Result := sessions @ session_key
 			end
 		end
 
-	cleanup_session is
+	cleanup_session
 		do
 			sessions.remove (session_key)
 		end
 
-	process_request is
+	process_request
 			-- Input the next client request, blocking if necessary, and split
 			-- the received message into `request_id', `session_key',
 			-- and `message_body'.
@@ -163,7 +163,7 @@ feature {NONE} -- Hook routines implementations
 			end
 		end
 
-	set_request_id_session_key (s: STRING; n, i: INTEGER) is
+	set_request_id_session_key (s: STRING; n, i: INTEGER)
 			-- Set `request_id' and `session_key'.
 		local
 			j: INTEGER
@@ -204,25 +204,25 @@ feature {NONE} -- Hook routines implementations
 			end
 		end
 
-	is_logout_request (id: like request_id): BOOLEAN is
+	is_logout_request (id: like request_id): BOOLEAN
 		do
 			Result := id.is_equal (Logout_request)
 		end
 
-	is_login_request (id: like request_id): BOOLEAN is
+	is_login_request (id: like request_id): BOOLEAN
 		do
 			Result := id.is_equal (Login_request)
 		end
 
 feature {NONE} -- Implementation
 
-	set_message_body (s: STRING; index: INTEGER) is
+	set_message_body (s: STRING; index: INTEGER)
 			-- Set `message_body' from string extracted from `s' @ `index'.
 		do
 			message_body := s.substring (index, s.count)
 		end
 
-	report_error (log_msg, client_msg, client_suffix: STRING) is
+	report_error (log_msg, client_msg, client_suffix: STRING)
 			-- Log `log_msg' as an error and report `client_msg' (or, if
 			-- it is Void, `default_client_error_msg'), and `client_suffix',
 			-- if it's not Void, to the client.
@@ -258,9 +258,9 @@ feature {NONE} -- Attributes
 
 feature {NONE} -- Constants
 
-	maximum_client_message_size: INTEGER is 100000
+	maximum_client_message_size: INTEGER = 100000
 
-	default_client_error_msg: STRING is
+	default_client_error_msg: STRING
 		once
 			Result := "Invalid request"
 		end

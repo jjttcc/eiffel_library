@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands that execute a sequence of sub-commands"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,14 +19,14 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create {LINKED_LIST [COMMAND]} children.make
 		end
 
 feature -- Initialization
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		do
 			children.do_all (agent {COMMAND}.initialize (arg))
 		end
@@ -41,14 +41,14 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := children.there_exists (agent {COMMAND}.arg_mandatory)
 		end
 
 feature -- Element change
 
-	add_child (c: COMMAND) is
+	add_child (c: COMMAND)
 			-- Add `c' to `children'.
 		require
 			c_exists: c /= Void
@@ -59,7 +59,7 @@ feature -- Element change
 				old children.count + 1
 		end
 
-	set_main_operator (arg: COMMAND) is
+	set_main_operator (arg: COMMAND)
 			-- Set `main_operator' to `arg'.  Note: `execute' will only
 			-- execute `main_operator' if it is in `children'.
 		require
@@ -72,7 +72,7 @@ feature -- Element change
 
 feature -- Removal
 
-	wipe_out_children is
+	wipe_out_children
 			-- Remove all children.
 		do
 			children.wipe_out
@@ -82,7 +82,7 @@ feature -- Removal
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			children.do_all (agent {COMMAND}.execute (arg))
 		end

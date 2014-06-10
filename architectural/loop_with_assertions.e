@@ -1,4 +1,4 @@
-indexing
+note
 	description: "LOOP_COMMANDs that that include a loop invariant and %
 		%loop variant"
 	author: "Jim Cochrane"
@@ -25,7 +25,7 @@ creation
 
 feature -- Initialization
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		do
 			Precursor (arg)
 			if loop_invariant /= Void then
@@ -44,7 +44,7 @@ feature -- Access
 	loop_variant: RESULT_COMMAND [REAL]
 			-- The loop variant - ceiling is used to obtain an integer
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		do
 			Result := Precursor
 			if loop_invariant /= Void then
@@ -57,7 +57,7 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := Precursor or (loop_invariant /= Void and then
 				loop_invariant.arg_mandatory) or
@@ -66,7 +66,7 @@ feature -- Status report
 
 feature -- Element change
 
-	set_loop_invariant (arg: RESULT_COMMAND [BOOLEAN]) is
+	set_loop_invariant (arg: RESULT_COMMAND [BOOLEAN])
 			-- Set `loop_invariant' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -76,7 +76,7 @@ feature -- Element change
 			loop_invariant_set: loop_invariant = arg and loop_invariant /= Void
 		end
 
-	set_loop_variant (arg: RESULT_COMMAND [REAL]) is
+	set_loop_variant (arg: RESULT_COMMAND [REAL])
 			-- Set `loop_variant' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -88,7 +88,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			from
 				initialization.execute (arg)
@@ -106,7 +106,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	check_invariant (arg: ANY) is
+	check_invariant (arg: ANY)
 		do
 			loop_invariant.execute (arg)
 			if not loop_invariant.value then
@@ -116,7 +116,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	check_variant (arg: ANY) is
+	check_variant (arg: ANY)
 		local
 			i: INTEGER
 		do
@@ -130,7 +130,7 @@ feature {NONE} -- Implementation
 			last_variant_value := i
 		end
 
-	initialize_variant (arg: ANY) is
+	initialize_variant (arg: ANY)
 		do
 			loop_variant.execute (arg)
 			last_variant_value := loop_variant.value.ceiling

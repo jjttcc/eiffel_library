@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A unary operator that produces the absolute value of its operand"
 	author: "Jim Cochrane"
@@ -20,7 +20,7 @@ creation
 
 feature {NONE} -- Basic operations
 
-	operate (v: REAL) is
+	operate (v: REAL)
 			-- Null action by default
 		do
 			value := v.abs

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Facilities for timing execution";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature
 
-	make is
+	make
 			-- Initialize and start the timer.
 		do
 			create start_time.make_now
@@ -27,13 +27,13 @@ feature -- Access
 	start_time: DATE_TIME
 			-- Time when `start' was called
 
-	current_time: DATE_TIME is
+	current_time: DATE_TIME
 			-- The current time
 		do
 			create Result.make_now
 		end
 
-	elapsed_time: DATE_TIME_DURATION is
+	elapsed_time: DATE_TIME_DURATION
 			-- Amount of time that has elapsed since `start' was called.
 		do
 			Result := current_time.duration - start_time.duration
@@ -44,7 +44,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	start is
+	start
 			-- Start the timer.
 		do
 			start_time.make_now

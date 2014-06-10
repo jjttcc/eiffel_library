@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Safe division operator - uses an epsilon value to prevent division %
 		%by 0 or by values very close to 0"
@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make (op1: like operand1; op2: like operand2) is
+	make (op1: like operand1; op2: like operand2)
 			-- Set the operands to the specified values.
 		require
 			not_void: op1 /= Void and op2 /= Void
@@ -73,7 +73,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_raise_exception_on_div_by_0 (arg: BOOLEAN) is
+	set_raise_exception_on_div_by_0 (arg: BOOLEAN)
 			-- Set raise_exception_on_div_by_0 to `arg'.
 		do
 			raise_exception_on_div_by_0 := arg
@@ -81,7 +81,7 @@ feature -- Status setting
 			raise_exception_on_div_by_0_set: raise_exception_on_div_by_0 = arg
 		end
 
-	set_epsilon (arg: REAL) is
+	set_epsilon (arg: REAL)
 			-- Set epsilon to `arg'.
 		do
 			epsilon := arg
@@ -89,7 +89,7 @@ feature -- Status setting
 			epsilon_set: epsilon = arg
 		end
 
-	set_div_by_0_result (arg: REAL) is
+	set_div_by_0_result (arg: REAL)
 			-- Set div_by_0_result to `arg'.
 		do
 			div_by_0_result := arg
@@ -99,7 +99,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 			-- If a divide-by-0 condition occurs and
 			-- raise_exception_on_div_by_0 is True, divide_by_0_occurred will
 			-- be True and an exception will be thrown.
@@ -128,7 +128,7 @@ feature -- Basic operations
 
 feature {NONE} -- Inapplicable
 
-	operate_unused (a1, a2: REAL) is do end
+	operate_unused (a1, a2: REAL) do end
 
 invariant
 

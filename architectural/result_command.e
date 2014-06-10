@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands with a result of generic type G";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ feature -- Access
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	status_contents: STRING is
+	status_contents: STRING
 		do
 			Result := "value: " + value.out
 		end

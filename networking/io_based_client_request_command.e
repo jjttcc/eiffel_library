@@ -1,4 +1,4 @@
-indexing
+note
 	description: "CLIENT_REQUEST_COMMANDs that use an IO_MEDIUM to respond %
 		%to the client request"
 	author: "Jim Cochrane"
@@ -19,7 +19,7 @@ deferred class IO_BASED_CLIENT_REQUEST_COMMAND inherit
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			create output_buffer.make (0)
 		end
@@ -31,7 +31,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_output_medium (arg: IO_MEDIUM) is
+	set_output_medium (arg: IO_MEDIUM)
 			-- Set output_medium to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -46,14 +46,14 @@ feature {NONE}
 	output_buffer: STRING
 			-- Buffer containing output to be sent to the client
 
-	output_buffer_used: BOOLEAN is
+	output_buffer_used: BOOLEAN
 			-- Is the `output_buffer' used?  Yes - redefine for
 			-- descendants that don't use it.
 		once
 			Result := True
 		end
 
-	put (s: STRING) is
+	put (s: STRING)
 			-- Append `s' to `output_buffer'.
 		require
 			buffer_not_void: output_buffer /= Void
@@ -63,7 +63,7 @@ feature {NONE}
 			new_count: output_buffer.count = old output_buffer.count + s.count
 		end
 
-	report_error (code: INTEGER; slist: ARRAY [ANY]) is
+	report_error (code: INTEGER; slist: ARRAY [ANY])
 			-- Report `slist' as an error message; include `code' ID at the
 			-- beginning and `eom' at the end.
 		do
@@ -72,7 +72,7 @@ feature {NONE}
 			put (eom)
 		end
 
-	put_ok is
+	put_ok
 			-- Append ok_string to `output_buffer'.
 		require
 			buffer_not_void: output_buffer /= Void
@@ -85,49 +85,49 @@ feature {NONE}
 
 feature {NONE} -- Hook routines
 
-	warning: INTEGER is
+	warning: INTEGER
 			-- Response code for sending a "warning" to the client
 		deferred
 		end
 
-	error: INTEGER is
+	error: INTEGER
 			-- Response code for sending error-status notification
 			-- to the client
 		deferred
 		end
 
-	eom: STRING is
+	eom: STRING
 			-- End of message indicator
 		deferred
 		end
 
-	ok_string: STRING is
+	ok_string: STRING
 			-- String indicating "OK" status to the client
 		deferred
 		end
 
 feature {NONE} -- Hook routine implementations
 
-	warn_client (slst: ARRAY [STRING]) is
+	warn_client (slst: ARRAY [STRING])
 		do
 			report_error (Warning, slst)
 			respond_to_client (slst)
 		end
 
-	prepare_for_execution (arg: ANY) is
+	prepare_for_execution (arg: ANY)
 		do
 			if output_buffer_used then
 				output_buffer.clear_all
 			end
 		end
 
-	exception_cleanup (arg: ANY) is
+	exception_cleanup (arg: ANY)
 		do
 			prepare_for_execution (arg)
 			warn_client (<<"Error occurred ", error_context (arg), ".">>)
 		end
 
-	respond_to_client (arg: ANY) is
+	respond_to_client (arg: ANY)
 			-- Send `output_buffer' to the `output_medium'.
 		do
 			if not output_buffer.is_empty then
@@ -137,7 +137,7 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	error_context (arg: ANY): STRING is
+	error_context (arg: ANY): STRING
 		do
 			Result := ""
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Debugging INPUT_SOCKET - reads all records up front"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -22,7 +22,7 @@ create
 feature
 
 --!!!!?:
-make_client_by_port (port_num: INTEGER; host: STRING) is
+make_client_by_port (port_num: INTEGER; host: STRING)
 	do
 		Precursor (port_num, host)
 record_separator := "%N"
@@ -39,14 +39,14 @@ feature -- Access
 			-- taken to ensure that no unwanted side effects occur as a
 			-- result of sharing this object.
 
-	record_index: INTEGER is
+	record_index: INTEGER
 		do
 			if all_records /= Void then
 				Result := all_records.index
 			end
 		end
 
-	field_count: INTEGER is
+	field_count: INTEGER
 		do
 			if all_records /= Void and not all_records.is_empty then
 				if all_records.off then
@@ -64,14 +64,14 @@ feature -- Access
 
 feature -- Status report
 
-	at_end_of_input: BOOLEAN is
+	at_end_of_input: BOOLEAN
 		do
 			Result := last_string = Void or else last_string.is_empty
 		end
 
 feature -- Cursor movement
 
-	advance_to_next_record, discard_current_record is
+	advance_to_next_record, discard_current_record
 		do
 			last_error_fatal := False
 			error_occurred := False
@@ -83,7 +83,7 @@ feature -- Cursor movement
 			end
 		end
 
-	start is
+	start
 		do
 --!!!! These 3 lines are probably wrong.  `pre_process_input' is called
 --explicitly by INPUT_SOCKET_CLIENT and it should not be called again:
@@ -100,7 +100,7 @@ feature -- Cursor movement
 
 feature {INPUT_SOCKET_CLIENT} -- Input
 
-	pre_process_input is
+	pre_process_input
 			-- Read all pending input from the server, pre-process and
 			-- buffer it (for use in the conventional 'read_...' calls), and
 			-- place the resulting buffered input into `last_input_string'.
@@ -132,7 +132,7 @@ feature {INPUT_SOCKET_CLIENT} -- Input
 
 feature {NONE} -- Implementation
 
-	pending_input: STRING is
+	pending_input: STRING
 			-- All input currently 'pending' from the server
 		do
 --!!!Note: reading one line at a time may not be the most efficient wat
@@ -152,7 +152,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	split_current_record is
+	split_current_record
 		do
 			current_record := all_records.item.split (field_separator @ 1)
 		ensure then
@@ -163,6 +163,6 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Hook routine implementations
 
-	split_current_record_on_start: BOOLEAN is False -- !!!!!Check this!!!
+	split_current_record_on_start: BOOLEAN = False -- !!!!!Check this!!!
 
 end

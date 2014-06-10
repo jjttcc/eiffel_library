@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Pairs of objects"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,7 +23,7 @@ creation
 
 feature -- Initialization
 
-	make (l: G; r: H) is
+	make (l: G; r: H)
 		do
 			first := l
 			second := r
@@ -39,19 +39,19 @@ feature -- Access
 	second: H
 			-- Second element of the pair
 
-	left: G is
+	left: G
 			-- Left element of the pair - synonym for `first'
 		do
 			Result := first
 		end
 
-	right: H is
+	right: H
 			-- Right element of the pair - synonym for `second'
 		do
 			Result := second
 		end
 
-	out: STRING is
+	out: STRING
 			-- Printable representation
 		local
 			f, s: STRING
@@ -71,7 +71,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_first, set_left (arg: G) is
+	set_first, set_left (arg: G)
 			-- Set `first' (`left') to `arg'.
 		do
 			first := arg
@@ -79,7 +79,7 @@ feature -- Element change
 			first_set: first = arg
 		end
 
-	set_second, set_right (arg: H) is
+	set_second, set_right (arg: H)
 			-- Set `second' (`right') to `arg'.
 		do
 			second := arg

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "HTTP_URLs with settable attributes"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,7 +23,7 @@ create
 
 feature -- Initialization
 
-	http_make (h, p: STRING) is
+	http_make (h, p: STRING)
 		require
 			args_valid: h /= Void and p /= Void
 		do
@@ -38,7 +38,7 @@ feature -- Initialization
 
 feature -- Element change
 
-	set_host (h: STRING) is
+	set_host (h: STRING)
 		require
 			h_valid: h /= Void and not h.is_empty
 		do
@@ -49,7 +49,7 @@ feature -- Element change
 			address_set: address.is_equal ("http://" + host + "/" + path)
 		end
 
-	set_path (p: STRING) is
+	set_path (p: STRING)
 		require
 			p_valid: p /= Void and not p.is_empty
 		do
@@ -62,7 +62,7 @@ feature -- Element change
 
 feature {NONE} -- Implementation
 
-	make_address is
+	make_address
 		do
 			address := "http://" + host + "/" + path
 		end

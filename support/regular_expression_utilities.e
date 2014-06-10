@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Regular-expression utility routines - depends on GOBO";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,7 +18,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	match (pattern, s: STRING): BOOLEAN is
+	match (pattern, s: STRING): BOOLEAN
 			-- Does `s' match the regular expression `pattern'?
 		require
 			args_exist: pattern /= Void and s /= Void
@@ -43,7 +43,7 @@ feature -- Basic operations
 				not last_regular_expression.is_compiled = last_compile_failed
 		end
 
-	sub (pattern, replacement, target: STRING): STRING is
+	sub (pattern, replacement, target: STRING): STRING
 			-- The result of replacing the first occurrence of
 			-- `pattern' in `target' by `replacement'.  `target' remains
 			-- unchanged.  If `pattern' is not found in `target' Result
@@ -62,7 +62,7 @@ feature -- Basic operations
 				not match (pattern, target) implies Result = target
 		end
 
-	gsub (pattern, replacement, target: STRING): STRING is
+	gsub (pattern, replacement, target: STRING): STRING
 			-- The result of replacing all occurrence of
 			-- `pattern' in `target' by `replacement'.  `target' remains
 			-- unchanged.  If `pattern' is not found in `target' Result
@@ -81,7 +81,7 @@ feature -- Basic operations
 				not match (pattern, target) implies Result = target
 		end
 
-	split (pattern, target: STRING): ARRAY [STRING] is
+	split (pattern, target: STRING): ARRAY [STRING]
 			-- Parts of `target' that do not match `pattern'
 		require
 			args_exist: pattern /= Void and target /= Void
@@ -96,7 +96,7 @@ feature -- Basic operations
 				Result.item (1).is_equal (target)
 		end
 
-	one_pattern_matches (patterns: LINEAR [STRING]; target: STRING): BOOLEAN is
+	one_pattern_matches (patterns: LINEAR [STRING]; target: STRING): BOOLEAN
 			-- Does `target' match at least one element of `patterns'?
 		require
 			args_exist: patterns /= Void and target /= Void
@@ -105,7 +105,7 @@ feature -- Basic operations
 				agent match (?, target))
 		end
 
-	all_patterns_match (patterns: LINEAR [STRING]; target: STRING): BOOLEAN is
+	all_patterns_match (patterns: LINEAR [STRING]; target: STRING): BOOLEAN
 			-- Does `target' match all elements of `patterns'?
 		require
 			args_exist: patterns /= Void and target /= Void

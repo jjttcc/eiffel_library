@@ -1,4 +1,4 @@
-indexing
+note
 	description: "File locking interface";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ deferred class FILE_LOCK
 
 feature {NONE} -- Initialization
 
-	make (fpath: STRING) is
+	make (fpath: STRING)
 			-- Create lock to be associated with file with path `fpath'.
 		require
 			path_not_void: fpath /= Void
@@ -25,7 +25,7 @@ feature -- Access
 	file_path: STRING
 			-- Path/filename of file to be locked
 
-	last_error: STRING is
+	last_error: STRING
 			-- Description of last error that occurred
 		deferred
 		end
@@ -40,7 +40,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	try_lock is
+	try_lock
 			-- Attempt to lock `file'.  `locked' will be True if
 			-- the attempt succeeds; otherwise it will be False.
 		require
@@ -48,7 +48,7 @@ feature -- Basic operations
 		deferred
 		end
 
-	lock is
+	lock
 			-- Lock the file, blocking if it is already locked.
 		require
 			not_locked: not locked
@@ -57,7 +57,7 @@ feature -- Basic operations
 			locked: locked
 		end
 
-	unlock is
+	unlock
 			-- Unlock the file.
 		require
 			locked: locked

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Suppliers for EVENT_CLIENTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ deferred class EVENT_SUPPLIER
 
 feature -- Basic operations
 
-	register_client (p: PROCEDURE [ANY, TUPLE [EVENT_SUPPLIER]]) is
+	register_client (p: PROCEDURE [ANY, TUPLE [EVENT_SUPPLIER]])
 			-- Register `p' as a client action to be called when
 			-- an event has occurred.
 		require
@@ -29,7 +29,7 @@ feature {NONE} -- Implementation
 
 	client_actions: LINKED_LIST [PROCEDURE [ANY, TUPLE [EVENT_SUPPLIER]]]
 
-	notify_clients is
+	notify_clients
 			-- Call all agents in `client_actions' with Current as an argument.
 		do
 			if client_actions /= Void then

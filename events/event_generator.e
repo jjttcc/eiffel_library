@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Objects that generate a list of events, based on specified %
 		%conditions"

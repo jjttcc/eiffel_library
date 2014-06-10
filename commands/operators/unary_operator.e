@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A RESULT_COMMAND that takes an operand (also of type RESULT_COMMAND) %
 		%and operates on its result.  G is the type of the 'value' feature %
@@ -18,7 +18,7 @@ class UNARY_OPERATOR [G, H] inherit
 
 feature -- Initialization
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		do
 			operand.initialize (arg)
 		end
@@ -27,7 +27,7 @@ feature -- Access
 
 	operand: RESULT_COMMAND [H]
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.extend (operand)
@@ -35,14 +35,14 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := operand.arg_mandatory
 		end
 
 feature -- Status setting
 
-	set_operand (arg: like operand) is
+	set_operand (arg: like operand)
 			-- Set operand to `arg'.
 		require
 			arg /= Void
@@ -54,7 +54,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			operand.execute (arg)
 			operate (operand.value)
@@ -62,7 +62,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	operate (v: H) is
+	operate (v: H)
 			-- Null action by default
 		require
 			not_void: v /= Void
