@@ -20,7 +20,7 @@ creation
 
 feature {NONE} -- Basic operations
 
-	operate (v: REAL)
+	operate (v: DOUBLE)
 			-- Null action by default
 		do
 			value := v.rounded

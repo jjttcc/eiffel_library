@@ -90,8 +90,6 @@ feature -- Access
 
 	last_double: DOUBLE
 
-	last_real: REAL
-
 	last_integer: INTEGER
 
 	last_date: DATE
@@ -210,7 +208,7 @@ feature -- Input
 			error_occurred := False
 			s := contents.item.item
 			if s.is_real then
-				last_real := s.to_real
+				last_double := s.to_real
 			else
 				make_error ("Invalid field value - real expected, %
 					%got: " + s + "%N", False)

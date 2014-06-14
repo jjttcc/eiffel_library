@@ -86,7 +86,7 @@ feature -- Access
 
 feature -- Element change
 
-	tail (c: CHARACTER)
+	keep_tail (c: CHARACTER)
 			-- Remove all characters of `target' up to the last occurrence
 			-- of `c'.
 		require
@@ -111,19 +111,21 @@ feature -- Element change
 				end
 			end
 			if last_index > 0 then
-				target.tail (target.count - last_index)
+-- !!!!check if this change is correct.
+				target.keep_tail (target.count - last_index)
 			end
 		ensure
 			no_c: not target.has (c)
 		end
 
-	head (c: CHARACTER)
+	keep_head (c: CHARACTER)
 			-- Remove all characters of `target' from `c' to the end.
 		require
 			target_not_void: target /= Void
 			has_c: target.has (c)
 		do
-			target.head (target.index_of (c, 1) - 1)
+-- !!!!check if this change is correct.
+			target.keep_head (target.index_of (c, 1) - 1)
 		ensure
 			no_c: not target.has (c)
 		end

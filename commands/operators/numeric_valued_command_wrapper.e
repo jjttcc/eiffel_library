@@ -1,9 +1,9 @@
 note
-	description: "Commands (which conform to RESULT_COMMAND [REAL])%
-		%with a REAL `value' that serve to wrap an `item' of type COMMAND %
+	description: "Commands (which conform to RESULT_COMMAND [DOUBLE])%
+		%with a DOUBLE `value' that serve to wrap an `item' of type COMMAND %
 		%(that is, a possibly non-numeric command).  After executing %
 		%`item', feature `value' is assigned as follows: If `item.value' %
-		%is REAL, `value' is set to its value; if `item.value' is BOOLEAN %
+		%is DOUBLE, `value' is set to its value; if `item.value' is BOOLEAN %
 		%and is True, `value' is set to 1; if `item.value' is BOOLEAN and %
 		%False, value is set to 0.  If `item' is a COMMAND_SEQUENCE whose %
 		%`main_operator' is not Void, the preceding steps are followed %
@@ -17,7 +17,7 @@ note
 
 class NUMERIC_VALUED_COMMAND_WRAPPER inherit
 
-	RESULT_COMMAND [REAL]
+	RESULT_COMMAND [DOUBLE]
 		redefine
 			initialize, children
 		end
@@ -87,7 +87,7 @@ feature {NONE} -- Implementation
 			-- Attempt, after `cmd' has been executed, to extract its
 			-- result into `value'.
 		local
-			real_cmd: RESULT_COMMAND [REAL]
+			real_cmd: RESULT_COMMAND [DOUBLE]
 			bool_cmd: RESULT_COMMAND [BOOLEAN]
 			cmd_seq: COMMAND_SEQUENCE
 		do

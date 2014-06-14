@@ -15,11 +15,12 @@ note
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class VALUE_SETTER inherit
+deferred class VALUE_SETTER [G] inherit
 
 	EXCEPTIONS
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	GENERAL_UTILITIES
@@ -29,7 +30,7 @@ deferred class VALUE_SETTER inherit
 
 feature -- Basic operations
 
-	set (stream: INPUT_SEQUENCE; tuple: ANY)
+	set (stream: INPUT_SEQUENCE; tuple: G)
 			-- Set the appropriate field of tuple using `stream' as input.
 			-- If `unrecoverable_error' occurs, no action is taken.
 		require
@@ -86,7 +87,7 @@ feature {NONE} -- Hook methods
 		deferred
 		end
 
-	do_set (stream: INPUT_SEQUENCE; tuple: ANY)
+	do_set (stream: INPUT_SEQUENCE; tuple: G)
 			-- Set appropriate field of `tuple' according
 			-- to the last value read in stream.
 		require

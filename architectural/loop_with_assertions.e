@@ -41,7 +41,7 @@ feature -- Access
 	loop_invariant: RESULT_COMMAND [BOOLEAN]
 			-- The loop invariant
 
-	loop_variant: RESULT_COMMAND [REAL]
+	loop_variant: RESULT_COMMAND [DOUBLE]
 			-- The loop variant - ceiling is used to obtain an integer
 
 	children: LIST [COMMAND]
@@ -76,7 +76,7 @@ feature -- Element change
 			loop_invariant_set: loop_invariant = arg and loop_invariant /= Void
 		end
 
-	set_loop_variant (arg: RESULT_COMMAND [REAL])
+	set_loop_variant (arg: RESULT_COMMAND [DOUBLE])
 			-- Set `loop_variant' to `arg'.
 		require
 			arg_not_void: arg /= Void

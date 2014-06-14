@@ -12,7 +12,7 @@ class SAFE_DIVISION
 
 inherit
 
-	BINARY_OPERATOR [REAL, REAL]
+	BINARY_OPERATOR [DOUBLE, DOUBLE]
 		rename
 			make as bo_make_unused, operate as operate_unused
 		export
@@ -57,12 +57,12 @@ feature -- Access
 			-- Will an exception be raised when a divide-by-0 operation is
 			-- detected?
 
-	epsilon: REAL
+	epsilon: DOUBLE
 			-- Value to use for divide-by-0 detection:
-			--    rabs (numerator - 0) < epsilon implies divide_by_0_occurred
+			--    dabs (numerator - 0) < epsilon implies divide_by_0_occurred
 			-- where numerator is the result of executing `operand2'
 
-	div_by_0_result: REAL
+	div_by_0_result: DOUBLE
 			-- Value to set the `value' feature to when a
 			-- divide-by-0 error occurs
 
@@ -81,7 +81,7 @@ feature -- Status setting
 			raise_exception_on_div_by_0_set: raise_exception_on_div_by_0 = arg
 		end
 
-	set_epsilon (arg: REAL)
+	set_epsilon (arg: DOUBLE)
 			-- Set epsilon to `arg'.
 		do
 			epsilon := arg
@@ -89,7 +89,7 @@ feature -- Status setting
 			epsilon_set: epsilon = arg
 		end
 
-	set_div_by_0_result (arg: REAL)
+	set_div_by_0_result (arg: DOUBLE)
 			-- Set div_by_0_result to `arg'.
 		do
 			div_by_0_result := arg
@@ -104,14 +104,14 @@ feature -- Basic operations
 			-- raise_exception_on_div_by_0 is True, divide_by_0_occurred will
 			-- be True and an exception will be thrown.
 		local
-			result1: REAL
+			result1: DOUBLE
 		do
 			-- Save result to avoid possible side effects from executing
 			-- operand2.
 			operand1.execute (arg)
 			result1 := operand1.value
 			operand2.execute (arg)
-			if rabs (operand2.value - 0) < epsilon then
+			if dabs (operand2.value - 0) < epsilon then
 				divide_by_0_occurred := True
 				value := div_by_0_result
 				if raise_exception_on_div_by_0 then
@@ -123,16 +123,16 @@ feature -- Basic operations
 			end
 		ensure then
 			div_by_0:
-				divide_by_0_occurred = (rabs (operand2.value - 0) < epsilon)
+				divide_by_0_occurred = (dabs (operand2.value - 0) < epsilon)
 		end
 
 feature {NONE} -- Inapplicable
 
-	operate_unused (a1, a2: REAL) do end
+	operate_unused (a1, a2: DOUBLE) do end
 
 invariant
 
 	dbd_value_result: divide_by_0_occurred implies
-		 rabs (value - div_by_0_result) < epsilon
+		 dabs (value - div_by_0_result) < epsilon
 	
 end -- class SAFE_DIVISION

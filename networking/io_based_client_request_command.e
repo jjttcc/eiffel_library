@@ -124,7 +124,7 @@ feature {NONE} -- Hook routine implementations
 	exception_cleanup (arg: ANY)
 		do
 			prepare_for_execution (arg)
-			warn_client (<<"Error occurred ", error_context (arg), ".">>)
+			warn_client (<<"Error occurred ", error_context (arg.out), ".">>)
 		end
 
 	respond_to_client (arg: ANY)

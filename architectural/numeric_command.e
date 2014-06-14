@@ -8,7 +8,7 @@ note
 
 deferred class NUMERIC_COMMAND inherit
 
-	RESULT_COMMAND [REAL]
+	RESULT_COMMAND [DOUBLE]
 
 	MATH_CONSTANTS
 		export {NONE}

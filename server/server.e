@@ -13,6 +13,7 @@ deferred class SERVER inherit
 	EXCEPTION_SERVICES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	TERMINABLE
@@ -28,7 +29,10 @@ deferred class SERVER inherit
 feature -- Initialization
 
 	make
+		local
+			app: APPLICATION
 		do
+create app.make
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",
 					command_line_error_description, "exiting ...%N">>)

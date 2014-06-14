@@ -16,7 +16,7 @@ creation
 
 feature {NONE} -- Basic operations
 
-	operate (v: REAL)
+	operate (v: DOUBLE)
 		do
 			value := sqrt (v)
 		end

@@ -1,5 +1,5 @@
 note
-	description: "Commands whose `value' is REAL and that depend on the %
+	description: "Commands whose `value' is DOUBLE and that depend on the %
 		%result of a boolean operator:  If the result is True, `value' is %
 		%the result of executing `true_cmd'; else `value' is the result %
 		%of executing `false_cmd'."
@@ -11,7 +11,7 @@ note
 
 class NUMERIC_CONDITIONAL_COMMAND inherit
 
-	RESULT_COMMAND [REAL]
+	RESULT_COMMAND [DOUBLE]
 		redefine
 			initialize, children
 		end
@@ -50,11 +50,11 @@ feature -- Access
 	boolean_operator: RESULT_COMMAND [BOOLEAN]
 			-- Operator used to compare two values
 
-	true_cmd: RESULT_COMMAND [REAL]
+	true_cmd: RESULT_COMMAND [DOUBLE]
 			-- Command that extracts the value to use if boolean_operator
 			-- evaluates as True
 
-	false_cmd: RESULT_COMMAND [REAL]
+	false_cmd: RESULT_COMMAND [DOUBLE]
 			-- Command that extracts the value to use if boolean_operator
 			-- evaluates as False
 

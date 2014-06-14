@@ -12,7 +12,7 @@ note
 
 class INDEX_EXTRACTOR inherit
 
-	RESULT_COMMAND [REAL]
+	RESULT_COMMAND [DOUBLE]
 		redefine
 			initialize, children, descendants_locked, lock_descendants,
 			unlock_descendants, suppliers_locked, lock_suppliers,

@@ -8,9 +8,9 @@ note
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class INTEGER_SETTER inherit
+deferred class INTEGER_SETTER [G] inherit
 
-	VALUE_SETTER
+	VALUE_SETTER [G]
 
 feature {NONE}
 

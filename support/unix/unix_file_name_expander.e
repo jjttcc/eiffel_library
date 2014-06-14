@@ -52,9 +52,9 @@ feature {NONE} -- Implemention
 				process.execute
 				output := process.fd_stdout
 				if output.is_open and not output.eof then
-					output.read_line (Max_output_length)
-					output.last_line.right_adjust
-					Result := output.last_line.split (' ')
+					output.read_line
+					output.last_string.right_adjust
+					Result := output.last_string.split (' ')
 				else
 					create {LINKED_LIST [STRING]} Result.make
 				end

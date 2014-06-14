@@ -9,8 +9,9 @@ note
 class FILE_READER inherit
 
 	GENERAL_UTILITIES
-		export {NONE}
-			all
+		export
+			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 creation

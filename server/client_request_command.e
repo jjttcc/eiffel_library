@@ -32,6 +32,14 @@ feature -- Status setting
 			session_set: session = arg and session /= Void
 		end
 
+feature -- Status report
+
+	do_execute_precondition: BOOLEAN
+			-- Precondition for `do_execute'
+		once
+			Result := True
+		end
+
 feature -- Basic operations
 
 	execute (arg: ANY)
@@ -89,12 +97,6 @@ feature {NONE} -- Hook routines
 	do_post_processing (arg: ANY)
 			-- Perform any needed processing after `do_execute' is called.
 		do
-		end
-
-	do_execute_precondition: BOOLEAN
-			-- Precondition for `do_execute'
-		once
-			Result := True
 		end
 
 feature {NONE} -- Implementation

@@ -13,6 +13,7 @@ deferred class SOCKET_ACCEPTOR inherit
 	CLEANUP_SERVICES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	TERMINABLE

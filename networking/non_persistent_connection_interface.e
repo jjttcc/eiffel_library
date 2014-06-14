@@ -87,9 +87,16 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Hook routines implementations
 
-	setup_command (cmd: IO_BASED_CLIENT_REQUEST_COMMAND)
+	setup_command (cmd: CLIENT_REQUEST_COMMAND)
+		local
+			io_cmd: IO_BASED_CLIENT_REQUEST_COMMAND
 		do
-			cmd.set_output_medium (io_medium)
+			io_cmd ?= cmd
+			if io_cmd /= Void then
+				io_cmd.set_output_medium (io_medium)
+			else
+				-- !!!!???!!!! Fatal or what? [clean-it-up]
+			end
 		end
 
 	request_error: BOOLEAN

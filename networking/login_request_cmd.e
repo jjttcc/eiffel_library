@@ -20,15 +20,17 @@ feature -- Status report
 
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING)
-			-- Create a new session and add it to `sessions', process `msg',
-			-- and send a unique session ID to the requesting client.
-			-- If a protocol error is encountered in `msg', an error
-			-- status and an error message is sent to the client instead
-			-- of a session ID.
+	do_execute (message: ANY)
+			-- Create a new session and add it to `sessions', process
+			-- `message', and send a unique session ID to the requesting
+			-- client. If a protocol error is encountered in `message',
+			-- an error status and an error message is sent to the client
+			-- instead of a session ID.
 		local
 			session_id: INTEGER
+			msg: STRING
 		do
+			msg := message.out
 			error_occurred := False
 			session_id := new_key
 			create_session

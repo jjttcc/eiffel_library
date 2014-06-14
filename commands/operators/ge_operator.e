@@ -8,7 +8,7 @@ note
 
 class GE_OPERATOR inherit
 
-	BINARY_OPERATOR [BOOLEAN, REAL]
+	BINARY_OPERATOR [BOOLEAN, DOUBLE]
 
 creation
 
@@ -16,7 +16,7 @@ creation
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL)
+	operate (v1, v2: DOUBLE)
 		do
 			value := v1 >= v2
 		end

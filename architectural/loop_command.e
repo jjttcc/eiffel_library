@@ -8,7 +8,7 @@ note
 
 class LOOP_COMMAND inherit
 
-	RESULT_COMMAND [REAL]
+	RESULT_COMMAND [DOUBLE]
 		redefine
 			initialize, children
 		end
@@ -58,7 +58,7 @@ feature -- Access
 	termination_condition: RESULT_COMMAND [BOOLEAN]
 			-- Boolean condition that, when true, terminates the loop
 
-	body: RESULT_COMMAND [REAL]
+	body: RESULT_COMMAND [DOUBLE]
 			-- Command that executes the body of the loop, after which
 			-- `value' is set to `body.value'
 

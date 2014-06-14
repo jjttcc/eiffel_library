@@ -63,7 +63,7 @@ feature {NONE} -- Access
 			Result := last_integer
 		end
 
-	real_selection (msg: STRING): REAL
+	real_selection (msg: STRING): DOUBLE
 			-- User-selected real value
 		do
 			current_lines_read := 0
@@ -71,7 +71,7 @@ feature {NONE} -- Access
 				print_list (<<"Enter a real value for ", msg, " ", eom>>)
 			end
 			read_real
-			Result := last_real
+			Result := last_double
 		end
 
 	string_selection (msg: STRING): STRING
@@ -244,15 +244,15 @@ feature {NONE} -- Input
 
 	read_real
 			-- Input a real (as a sequence of characters terminated with
-			-- a newline) and place the result in `last_real'.  If the
-			-- entered characters do not make up a real value, last_real is
+			-- a newline) and place the result in `last_double'.  If the
+			-- entered characters do not make up a real value, last_double is
 			-- set to 0.
 		do
 			read_input_line
 			if input_device.last_string.is_real then
-				last_real := input_device.last_string.to_real
+				last_double := input_device.last_string.to_real
 			else
-				last_real := 0
+				last_double := 0
 			end
 		end
 
@@ -349,7 +349,7 @@ feature {NONE} -- Implementation
 	last_integer: INTEGER
 			-- Last integer input with `read_integer'
 
-	last_real: REAL
+	last_double: DOUBLE
 			-- Last real input with `read_real'
 
 	last_string: STRING

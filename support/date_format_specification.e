@@ -11,6 +11,7 @@ class DATE_FORMAT_SPECIFICATION inherit
 	ERROR_PUBLISHER
 		export
 			{ERROR_SUBSCRIBER} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 creation

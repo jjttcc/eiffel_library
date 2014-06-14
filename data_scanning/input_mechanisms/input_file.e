@@ -21,7 +21,8 @@ class INPUT_FILE inherit
 			start as implementation_start
 		export
 			{NONE} all
-			{ANY} after, open_read, date, count, position, back
+			{ANY} after, open_read, date, count, position, back,
+			is_open_write, put_string, file_readable, extendible, file_pointer
 		undefine
 			read_integer, read_real, read_double
 		redefine

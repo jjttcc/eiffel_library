@@ -8,7 +8,7 @@ note
 
 class MATH_CONSTANTS inherit
 
-	SINGLE_MATH
+	DOUBLE_MATH
 
 feature -- Access
 
@@ -16,12 +16,12 @@ feature -- Access
 
 feature -- Utility
 
-	reals_equal (r1, r2: REAL): BOOLEAN
+	reals_equal (r1, r2: DOUBLE): BOOLEAN
 			-- Is `r1' equal to `r2' within a tolerance of `epsilon'?
 		do
-			Result := rabs (r1 - r2) < epsilon
+			Result := dabs (r1 - r2) < epsilon
 		ensure
-			definition: Result = (rabs (r1 - r2) < epsilon)
+			definition: Result = (dabs (r1 - r2) < epsilon)
 		end
 
 end -- class MATH_CONSTANTS

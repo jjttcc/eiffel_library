@@ -96,9 +96,11 @@ feature {NONE} -- Implementation
 		local
 			v: ECLI_VALUE
 		do
-			v := tuple_sequence.cursor.item (field_index)
+			v := tuple_sequence.results.item (field_index)
 			if v /= Void and then not v.is_null then
-				Result := v.item
+--!!!				Result := v.item
+--!!!!???!!!! -- fix/filler - may not be correct
+				Result := v
 			end
 		end
 

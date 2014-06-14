@@ -12,7 +12,7 @@ class EXCEPTION_SERVICES inherit
 	EXCEPTIONS
 		export
 			{NONE} all
-			{ANY} raise
+			{ANY} raise, deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	UNIX_SIGNALS

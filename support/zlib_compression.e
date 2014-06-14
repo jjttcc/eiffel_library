@@ -66,7 +66,7 @@ feature {NONE} -- Implementation
 			end
 			product_implementation := Void
 			buffcount := (target.count + target.count * .0015 + 25).ceiling
-			create buffer.make_area (buffcount)
+			create buffer.make_empty_area (buffcount)
 			src := target.area
 			raw_product := buffer.area
 			dest := raw_product
@@ -79,7 +79,7 @@ feature {NONE} -- Implementation
 				if cmpresult = Buffer_error then
 					-- Buffer was too small - Try again with a larger buffer.
 					buffcount := buffcount + 254
-					create buffer.make_area (buffcount)
+					create buffer.make_empty_area (buffcount)
 					raw_product := buffer.area
 					dest := raw_product
 					cmpresult := zlib_compress2 ($dest, $buffcount, $src,

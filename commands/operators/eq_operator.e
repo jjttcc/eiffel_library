@@ -9,7 +9,7 @@ note
 
 class EQ_OPERATOR inherit
 
-	BINARY_OPERATOR [BOOLEAN, REAL]
+	BINARY_OPERATOR [BOOLEAN, DOUBLE]
 		rename
 			make as bo_make
 		export {NONE}
@@ -42,11 +42,11 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	epsilon: REAL
+	epsilon: DOUBLE
 
 feature -- Status setting
 
-	set_epsilon (arg: REAL)
+	set_epsilon (arg: DOUBLE)
 			-- Set epsilon to `arg'.
 		do
 			epsilon := arg
@@ -56,9 +56,9 @@ feature -- Status setting
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL)
+	operate (v1, v2: DOUBLE)
 		do
-			value := rabs (v1 - v2) < epsilon
+			value := dabs (v1 - v2) < epsilon
 		end
 
 end -- class EQ_OPERATOR

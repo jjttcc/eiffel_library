@@ -12,6 +12,7 @@ deferred class CONFIGURATION_UTILITIES inherit
 	GENERAL_UTILITIES
 		export
 			{NONE} all
+			{ANY} deep_twin, deep_equal, standard_is_equal, is_deep_equal
 		end
 
 feature -- Initialization

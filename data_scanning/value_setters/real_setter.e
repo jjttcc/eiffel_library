@@ -8,9 +8,9 @@ note
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class REAL_SETTER inherit
+deferred class REAL_SETTER [G] inherit
 
-	VALUE_SETTER
+	VALUE_SETTER [G]
 
 	MATH_CONSTANTS
 

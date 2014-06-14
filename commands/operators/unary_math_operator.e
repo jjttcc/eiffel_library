@@ -9,12 +9,12 @@ note
 
 deferred class UNARY_MATH_OPERATOR inherit
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_OPERATOR [DOUBLE, DOUBLE]
 		undefine
 			operate
 		end
 
-	SINGLE_MATH
+	DOUBLE_MATH
 		export
 			{NONE} all
 		end

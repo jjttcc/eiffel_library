@@ -11,7 +11,7 @@ class POWER
 
 inherit
 
-	BINARY_OPERATOR [REAL, REAL]
+	BINARY_OPERATOR [DOUBLE, DOUBLE]
 
 creation
 
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL)
+	operate (v1, v2: DOUBLE)
 		do
 			value := v1 ^ v2
 		end

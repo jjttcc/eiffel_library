@@ -261,7 +261,7 @@ feature -- Text formatting
 			column_pivot, row_width, first_row_label: INTEGER)
 		local
 			column, i, item_label: INTEGER
-			math: expanded SINGLE_MATH
+			math: expanded DOUBLE_MATH
 		do
 			from column := 1 until
 				column = cols or

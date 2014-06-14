@@ -17,9 +17,9 @@ note
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class DATA_SCANNER inherit
+deferred class DATA_SCANNER [G] inherit
 
-	FACTORY
+	FACTORY [COLLECTION[G]]
 		redefine
 			execute_precondition
 		end
@@ -41,7 +41,7 @@ feature -- Initialization
 
 feature -- Access
 
-	product: COLLECTION [ANY]
+	product: COLLECTION [G]
 			-- Tuples produced by scanning the input
 
 	error_list: LINKED_LIST [STRING]
@@ -52,10 +52,10 @@ feature -- Access
 			-- Was the last error that occurred during scanning fatal,
 			-- meaning that scanning can't continue?
 
-	tuple_maker: FACTORY
+	tuple_maker: ANY
 			-- Tuple manufacturer
 
-	value_setters: LIST [VALUE_SETTER]
+	value_setters: LIST [VALUE_SETTER [G]]
 			-- Used to scan input and set the appropriate tuple fields
 
 	input: INPUT_RECORD_SEQUENCE
@@ -100,7 +100,7 @@ feature -- Status setting
 
 feature -- Element change
 
-	set_tuple_maker (arg: FACTORY)
+	set_tuple_maker (arg: like tuple_maker)
 			-- Set tuple_maker to `arg'.
 		require
 			arg /= Void
@@ -110,7 +110,7 @@ feature -- Element change
 			tuple_maker_set: tuple_maker = arg and tuple_maker /= Void
 		end
 
-	set_value_setters (arg: LIST [VALUE_SETTER])
+	set_value_setters (arg: LIST [VALUE_SETTER [G]])
 			-- Set value_setters to `arg'.
 		require
 			arg /= Void
@@ -207,49 +207,103 @@ feature {NONE} -- Hook methods
 			-- Create a tuple and initialize it with the data from
 			-- the current record in `input'.  Default implementation.
 		local
-			tuple: ANY
+			tuple: COLLECTION[G]
 		do
 			error_in_current_tuple := False
 			discard_current_tuple := False
-			tuple_maker.execute
-			tuple := tuple_maker.product
-			open_tuple (tuple)
-			from
-				value_setters.start
-				check not value_setters.after end
-				-- Set first field of tuple:
-				value_setters.item.set (input, tuple)
-				if value_setters.item.error_occurred then
-					handle_error_for_current_tuple
-				end
-				value_setters.forth
-			invariant
-				-- tuple.number_of_fields_set = value_setters.index - 1
-			variant
-				value_setters.count - value_setters.index + 1
-			until
-				value_setters.after or discard_current_tuple
-			loop
-				advance_to_next_field
-				if not discard_current_tuple then
-					value_setters.item.set (input, tuple)
-					if value_setters.item.error_occurred then
-						handle_error_for_current_tuple
+--!!!!!!Will this work????!!!:
+			if attached {FACTORY [COLLECTION[G]]} tuple_maker as tmaker then
+				tmaker.execute
+				tuple := tmaker.product
+--!!!!!!This is probabaly a mess/run-time-crash:
+				if attached {G} tuple as tpl then
+					open_tuple (tpl)
+					from
+						value_setters.start
+					check not value_setters.after end
+						-- Set first field of tuple:
+						value_setters.item.set (input, tpl)
+						if value_setters.item.error_occurred then
+							handle_error_for_current_tuple
+						end
+						value_setters.forth
+					invariant
+						-- tpl.number_of_fields_set = value_setters.index - 1
+					variant
+						value_setters.count - value_setters.index + 1
+					until
+						value_setters.after or discard_current_tuple
+					loop
+						advance_to_next_field
+						if not discard_current_tuple then
+							value_setters.item.set (input, tpl)
+							if value_setters.item.error_occurred then
+								handle_error_for_current_tuple
+							end
+						end
+						value_setters.forth
+					end
+					do_last_error_check (tpl)
+					if not discard_current_tuple then
+						close_tuple (tpl)
+						add_tuple (tpl)
+					else
+						discard_tuple (tpl)
 					end
 				end
-				value_setters.forth
-			end
-			do_last_error_check (tuple)
-			if not discard_current_tuple then
-				close_tuple (tuple)
-				add_tuple (tuple)
-			else
-				discard_tuple (tuple)
 			end
 		ensure
 			--one_more: product.count = old product.count + 1 or
 			--		discard_current_tuple
 		end
+
+--	make_tuple_old
+--			-- Create a tuple and initialize it with the data from
+--			-- the current record in `input'.  Default implementation.
+--		local
+--			tuple: G
+--		do
+--			error_in_current_tuple := False
+--			discard_current_tuple := False
+--			tuple_maker.execute
+--			tuple := tuple_maker.product
+--			open_tuple (tuple)
+--			from
+--				value_setters.start
+--				check not value_setters.after end
+--				-- Set first field of tuple:
+--				value_setters.item.set (input, tuple)
+--				if value_setters.item.error_occurred then
+--					handle_error_for_current_tuple
+--				end
+--				value_setters.forth
+--			invariant
+--				-- tuple.number_of_fields_set = value_setters.index - 1
+--			variant
+--				value_setters.count - value_setters.index + 1
+--			until
+--				value_setters.after or discard_current_tuple
+--			loop
+--				advance_to_next_field
+--				if not discard_current_tuple then
+--					value_setters.item.set (input, tuple)
+--					if value_setters.item.error_occurred then
+--						handle_error_for_current_tuple
+--					end
+--				end
+--				value_setters.forth
+--			end
+--			do_last_error_check (tuple)
+--			if not discard_current_tuple then
+--				close_tuple (tuple)
+--				add_tuple (tuple)
+--			else
+--				discard_tuple (tuple)
+--			end
+--		ensure
+--			--one_more: product.count = old product.count + 1 or
+--			--		discard_current_tuple
+--		end
 
 	value_setters_used: BOOLEAN
 			-- Is `value_setters' used?  (Will be True if `make_tuple' is
@@ -258,7 +312,7 @@ feature {NONE} -- Hook methods
 			Result := True	-- Redefine if they are not used.
 		end
 
-	open_tuple (t: ANY)
+	open_tuple (t: G)
 			-- Perform any initialization of `t' needed before setting
 			-- its fields.
 		require
@@ -266,13 +320,13 @@ feature {NONE} -- Hook methods
 		do
 		end
 
-	do_last_error_check (t: ANY)
+	do_last_error_check (t: G)
 			-- Perform final check for errors before closing the current
 			-- tuple.
 		do
 		end
 
-	close_tuple (t: ANY)
+	close_tuple (t: G)
 			-- Perform any close/clean-up of `t' needed after setting
 			-- its fields.
 		require
@@ -280,7 +334,7 @@ feature {NONE} -- Hook methods
 		do
 		end
 
-	add_tuple (t: ANY)
+	add_tuple (t: G)
 			-- Add tuple to product - redefine if not needed.
 		require
 			tuple_ok: t /= Void and not discard_current_tuple
@@ -288,7 +342,7 @@ feature {NONE} -- Hook methods
 			product.extend (t)
 		end
 
-	discard_tuple (t: ANY)
+	discard_tuple (t: G)
 			-- Take appropriate action to discard the current tuple in
 			-- response to an unrecoverable scanning error.
 		require
