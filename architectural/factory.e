@@ -10,11 +10,11 @@ note
 
 deferred class
 
-	FACTORY [G]
+	FACTORY
 
 feature -- Access
 
-	product: G
+	product: ANY
 			-- The object manufactured by calling execute
 		deferred
 		end

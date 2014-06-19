@@ -233,13 +233,13 @@ feature {NONE} -- Implementation
 			loop
 				if
 					(contents.item.count >= 2 and
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = c) or
+						contents.item.item(1).is_equal(option_sign) and
+						contents.item.item(2).is_equal(c)) or
 						-- Allow GNU "--opt" type options:
 					(contents.item.count >= 3 and
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = option_sign and
-					contents.item.item (3) = c)
+						contents.item.item(1).is_equal(option_sign) and
+						contents.item.item(2).is_equal(option_sign) and
+						contents.item.item(3).is_equal(c))
 				then
 					Result := True
 				else
@@ -248,10 +248,11 @@ feature {NONE} -- Implementation
 			end
 		ensure
 			cursor_set_if_true: Result = (not contents.exhausted and then
-				((contents.item.item (1) = option_sign and
-				contents.item.item (2) = c) or (contents.item.item (1) =
-				option_sign and contents.item.item (2) = option_sign and
-				contents.item.item (3) = c)))
+				((contents.item.item(1).is_equal(option_sign) and
+					contents.item.item(2).is_equal(c)) or
+				(contents.item.item(1).is_equal(option_sign) and
+					contents.item.item(2).is_equal(option_sign) and
+					contents.item.item(3).is_equal(c))))
 			exhausted_if_false: not Result = contents.exhausted
 		end
 

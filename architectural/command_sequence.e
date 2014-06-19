@@ -10,7 +10,7 @@ class COMMAND_SEQUENCE inherit
 
 	COMMAND
 		redefine
-			children, initialize
+			children, initialize, copy_of_children
 		end
 
 create
@@ -33,7 +33,7 @@ feature -- Initialization
 
 feature -- Access
 
-	children: LIST [COMMAND]
+	children, copy_of_children: LIST [COMMAND]
 			-- The sub-commands to be executed
 
 	main_operator: COMMAND

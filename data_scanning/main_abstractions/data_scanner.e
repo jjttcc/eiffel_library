@@ -19,11 +19,6 @@ note
 
 deferred class DATA_SCANNER [G] inherit
 
-	FACTORY [COLLECTION[G]]
-		redefine
-			execute_precondition
-		end
-
 feature -- Initialization
 
 	make (in: like input; tm: like tuple_maker; vs: like value_setters)
@@ -41,7 +36,7 @@ feature -- Initialization
 
 feature -- Access
 
-	product: COLLECTION [G]
+	product: COLLECTION [ANY]
 			-- Tuples produced by scanning the input
 
 	error_list: LINKED_LIST [STRING]
@@ -203,107 +198,115 @@ feature {NONE} -- Hook methods
 			product /= Void
 		end
 
+--	make_tuple_new
+--			-- Create a tuple and initialize it with the data from
+--			-- the current record in `input'.  Default implementation.
+--		local
+--			tuple: COLLECTION[G]
+--		do
+--			error_in_current_tuple := False
+--			discard_current_tuple := False
+----!!!!!!Will this work????!!!:
+--			if attached {FACTORY [COLLECTION[G]]} tuple_maker as tmaker then
+--				tmaker.execute
+--				tuple := tmaker.product
+----!!!!!!This is probabaly a mess/run-time-crash:
+--				if attached {G} tuple as tpl then
+--					open_tuple (tpl)
+--					from
+--						value_setters.start
+--					check not value_setters.after end
+--						-- Set first field of tuple:
+--						value_setters.item.set (input, tpl)
+--						if value_setters.item.error_occurred then
+--							handle_error_for_current_tuple
+--						end
+--						value_setters.forth
+--					invariant
+--						-- tpl.number_of_fields_set = value_setters.index - 1
+--					variant
+--						value_setters.count - value_setters.index + 1
+--					until
+--						value_setters.after or discard_current_tuple
+--					loop
+--						advance_to_next_field
+--						if not discard_current_tuple then
+--							value_setters.item.set (input, tpl)
+--							if value_setters.item.error_occurred then
+--								handle_error_for_current_tuple
+--							end
+--						end
+--						value_setters.forth
+--					end
+--					do_last_error_check (tpl)
+--					if not discard_current_tuple then
+--						close_tuple (tpl)
+--						add_tuple (tpl)
+--					else
+--						discard_tuple (tpl)
+--					end
+--				end
+--			end
+--		ensure
+--			--one_more: product.count = old product.count + 1 or
+--			--		discard_current_tuple
+--		end
+
 	make_tuple
 			-- Create a tuple and initialize it with the data from
 			-- the current record in `input'.  Default implementation.
 		local
-			tuple: COLLECTION[G]
+			tuple: G
 		do
 			error_in_current_tuple := False
 			discard_current_tuple := False
---!!!!!!Will this work????!!!:
-			if attached {FACTORY [COLLECTION[G]]} tuple_maker as tmaker then
-				tmaker.execute
-				tuple := tmaker.product
---!!!!!!This is probabaly a mess/run-time-crash:
-				if attached {G} tuple as tpl then
-					open_tuple (tpl)
-					from
-						value_setters.start
-					check not value_setters.after end
-						-- Set first field of tuple:
-						value_setters.item.set (input, tpl)
-						if value_setters.item.error_occurred then
-							handle_error_for_current_tuple
-						end
-						value_setters.forth
-					invariant
-						-- tpl.number_of_fields_set = value_setters.index - 1
-					variant
-						value_setters.count - value_setters.index + 1
-					until
-						value_setters.after or discard_current_tuple
-					loop
-						advance_to_next_field
-						if not discard_current_tuple then
-							value_setters.item.set (input, tpl)
-							if value_setters.item.error_occurred then
-								handle_error_for_current_tuple
-							end
-						end
-						value_setters.forth
-					end
-					do_last_error_check (tpl)
-					if not discard_current_tuple then
-						close_tuple (tpl)
-						add_tuple (tpl)
-					else
-						discard_tuple (tpl)
+			tuple_maker_execute
+			tuple := tuple_maker_product
+			open_tuple (tuple)
+			from
+				value_setters.start
+				check not value_setters.after end
+				-- Set first field of tuple:
+				value_setters.item.set (input, tuple)
+				if value_setters.item.error_occurred then
+					handle_error_for_current_tuple
+				end
+				value_setters.forth
+			invariant
+				-- tuple.number_of_fields_set = value_setters.index - 1
+			variant
+				value_setters.count - value_setters.index + 1
+			until
+				value_setters.after or discard_current_tuple
+			loop
+				advance_to_next_field
+				if not discard_current_tuple then
+					value_setters.item.set (input, tuple)
+					if value_setters.item.error_occurred then
+						handle_error_for_current_tuple
 					end
 				end
+				value_setters.forth
+			end
+			do_last_error_check (tuple)
+			if not discard_current_tuple then
+				close_tuple (tuple)
+				add_tuple (tuple)
+			else
+				discard_tuple (tuple)
 			end
 		ensure
 			--one_more: product.count = old product.count + 1 or
 			--		discard_current_tuple
 		end
 
---	make_tuple_old
---			-- Create a tuple and initialize it with the data from
---			-- the current record in `input'.  Default implementation.
---		local
---			tuple: G
---		do
---			error_in_current_tuple := False
---			discard_current_tuple := False
---			tuple_maker.execute
---			tuple := tuple_maker.product
---			open_tuple (tuple)
---			from
---				value_setters.start
---				check not value_setters.after end
---				-- Set first field of tuple:
---				value_setters.item.set (input, tuple)
---				if value_setters.item.error_occurred then
---					handle_error_for_current_tuple
---				end
---				value_setters.forth
---			invariant
---				-- tuple.number_of_fields_set = value_setters.index - 1
---			variant
---				value_setters.count - value_setters.index + 1
---			until
---				value_setters.after or discard_current_tuple
---			loop
---				advance_to_next_field
---				if not discard_current_tuple then
---					value_setters.item.set (input, tuple)
---					if value_setters.item.error_occurred then
---						handle_error_for_current_tuple
---					end
---				end
---				value_setters.forth
---			end
---			do_last_error_check (tuple)
---			if not discard_current_tuple then
---				close_tuple (tuple)
---				add_tuple (tuple)
---			else
---				discard_tuple (tuple)
---			end
---		ensure
---			--one_more: product.count = old product.count + 1 or
---			--		discard_current_tuple
---		end
+	tuple_maker_execute
+		deferred
+		end
+
+	tuple_maker_product: G
+		deferred
+		end
 
 	value_setters_used: BOOLEAN
 			-- Is `value_setters' used?  (Will be True if `make_tuple' is

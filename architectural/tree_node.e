@@ -12,21 +12,21 @@ deferred class TREE_NODE inherit
 
 feature -- Access
 
-	children: LIST [TREE_NODE]
+	children: LIST [like Current]
 			-- Current's children
 		deferred
 		ensure
 			not_void: Result /= Void
 		end
 
-	descendants: LIST [TREE_NODE]
+	descendants: like children
 			-- All of Current's descendants (excluding Current) - children,
 			-- children's children, etc., with duplicates removed
 		local
-			l: LIST [TREE_NODE]
-			node_set: LINKED_SET [TREE_NODE]
+			l: like descendants
+			node_set: LINKED_SET [like children.item]
 		do
-			create {LINKED_LIST [TREE_NODE]} Result.make
+			create {LINKED_LIST [like children.item]} Result.make
 			if not descendants_locked then
 				lock_descendants
 				l := copy_of_children
@@ -87,7 +87,7 @@ feature -- Status report
 			arg_exists: visited /= Void
 		local
 			current_tag: STRING
-			l: LIST [TREE_NODE]
+			l: like children
 		do
 			current_tag := out
 			-- If Current has already been visited for this cycle check,

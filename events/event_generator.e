@@ -10,7 +10,7 @@ note
 
 deferred class EVENT_GENERATOR inherit
 
-	FACTORY [CHAIN[EVENT]]
+	GENERIC_FACTORY [CHAIN[EVENT]]
 
 feature -- Access
 

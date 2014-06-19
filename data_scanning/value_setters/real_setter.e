@@ -23,7 +23,7 @@ feature {NONE}
 
 	read_value (stream: INPUT_SEQUENCE)
 		do
-			stream.read_real
+			stream.read_double
 		end
 
 	handle_le_0_error (field_name: STRING)
