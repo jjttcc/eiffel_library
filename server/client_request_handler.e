@@ -10,12 +10,19 @@ deferred class
 
 	CLIENT_REQUEST_HANDLER
 
+feature -- Access
+
+	command_type_anchor: CLIENT_REQUEST_COMMAND
+		deferred
+		end
+
 feature -- Basic operations
 
 	execute
 		local
-			cmd: CLIENT_REQUEST_COMMAND
+			cmd: like command_type_anchor
 		do
+print("[14.05-testing]: CLIENT_REQUEST_HANDLER.execute called%N")
 			if initialization_needed then
 				request_id := Void; command_argument := Void
 			end
@@ -101,7 +108,7 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
-	setup_command (cmd: CLIENT_REQUEST_COMMAND)
+	setup_command (cmd: like command_type_anchor)
 			-- Perform any needed setup on `cmd' before executing it.
 		do
 		end
@@ -137,7 +144,7 @@ feature {NONE} -- Implementation
 				not request_error implies session /= Void)
 		end
 
-	request_handlers: HASH_TABLE [CLIENT_REQUEST_COMMAND, HASHABLE]
+	request_handlers: HASH_TABLE [like command_type_anchor, HASHABLE]
 			-- Handlers of client requests, keyed by `request_id'
 
 	request_id: HASHABLE

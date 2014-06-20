@@ -56,6 +56,11 @@ feature -- Access
 	input: INPUT_RECORD_SEQUENCE
 			-- Sequence used for input
 
+	product_count: INTEGER
+			-- Number of items contained by `product'
+		deferred
+		end
+
 feature -- Status report
 
 	strict_error_checking: BOOLEAN
@@ -155,7 +160,8 @@ feature -- Basic operations
 				if
 					start_input
 -- !!!!!Comment out to expose other bug that needs fixing (See [TBD].):
-and not input.after_last_record
+--!!!!![tmp/14.05 - restore soon(?):]!!!!!and not input.after_last_record
+--!!!!!!!!!!!and not input.after_last_record
 					and then value_setters_used and
 					input.field_count /= value_setters.count
 				then
@@ -168,7 +174,7 @@ and not input.after_last_record
 						input.field_count, value_setters.count))
 				end
 			invariant
-				-- product.count = number_of_records_in (
+				-- product_count = number_of_records_in (
 				--	input @ 1 .. input @ (input.record_index - 1))
 			until
 				input.after_last_record or last_error_fatal
@@ -185,7 +191,7 @@ and not input.after_last_record
 				handle_fatal_error
 			end
 		ensure then
-			-- product.count = number of records in input
+			-- product_count = number of records in input
 			errlist_not_void: error_list /= Void
 		end
 
@@ -197,60 +203,6 @@ feature {NONE} -- Hook methods
 		ensure
 			product /= Void
 		end
-
---	make_tuple_new
---			-- Create a tuple and initialize it with the data from
---			-- the current record in `input'.  Default implementation.
---		local
---			tuple: COLLECTION[G]
---		do
---			error_in_current_tuple := False
---			discard_current_tuple := False
-----!!!!!!Will this work????!!!:
---			if attached {FACTORY [COLLECTION[G]]} tuple_maker as tmaker then
---				tmaker.execute
---				tuple := tmaker.product
-----!!!!!!This is probabaly a mess/run-time-crash:
---				if attached {G} tuple as tpl then
---					open_tuple (tpl)
---					from
---						value_setters.start
---					check not value_setters.after end
---						-- Set first field of tuple:
---						value_setters.item.set (input, tpl)
---						if value_setters.item.error_occurred then
---							handle_error_for_current_tuple
---						end
---						value_setters.forth
---					invariant
---						-- tpl.number_of_fields_set = value_setters.index - 1
---					variant
---						value_setters.count - value_setters.index + 1
---					until
---						value_setters.after or discard_current_tuple
---					loop
---						advance_to_next_field
---						if not discard_current_tuple then
---							value_setters.item.set (input, tpl)
---							if value_setters.item.error_occurred then
---								handle_error_for_current_tuple
---							end
---						end
---						value_setters.forth
---					end
---					do_last_error_check (tpl)
---					if not discard_current_tuple then
---						close_tuple (tpl)
---						add_tuple (tpl)
---					else
---						discard_tuple (tpl)
---					end
---				end
---			end
---		ensure
---			--one_more: product.count = old product.count + 1 or
---			--		discard_current_tuple
---		end
 
 	make_tuple
 			-- Create a tuple and initialize it with the data from
@@ -296,8 +248,8 @@ feature {NONE} -- Hook methods
 				discard_tuple (tuple)
 			end
 		ensure
-			--one_more: product.count = old product.count + 1 or
-			--		discard_current_tuple
+			one_more: product_count = old product_count + 1 or
+					discard_current_tuple
 		end
 
 	tuple_maker_execute

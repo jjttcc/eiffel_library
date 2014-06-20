@@ -29,6 +29,10 @@ feature -- Access
 		deferred
 		end
 
+	command_type_anchor: IO_BASED_CLIENT_REQUEST_COMMAND
+		do
+		end
+
 feature -- Element change
 
 	set_io_medium (arg: like io_medium)
@@ -87,16 +91,9 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Hook routines implementations
 
-	setup_command (cmd: CLIENT_REQUEST_COMMAND)
-		local
-			io_cmd: IO_BASED_CLIENT_REQUEST_COMMAND
+	setup_command (cmd: like command_type_anchor)
 		do
-			io_cmd ?= cmd
-			if io_cmd /= Void then
-				io_cmd.set_output_medium (io_medium)
-			else
-				-- !!!!???!!!! Fatal or what? [clean-it-up]
-			end
+			cmd.set_output_medium (io_medium)
 		end
 
 	request_error: BOOLEAN

@@ -99,7 +99,7 @@ feature {NONE} -- Implementation
 			v := tuple_sequence.results.item (field_index)
 			if v /= Void and then not v.is_null then
 --!!!				Result := v.item
---!!!!???!!!! -- fix/filler - may not be correct
+--!!!!???!!!![14.05] -- Check if this change/update is correct:
 				Result := v
 			end
 		end
