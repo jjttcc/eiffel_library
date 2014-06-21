@@ -19,6 +19,11 @@ create
 
 	make_client_by_port
 
+
+create {NETWORK_STREAM_SOCKET}
+
+	make_from_descriptor_and_address
+
 feature
 
 --!!!!?:

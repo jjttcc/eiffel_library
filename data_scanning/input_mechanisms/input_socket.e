@@ -19,7 +19,11 @@ class INPUT_SOCKET inherit
 			{NONE} all
 			{INPUT_SOCKET_CLIENT} is_linger_on, linger_time, set_delay,
 				set_linger_off, set_linger_on, set_nodelay, set_timeout,
-				timeout, set_blocking, set_non_blocking, is_blocking, socket_ok
+				timeout, socket_ok,
+				error, put_string, connect, is_open_read, is_open_write,
+				peer_address, extendible
+			{INPUT_SOCKET_CLIENT, INPUT_SOCKET} is_blocking, set_non_blocking,
+				set_blocking, set_peer_address, is_valid_peer_address
 		undefine
 			read_integer, read_real, read_double, read_line, readline
 		redefine
@@ -33,9 +37,13 @@ class INPUT_SOCKET inherit
 			split_current_record_on_start
 		end
 
-creation
+create
 
 	make_client_by_port
+
+create {NETWORK_STREAM_SOCKET}
+
+	make_from_descriptor_and_address
 
 feature -- Initialization
 
