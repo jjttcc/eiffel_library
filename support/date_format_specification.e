@@ -152,7 +152,7 @@ feature {NONE} -- Implementation
 				publish_error (Numeric_date_separator_error)
 				valid := False
 			else
-				date_field_separator := clone (setting)
+				date_field_separator := setting.twin
 			end
 		end
 

@@ -82,7 +82,7 @@ feature {NONE} -- Access
 				print_list (<<msg, " ", eom>>)
 			end
 			read_line
-			Result := clone (last_string)
+			Result := last_string.twin
 		ensure
 			Result_exists: Result /= Void
 		end

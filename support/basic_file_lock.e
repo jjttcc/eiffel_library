@@ -155,8 +155,8 @@ feature {NONE} -- Implementation
 		local
 			oe: expanded OPERATING_ENVIRONMENT
 		do
-			lock_file_name := clone (file_path)
-			lock_file_name.insert (".", lock_file_name.last_index_of (
+			lock_file_name := file_path.twin
+			lock_file_name.insert_string (".", lock_file_name.last_index_of (
 				oe.Directory_separator, lock_file_name.count) + 1)
 			lock_file_name.append (".lock")
 		end

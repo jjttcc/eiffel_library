@@ -103,7 +103,7 @@ feature -- String manipulation
 		local
 			replacement: STRING
 		do
-			replacement := clone (token)
+			replacement := token.twin
 			replacement.prepend_character (start_delimiter)
 			replacement.append_character (end_delimiter)
 			target.replace_substring_all (replacement, new_value)
@@ -142,7 +142,7 @@ feature -- String manipulation
 			if not l.is_empty then
 				from
 					l.start
-					Result := clone (l.item)
+					Result := l.item.twin
 					l.forth
 				until
 					l.exhausted
@@ -176,7 +176,7 @@ feature -- String manipulation
 				l.extend (s.substring (1, i - 1))
 				l.extend (s.substring (i + 1, s.count))
 			else
-				l.extend (clone (s))
+				l.extend (s.twin)
 			end
 			Result := l
 		ensure
@@ -446,7 +446,7 @@ feature -- Miscellaneous
 		local
 			temp: like target
 		do
-			temp := deep_clone (source)
+			temp := source.deep_twin
 			target.copy (temp)
 		end
 

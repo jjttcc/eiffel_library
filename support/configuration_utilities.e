@@ -176,7 +176,7 @@ feature {NONE} -- Implementation
 			from
 				-- Use a clone to prevent side effects, in case the
 				-- original string object is being referenced elsewhere:
-				s := clone (file_reader.item)
+				s := file_reader.item.twin
 				if
 					s.item (s.count) = Continuation_character
 				then
@@ -191,7 +191,7 @@ feature {NONE} -- Implementation
 				file_reader.forth
 				current_line := current_line + 1
 				if not file_reader.exhausted then
-					line := clone (file_reader.item)
+					line := file_reader.item.twin
 					if
 						line.item (line.count) = Continuation_character
 					then

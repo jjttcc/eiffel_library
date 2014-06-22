@@ -51,7 +51,7 @@ feature {NONE} -- Implemention
 					Expansion_command (expr))
 				process.execute
 				output := process.fd_stdout
-				if output.is_open and not output.eof then
+				if output.is_open and not output.end_of_input then
 					output.read_line
 					output.last_string.right_adjust
 					Result := output.last_string.split (' ')

@@ -35,7 +35,7 @@ feature -- Access
 
 	field_count: INTEGER
 		do
-			Result := tuple_sequence.result_column_count
+			Result := tuple_sequence.result_columns_count
 		end
 
 feature -- Status report

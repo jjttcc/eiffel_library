@@ -37,7 +37,7 @@ feature {NONE} -- Initialization
 	new_instance (value: G): like Current
 			-- A new instance of this 'ENUMERATED' with the specified `value'
 		do
-			Result := clone (Current)
+			Result := Current.twin
 			Result.make (value)
 		end
 

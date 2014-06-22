@@ -117,7 +117,7 @@ feature {NONE} -- Hook routine implementations
 	prepare_for_execution (arg: ANY)
 		do
 			if output_buffer_used then
-				output_buffer.clear_all
+				output_buffer.wipe_out
 			end
 		end
 

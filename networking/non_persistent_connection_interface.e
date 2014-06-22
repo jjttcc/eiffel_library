@@ -237,7 +237,7 @@ feature {NONE} -- Implementation
 			if client_msg /= Void then
 				message_body := client_msg
 			else
-				message_body := clone (default_client_error_msg)
+				message_body := default_client_error_msg.twin
 			end
 			if client_suffix /= Void then
 				message_body.append (client_suffix)

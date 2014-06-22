@@ -111,7 +111,7 @@ feature -- Element change
 		require
 			arg_not_void: arg /= Void
 		do
-			name_implementation := clone (arg)
+			name_implementation := arg.twin
 		ensure
 			name_set: name_implementation.is_equal (arg) and name /= Void
 		end

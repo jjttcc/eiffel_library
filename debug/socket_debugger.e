@@ -188,7 +188,7 @@ feature {NONE} -- Implementation
 				"is_linger_on: " + s.is_linger_on.out + "%N" +
 				"is_out_of_band_inline: " + s.is_out_of_band_inline.out + "%N"+
 				"linger_time: " + s.linger_time.out + "%N" +
-				"maximum_seg_size: " + s.maxium_seg_size.out + "%N" +
+				"maximum_seg_size: " + s.maximum_seg_size.out + "%N" +
 				"<<<END NETWORK_STREAM_SOCKET REPORT>>>" + "%N"
 		end
 
