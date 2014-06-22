@@ -29,14 +29,7 @@ deferred class SERVER inherit
 feature -- Initialization
 
 	make
-		local
-p: PATH
-tst1: ARRAY [STRING]
 		do
-create tst1.make_empty
-print(tst1.out + "%N")
-create p.make_empty
-print(p.absolute_path.out + "%N")
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",
 					command_line_error_description, "exiting ...%N">>)
