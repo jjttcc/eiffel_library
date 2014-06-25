@@ -30,6 +30,8 @@ feature -- Initialization
 
 	make
 		do
+--!!!!![14.05 debug - remove soon:]!!!!!!!!!!
+print((create {EXECUTION_ENVIRONMENT}).current_working_path.out + "%N")
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",
 					command_line_error_description, "exiting ...%N">>)

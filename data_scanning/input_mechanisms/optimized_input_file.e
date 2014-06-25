@@ -17,7 +17,7 @@ class OPTIMIZED_INPUT_FILE inherit
 		undefine
 			make_create_read_write, make
 		redefine
-			start
+			start, read_double
 		end
 
 	INPUT_FILE
@@ -95,6 +95,34 @@ feature -- Access
 feature -- Cursor movement
 
 	advance_to_next_field
+			-- Advance the cursor to the next field.
+			-- Set error_occurred and error_string if an error is encountered.
+		local
+			i: INTEGER
+		do
+			last_error_fatal := False
+			error_occurred := False
+			from
+				i := 1
+			variant
+				field_separator.count + 1 - i
+			until
+				i > field_separator.count
+			loop
+				read_character
+				if last_character /= field_separator @ i then
+					error_occurred := True
+					error_string := "Incorrect field separator %
+					%character detected: '"
+					error_string.extend (last_character)
+					error_string.append ("'.")
+				end
+				i := i + 1
+			end
+			field_index := field_index + 1
+		end
+
+	orig_advance_to_next_field
 			-- Advance the cursor to the next field.
 			-- Set error_occurred and error_string if an error is encountered.
 		local
@@ -257,6 +285,8 @@ feature -- Cursor movement
 			field_index := 1
 			record_index_implementation := 1
 			after_last_record := count = 0
+			field_sep_is_white := (field_separator @ 1) = ' ' or
+				(field_separator @ 1) = '%T'
 		end
 
 	position_cursor (p: INTEGER)
@@ -291,6 +321,29 @@ feature -- Input
 			end
 		end
 
+	read_double
+		do
+			Precursor {PLAIN_TEXT_FILE}
+			if field_sep_is_white and not end_of_file then
+				read_character
+				if
+					last_character /= record_separator @ 1 and
+					last_character /= field_separator @ 1
+				then
+					-- Work around an oddity that appears to sometimes occur 
+					-- after the Precursor (read_double) call in which - only
+					-- when white space is used - the field separator character,
+					-- after the double characters, is eaten (i.e., is not the
+					-- next character to be read); i.e., back up one so
+					-- that it is the next character.  (This appears to at
+					-- least happen when the read_double call follows a
+					-- read_string call.
+					back
+				end
+				back	-- Put back the character just read.
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	current_string_matches (s: STRING): BOOLEAN
@@ -317,5 +370,8 @@ feature {NONE} -- Implementation
 				go (saved_position)
 			end
 		end
+
+	field_sep_is_white: BOOLEAN
+			-- Does the field separator start with white space?
 
 end
