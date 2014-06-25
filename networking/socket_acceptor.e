@@ -5,8 +5,8 @@ note
 	author: "Jim Cochrane"
 	date: "$Date: 2006-04-04 21:28:13 -0600 (Tue, 04 Apr 2006) $";
 	revision: "$Revision: 586 $"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 deferred class SOCKET_ACCEPTOR inherit
 
