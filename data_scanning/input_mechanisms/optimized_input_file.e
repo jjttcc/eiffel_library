@@ -122,45 +122,6 @@ feature -- Cursor movement
 			field_index := field_index + 1
 		end
 
-	orig_advance_to_next_field
-			-- Advance the cursor to the next field.
-			-- Set error_occurred and error_string if an error is encountered.
-		local
-			i: INTEGER
-		do
-			last_error_fatal := False
-			error_occurred := False
-			from
-				i := 1
-			variant
-				field_separator.count + 1 - i
-			until
-				i > field_separator.count
-			loop
-				-- If field_separator @ i is a tab or space, it will have
-				-- been eaten in the last read_x call (idiosyncracy of an
-				-- PLAIN_TEXT_FILE).  If it's something else, then the
-				-- character still needs to be eaten.
-				if
-					not (field_separator @ i = '%T' or
-						field_separator @ i = ' ')
-				then
-					read_character
-					if
-						last_character /= field_separator @ i
-					then
-						error_occurred := True
-						error_string := "Incorrect field separator %
-							%character detected: '"
-						error_string.extend (last_character)
-						error_string.append ("'.")
-					end
-				end
-				i := i + 1
-			end
-			field_index := field_index + 1
-		end
-
 	advance_to_next_record
 			-- Advance the cursor to the next record.
 			-- Set error_occurred and error_string if an error is encountered.
