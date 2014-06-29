@@ -29,10 +29,6 @@ feature -- Access
 		deferred
 		end
 
-	command_type_anchor: IO_BASED_CLIENT_REQUEST_COMMAND
-		do
-		end
-
 feature -- Element change
 
 	set_io_medium (arg: like io_medium)
@@ -219,6 +215,10 @@ feature {NONE} -- Hook routines implementations
 		end
 
 feature {NONE} -- Implementation
+
+	command_type_anchor: IO_BASED_CLIENT_REQUEST_COMMAND
+		do
+		end
 
 	set_message_body (s: STRING; index: INTEGER)
 			-- Set `message_body' from string extracted from `s' @ `index'.

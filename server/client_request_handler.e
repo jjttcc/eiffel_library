@@ -22,7 +22,6 @@ feature -- Basic operations
 		local
 			cmd: like command_type_anchor
 		do
-print("[14.05-testing]: CLIENT_REQUEST_HANDLER.execute called%N")
 			if initialization_needed then
 				request_id := Void; command_argument := Void
 			end
