@@ -44,7 +44,7 @@ feature -- Access
 
 feature -- Comparison
 
-	infix "<" (other: EVENT): BOOLEAN
+	infix "<" (other: like Current): BOOLEAN
 		do
 			if date = Void or other.date = Void then
 				Result := date = Void and other.date /= Void

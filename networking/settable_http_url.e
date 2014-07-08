@@ -31,8 +31,8 @@ feature -- Initialization
 			path := p
 			make ("http://" + host + "/" + path)
 		ensure
-			host_set: host /= Void and host = h
-			path_set: path /= Void and path = p
+			host_set: host /= Void and host.is_equal(h)
+			path_set: path /= Void and path.is_equal(p)
 			address_set: address.is_equal ("http://" + host + "/" + path)
 		end
 

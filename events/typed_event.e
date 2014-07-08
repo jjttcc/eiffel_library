@@ -10,9 +10,6 @@ note
 deferred class TYPED_EVENT inherit
 
 	EVENT
-		redefine
-			is_equal
-		end
 
 feature -- Access
 
@@ -20,12 +17,6 @@ feature -- Access
 			-- The type of the event
 
 feature -- Comparison
-
-	is_equal (other: like Current): BOOLEAN
-		do
-			Result := other.type = type and
-						other.time_stamp.is_equal (time_stamp)
-		end
 
 invariant
 

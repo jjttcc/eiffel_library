@@ -115,7 +115,7 @@ feature {NONE} -- Hook routines implementations
 			-- and `message_body'.
 		local
 			s, number: STRING
-			i, loop_count: INTEGER
+			i, loop_count, candidate_req_id: INTEGER
 		do
 			create s.make (0)
 			from
@@ -148,14 +148,18 @@ feature {NONE} -- Hook routines implementations
 					report_error ("Request ID is not a valid integer: " +
 						number, Void, Void)
 					request_id := Error
-				elseif
-					not request_handlers.has (number.to_integer) and
-					number.to_integer /= Logout_request
-				then
-					report_error ("Invalid request ID: " + number, Void, Void)
-					request_id := Error
 				else
-					set_request_id_session_key (s, number.to_integer, i)
+					candidate_req_id := number.to_integer
+					if
+						not request_handlers.has (candidate_req_id) and
+						candidate_req_id /= Logout_request
+					then
+						report_error ("Invalid request ID: " + number,
+							Void, Void)
+						request_id := Error
+					else
+						set_request_id_session_key (s, candidate_req_id, i)
+					end
 				end
 			end
 			check
