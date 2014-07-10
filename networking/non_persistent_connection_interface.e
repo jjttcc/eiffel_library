@@ -24,7 +24,7 @@ feature -- Access
 
 	io_medium: SOCKET
 
-	sessions: HASH_TABLE [SESSION, INTEGER]
+	sessions: HASH_TABLE [like session, INTEGER]
 			-- Registered GUI Client sessions
 		deferred
 		end
@@ -97,7 +97,7 @@ feature {NONE} -- Hook routines implementations
 			Result := request_id.is_equal (Error)
 		end
 
-	session: SESSION
+	session: like session_anchor
 		do
 			if sessions.has (session_key) then
 				Result := sessions @ session_key
@@ -221,6 +221,10 @@ feature {NONE} -- Hook routines implementations
 feature {NONE} -- Implementation
 
 	command_type_anchor: IO_BASED_CLIENT_REQUEST_COMMAND
+		do
+		end
+
+	session_anchor: SESSION
 		do
 		end
 

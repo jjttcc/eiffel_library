@@ -105,8 +105,10 @@ feature {NONE} -- Implementation
 			interface.execute
 		end
 
+--!!!!!!socket-enhancement: When is cleanup called??!!!!
 	cleanup
 		do
+print ("!!!!!!!!!SOCKET_ACCEPTOR.cleanup called!!!!!!!%N")
 			if
 				accepted_socket /= Void and then not accepted_socket.is_closed
 			then
@@ -145,8 +147,6 @@ feature {NONE} -- Implementation - Hook routines
 			-- Perform any processing needed after calling `do_execute'.
 		do
 			accepted_socket.close
-		ensure
-			accepted_socket_is_closed: accepted_socket.is_closed
 		end
 
 	Persistent_connection_flag: CHARACTER

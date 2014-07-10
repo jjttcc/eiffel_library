@@ -9,7 +9,7 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class SOCKET_BASED_POLL_COMMAND
+class LISTENING_SOCKET_POLL_COMMAND
 
 inherit
 
