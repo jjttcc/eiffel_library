@@ -26,10 +26,13 @@ create
 
 feature {NONE} -- Initialization
 
-	make (s: like acceptor)
+	make (s: like socket_processor)
+		require
+			s_not_void: s /= Void
+			srvr_socket_not_void: s.server_socket /= Void
 		do
-			acceptor := s
-			pc_make (acceptor.server_socket)
+			socket_processor := s
+			pc_make (socket_processor.server_socket)
 			socket.listen (5)
 		ensure
 			set: socket = s.server_socket
@@ -40,13 +43,13 @@ feature -- Access
 	socket: NETWORK_STREAM_SOCKET
 			-- The socket used for establishing a connection
 
-	acceptor: SOCKET_ACCEPTOR
+	socket_processor: SERVER_SOCKET_PROCESSOR
 
 feature -- Basic operations
 
 	execute (arg: ANY)
 		do
-			acceptor.process_socket
+			socket_processor.process_socket
 		end
 
 end

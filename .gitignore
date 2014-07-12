@@ -1,0 +1,7 @@
+.*.sw[op]
+indicators_persist*
+generators_persist*
+*.o
+*.orig
+tags
+Makefile

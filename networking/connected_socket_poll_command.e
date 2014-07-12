@@ -30,8 +30,6 @@ feature {NONE} -- Initialization
             pc_make(s)
             poller := poll
             poller.put_read_command(Current)
-print("CONNECTED_SOCKET_POLL_COMMAND - socket: " + socket.out + "%N")
-print("CONNECTED_SOCKET_POLL_COMMAND - socket.is_closed: " + socket.is_closed.out + "%N")
         ensure then
             poller = poll
         end
@@ -47,7 +45,6 @@ feature -- Basic operations
 
     execute (arg: ANY)
         do
-print("CONNECTED_SOCKET_POLL_COMMAND.do_nothing called!!!!!")
 --!!!!!!!!!!!!!!!!            poller.remove_read_command(Current)
         end
 

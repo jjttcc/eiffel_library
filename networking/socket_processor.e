@@ -1,42 +1,32 @@
 note
 
-	description: "Objects that 'accept' a server socket connection and %
-		%perform input/output operations on the resulting socket object"
+	description: "Objects that perform input/output operations on a target%
+		%socket object"
 	author: "Jim Cochrane"
 	date: "$Date: 2006-04-04 21:28:13 -0600 (Tue, 04 Apr 2006) $";
 	revision: "$Revision: 586 $"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-deferred class SOCKET_ACCEPTOR inherit
+deferred class SOCKET_PROCESSOR
 
-	CLEANUP_SERVICES
-		export
-			{NONE} all
-			{ANY} deep_twin, is_deep_equal, standard_is_equal
-		end
+inherit
 
 	TERMINABLE
-		export
-			{NONE} all
-		end
+
+	CLEANUP_SERVICES
 
 feature {NONE} -- Initialization
 
-	initialize_components (s: like server_socket)
+	initialize
 		do
-			server_socket := s
 			register_for_termination (Current)
-		ensure
-			set: server_socket = s
 		end
 
 feature -- Access
 
-	accepted_socket: SOCKET
+	target_socket: SOCKET
 			-- The socket that will be used for input and output
-
-	server_socket: NETWORK_STREAM_SOCKET
 
 	is_non_persistent_connection: BOOLEAN
 			-- Is the current client connection a non-persistent connection?
@@ -69,19 +59,17 @@ feature {NONE} -- Implementation
 	initialize_for_execution
 			-- Perform initialization needed before calling `do_execute'.
 		do
-			server_socket.accept
-			accepted_socket := server_socket.accepted
-			accepted_socket.read_character
+			initialize_interfaces
+			initialize_target_socket
+			target_socket.read_character
 			if
-				accepted_socket.last_character.is_equal (
+				target_socket.last_character.is_equal (
 					Persistent_connection_flag)
 			then
 				is_non_persistent_connection := False
 			else
 				is_non_persistent_connection := True
 			end
-		ensure
-			accepted_socket_accepted: accepted_socket = server_socket.accepted
 		end
 
 	do_execute
@@ -89,33 +77,28 @@ feature {NONE} -- Implementation
 		do
 			if is_non_persistent_connection then
 				prepare_for_non_persistent_connection
-				non_persistent_connection_interface.set_io_medium (
-					accepted_socket)
+				non_persistent_connection_interface.set_io_medium (target_socket)
 				interface := non_persistent_connection_interface
 			else
 				prepare_for_persistent_connection
-				persistent_connection_interface.set_input_device (
-					accepted_socket)
-				persistent_connection_interface.set_output_device (
-					accepted_socket)
+				persistent_connection_interface.set_input_device (target_socket)
+				persistent_connection_interface.set_output_device (target_socket)
 				interface := persistent_connection_interface
 			end
-			-- !!!Out of date - remove: When threads are added, this call
-			-- may change to "interface.launch" to run in a separate thread.
 			interface.execute
 		end
 
 --!!!!!!socket-enhancement: When is cleanup called??!!!!
 	cleanup
 		do
-print ("!!!!!!!!!SOCKET_ACCEPTOR.cleanup called!!!!!!!%N")
+print ("!!!!!!!!!SOCKET_PROCESSOR.cleanup called!!!!!!!%N")
 			if
-				accepted_socket /= Void and then not accepted_socket.is_closed
+				target_socket /= Void and then not target_socket.is_closed
 			then
 				if not is_non_persistent_connection then
 					terminate_persistent_connection
 				end
-				accepted_socket.close
+				target_socket.close
 			end
 		end
 
@@ -124,10 +107,25 @@ print ("!!!!!!!!!SOCKET_ACCEPTOR.cleanup called!!!!!!!%N")
 		require
 			persistent_connection: not is_non_persistent_connection
 		do
-			accepted_socket.put_character (connection_termination_character)
+			target_socket.put_character (connection_termination_character)
 		end
 
 feature {NONE} -- Implementation - Hook routines
+
+	initialize_target_socket
+			-- Make sure the target socket exists and is open.
+		deferred
+		ensure
+			target_socket /= Void and then not target_socket.is_closed
+		end
+
+	initialize_interfaces
+			-- Initialize the interface attributes
+		deferred
+		ensure
+            persistent_connection_interface /= Void
+            non_persistent_connection_interface /= Void
+		end
 
 	prepare_for_non_persistent_connection
 			-- Perform any needed specialized preparation for the
@@ -146,7 +144,7 @@ feature {NONE} -- Implementation - Hook routines
 	post_process
 			-- Perform any processing needed after calling `do_execute'.
 		do
-			accepted_socket.close
+			target_socket.close
 		end
 
 	Persistent_connection_flag: CHARACTER
