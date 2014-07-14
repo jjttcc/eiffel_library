@@ -92,7 +92,7 @@ feature {NONE} -- Hook routines implementations
 			cmd.set_output_medium (io_medium)
 		end
 
-	request_error: BOOLEAN
+	is_request_error: BOOLEAN
 		do
 			Result := request_id.is_equal (Error)
 		end

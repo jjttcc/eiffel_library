@@ -20,7 +20,7 @@ feature {NONE} -- Initialization
 
 	initialize
 		do
-			register_for_termination (Current)
+			register_for_termination(Current)
 		end
 
 feature -- Access
@@ -40,6 +40,11 @@ feature -- Access
 	non_persistent_connection_interface: NON_PERSISTENT_CONNECTION_INTERFACE
 			-- The interface used for non-persistent connections
 
+feature -- Status report
+
+	error_occurred: BOOLEAN
+			-- Did an error occur during the last socket operation?
+
 feature -- Basic operations
 
 	process_socket
@@ -52,8 +57,13 @@ feature {NONE} -- Implementation
 	execute
 		do
 			initialize_for_execution
-			do_execute
-			post_process
+			if error_occurred then
+				handle_error
+--!!!!!![socket-enh]				error_occurred := False
+			else
+				do_execute
+				post_process
+			end
 		end
 
 	initialize_for_execution
@@ -61,14 +71,18 @@ feature {NONE} -- Implementation
 		do
 			initialize_interfaces
 			initialize_target_socket
-			target_socket.read_character
-			if
-				target_socket.last_character.is_equal (
+			if target_socket.socket_ok then
+				target_socket.read_character
+				if
+					target_socket.last_character.is_equal(
 					Persistent_connection_flag)
-			then
-				is_non_persistent_connection := False
+					then
+					is_non_persistent_connection := False
+				else
+					is_non_persistent_connection := True
+				end
 			else
-				is_non_persistent_connection := True
+				error_occurred := True
 			end
 		end
 
@@ -77,12 +91,12 @@ feature {NONE} -- Implementation
 		do
 			if is_non_persistent_connection then
 				prepare_for_non_persistent_connection
-				non_persistent_connection_interface.set_io_medium (target_socket)
+				non_persistent_connection_interface.set_io_medium(target_socket)
 				interface := non_persistent_connection_interface
 			else
 				prepare_for_persistent_connection
-				persistent_connection_interface.set_input_device (target_socket)
-				persistent_connection_interface.set_output_device (target_socket)
+				persistent_connection_interface.set_input_device(target_socket)
+				persistent_connection_interface.set_output_device(target_socket)
 				interface := persistent_connection_interface
 			end
 			interface.execute
@@ -91,7 +105,7 @@ feature {NONE} -- Implementation
 --!!!!!!socket-enhancement: When is cleanup called??!!!!
 	cleanup
 		do
-print ("!!!!!!!!!SOCKET_PROCESSOR.cleanup called!!!!!!!%N")
+print("!!!!!!!!!SOCKET_PROCESSOR.cleanup called!!!!!!!%N")
 			if
 				target_socket /= Void and then not target_socket.is_closed
 			then
@@ -107,14 +121,29 @@ print ("!!!!!!!!!SOCKET_PROCESSOR.cleanup called!!!!!!!%N")
 		require
 			persistent_connection: not is_non_persistent_connection
 		do
-			target_socket.put_character (connection_termination_character)
+			target_socket.put_character(connection_termination_character)
+		end
+
+	handle_error
+			-- Process the last error that occurred.
+		local
+			msg: STRING
+		do
+			if target_socket /= Void then
+				msg := "Socket operation error"
+				if target_socket.error /= Void then
+					msg := msg + ": " + target_socket.error
+				end
+				log_socket_error(msg)
+				perform_specific_error_processing
+			end
 		end
 
 feature {NONE} -- Implementation - Hook routines
 
 	initialize_target_socket
 			-- Make sure the target socket exists and is open.
-		deferred
+		do
 		ensure
 			target_socket /= Void and then not target_socket.is_closed
 		end
@@ -144,7 +173,7 @@ feature {NONE} -- Implementation - Hook routines
 	post_process
 			-- Perform any processing needed after calling `do_execute'.
 		do
-			target_socket.close
+			do_nothing
 		end
 
 	Persistent_connection_flag: CHARACTER
@@ -155,6 +184,17 @@ feature {NONE} -- Implementation - Hook routines
 	connection_termination_character: CHARACTER
 			-- Character that tells the client that the connection has
 			-- been terminated.
+		deferred
+		end
+
+	log_socket_error(msg: STRING)
+			-- Send 'msg' to an appropriate destination/device.
+		deferred
+		end
+
+	perform_specific_error_processing
+			-- Perform any error-condition processing needed by descendants.
+			-- Override only if needed.
 		deferred
 		end
 

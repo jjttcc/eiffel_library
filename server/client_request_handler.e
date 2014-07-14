@@ -43,7 +43,7 @@ feature -- Basic operations
 				setup_command (cmd)
 				if
 					sessions_used and
-					not is_login_request (request_id) and not request_error
+					not is_login_request (request_id) and not is_request_error
 					-- A session is not needed for the login request command,
 					-- since it will create one.
 				then
@@ -53,7 +53,7 @@ feature -- Basic operations
 					cmd.set_session (session)
 				end
 				-- `cmd.execute' is expected to handle the error if
-				-- `request_error' is True.
+				-- `is_request_error' is True.
 				cmd.execute (command_argument)
 			end
 		end
@@ -101,7 +101,7 @@ feature {NONE} -- Hook routines
 		do
 		end
 
-	request_error: BOOLEAN
+	is_request_error: BOOLEAN
 			-- Did an error occur, such as an invalid request, in
 			-- `process_request'?
 		deferred
@@ -136,11 +136,11 @@ feature {NONE} -- Implementation
 		do
 			Result := sessions_used and
 				not is_login_request (request_id) and
-				not request_error implies session /= Void
+				not is_request_error implies session /= Void
 		ensure
 			definition: Result = (sessions_used and
 				not is_login_request (request_id) and
-				not request_error implies session /= Void)
+				not is_request_error implies session /= Void)
 		end
 
 	request_handlers: HASH_TABLE [like command_type_anchor, HASHABLE]

@@ -12,7 +12,7 @@ deferred class SERVER_SOCKET_PROCESSOR inherit
 
 	SOCKET_PROCESSOR
 		redefine
-			cleanup
+			cleanup, post_process, initialize_target_socket
 		end
 
 feature -- Access
@@ -20,6 +20,12 @@ feature -- Access
 	server_socket: NETWORK_STREAM_SOCKET
 
 feature {NONE} -- Implementation
+
+	post_process
+			-- Perform any processing needed after calling `do_execute'.
+		do
+			target_socket.close
+		end
 
 	initialize_target_socket
 			-- Set target_socket to the "accepted" socket.
