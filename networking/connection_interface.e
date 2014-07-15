@@ -8,6 +8,13 @@ note
 
 deferred class CONNECTION_INTERFACE inherit
 
+feature -- Status report
+
+	logged_out: BOOLEAN
+			-- Is the last client request a "logout" request?
+		deferred
+		end
+
 feature -- Basic operations
 
 	execute

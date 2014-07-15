@@ -16,6 +16,12 @@ feature -- Access
 		deferred
 		end
 
+	logged_out: BOOLEAN
+			-- Was the last client request a "logout" request?
+		do
+			Result := is_logout_request(request_id)
+		end
+
 feature -- Basic operations
 
 	execute

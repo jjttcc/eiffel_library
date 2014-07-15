@@ -137,32 +137,27 @@ feature {NONE} -- Hook routine implementations
 
     respond_to_client(arg: ANY)
             -- Send `output_buffer' to the `output_medium'.
-        local
-            msg: STRING
         do
             if not output_buffer.is_empty then
                 if output_medium.is_writable then
                     output_medium.put_string(output_buffer)
                 else
---!!!!!![socket-enh]maybe this error logic doesn't belong here.
-                    msg := "Output medium is not writable"
---                  if output_medium.error /= Void then
---!!!!!!!sockenh                    if output_medium_error /= Void then
---!!!!!!!sockenh                 msg := msg + " [" + output_medium_error + "]"
---!!!!!!!sockenh                    end
-                    log_server_error(msg)
+                    log_server_error("Output medium is not writable")
                 end
             end
         end
 
---!!!!    output_medium_error: STRING
-            -- Description of last error, if any
---        deferred
- --       end
-log_server_error(msg: STRING)
---!!!!!!!!!!should be: deferred
-do
-end
+    log_server_error(msg: STRING)
+            -- Log `msg' on the server side.
+            -- (default: send to stderr - redefine if needed)
+        do
+            if msg[msg.count] ~ "%N" then
+                io.error.print(msg)
+            else
+                -- No newline at end, so add it.
+                io.error.print(msg + "%N")
+            end
+        end
 
 feature {NONE} -- Implementation
 
