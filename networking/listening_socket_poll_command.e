@@ -2,7 +2,7 @@ note
 
 	description: "POLL_COMMANDs whose `active_medium' is a %
 		%NETWORK_STREAM_SOCKET - server socket - and that delegates accepting %
-		%connections from that socket to a SOCKET_ACCEPTOR object."
+		%connections from that socket to a 'socket_processor' object."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
