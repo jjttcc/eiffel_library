@@ -62,7 +62,6 @@ feature {NONE} -- Implementation
             initialize_for_execution
             if error_occurred then
                 handle_error
---!!!!!![socket-enh]                error_occurred := False
             else
                 do_execute
                 post_process
@@ -107,10 +106,8 @@ feature {NONE} -- Implementation
             interface.execute
         end
 
---!!!!!!socket-enhancement: When is cleanup called??!!!!
     cleanup
         do
-print("!!!!!!!!!SOCKET_PROCESSOR.cleanup called for " + Current.out + "%N")
             if
                 target_socket /= Void and then not target_socket.is_closed
             then
