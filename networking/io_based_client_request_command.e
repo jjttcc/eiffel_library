@@ -117,8 +117,12 @@ feature {NONE} -- Hook routines
 feature {NONE} -- Hook routine implementations
 
     warn_client(slst: ARRAY [STRING])
+        local
+            warning_code: STRING
         do
-            report_error(warning_string, slst)
+            warning_code := warning_string.twin
+            warning_code.right_adjust
+            report_error(warning_code, slst)
             respond_to_client(slst)
         end
 
@@ -132,7 +136,9 @@ feature {NONE} -- Hook routine implementations
     exception_cleanup(arg: ANY)
         do
             prepare_for_execution(arg)
-            warn_client(<<"Error occurred ", error_context(arg.out), ".">>)
+            if execution_retries < Maximum_execution_tries then
+                warn_client(<<"Error occurred ", error_context(arg.out), ".">>)
+            end
         end
 
     respond_to_client(arg: ANY)

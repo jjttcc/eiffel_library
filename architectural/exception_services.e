@@ -160,7 +160,8 @@ feature -- Basic operations
 			-- Is `e' an exception that is considered fatal?
 		do
 			Result := exception_list.has (e) and not (e = External_exception
-				or e = Floating_point_exception or e = Routine_failure)
+				or e = Floating_point_exception or e = Routine_failure or
+				e = Io_exception)
 		end
 
 	error_information (errname: STRING; stack_trace: BOOLEAN): STRING

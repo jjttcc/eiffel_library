@@ -15,6 +15,11 @@ feature -- Status report
 		deferred
 		end
 
+	execution_error_occurred: BOOLEAN
+			-- Did the last call to `execute' fail?
+		deferred
+		end
+
 feature -- Basic operations
 
 	execute

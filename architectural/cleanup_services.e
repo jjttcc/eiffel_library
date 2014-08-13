@@ -1,5 +1,5 @@
 note
-	description: "Services for cleanup registration and execution"
+	description: "Global services for cleanup registration and execution"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

@@ -22,6 +22,11 @@ feature -- Access
 			Result := is_logout_request(request_id)
 		end
 
+feature -- Status report
+
+	execution_error_occurred: BOOLEAN
+			-- Did the last call to `execute' fail?
+
 feature -- Basic operations
 
 	execute
@@ -61,6 +66,7 @@ feature -- Basic operations
 				-- `cmd.execute' is expected to handle the error if
 				-- `is_request_error' is True.
 				cmd.execute (command_argument)
+				execution_error_occurred := cmd.execution_error
 			end
 		end
 

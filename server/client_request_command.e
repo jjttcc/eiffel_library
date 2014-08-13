@@ -40,6 +40,10 @@ feature -- Status report
 			Result := True
 		end
 
+	execution_error: BOOLEAN
+			-- Did the last call to `execute' result in an error that
+			-- prevented successful execution?
+
 feature -- Basic operations
 
 	execute (arg: ANY)
@@ -47,8 +51,10 @@ feature -- Basic operations
 		local
 			exception_occurred: BOOLEAN
 		do
+			execution_error := False
 			if exception_occurred then
 				exception_cleanup (arg)
+				execution_error := True
 			else
 				execution_retries := 0
 				prepare_for_execution (arg)
@@ -86,7 +92,7 @@ feature {NONE} -- Hook routines
 		end
 
 	exception_cleanup, failure_cleanup (arg: ANY)
-			-- Perform any needed cleanup after an exception or failer
+			-- Perform any needed cleanup after an exception or failure
 			-- has occurred.
 		do
 			-- Default to null action - redefine as needed.

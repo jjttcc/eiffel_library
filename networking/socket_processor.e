@@ -104,6 +104,9 @@ feature {NONE} -- Implementation
                 interface := persistent_connection_interface
             end
             interface.execute
+            if interface.execution_error_occurred then
+                error_occurred := True
+            end
         end
 
     cleanup
