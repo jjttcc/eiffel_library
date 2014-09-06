@@ -86,7 +86,8 @@ feature -- Access
 		do
 			Result := name_implementation
 			if Result = Void then
-				Result := ""
+				Result := generating_type.as_lower
+				Result.replace_substring_all("_", " ")
 			end
 		end
 
