@@ -84,6 +84,15 @@ feature -- Access
 			target.is_empty implies Result.count = 1 and Result.first.is_empty
 		end
 
+	pluralized(s: STRING; count: INTEGER): STRING
+			-- Make `s` plural - by appending an 's' - if `count' > 1
+		do
+			Result := s
+			if count > 1 then
+				Result := Result + "s"
+			end
+		end
+
 feature -- Element change
 
 	keep_tail (c: CHARACTER)
