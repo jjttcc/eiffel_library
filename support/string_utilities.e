@@ -85,10 +85,10 @@ feature -- Access
 		end
 
 	pluralized(s: STRING; count: INTEGER): STRING
-			-- Make `s` plural - by appending an 's' - if `count' > 1
+			-- Make `s` plural - by appending an 's' - if `count' /= 1
 		do
 			Result := s
-			if count > 1 then
+			if count /= 1 then
 				Result := Result + "s"
 			end
 		end
