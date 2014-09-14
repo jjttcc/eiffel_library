@@ -86,6 +86,14 @@ feature -- Access
 		do
 			Result := name_implementation
 			if Result = Void then
+				Result := ""
+			end
+		end
+
+	user_friendly_name: STRING
+		do
+			Result := name
+			if Result = Void or else Result.is_empty then
 				Result := generating_type.as_lower
 				Result.replace_substring_all("_", " ")
 			end
