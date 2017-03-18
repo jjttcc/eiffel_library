@@ -17,7 +17,7 @@ class INPUT_SOCKET_DEBUG inherit
 
 create
 
-	make_client_by_port
+	make_client_by_port, make_empty
 
 
 create {NETWORK_STREAM_SOCKET}
