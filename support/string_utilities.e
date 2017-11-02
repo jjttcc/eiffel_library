@@ -49,6 +49,7 @@ feature -- Access
 			i, last_index, s_count: INTEGER
 		do
 			create Result.make (0)
+			last_index := 0
 			if not target.is_empty then
 				last_index := target.substring_index (fld_sep, 1)
 			end
@@ -77,6 +78,64 @@ feature -- Access
 							Result.extend (target.substring (i, target.count))
 						end
 					end
+				end
+			end
+		ensure
+			result_exists: Result /= Void
+			target.is_empty implies Result.count = 1 and Result.first.is_empty
+		end
+
+	tokens_with_limit (fld_sep: STRING; limit: INTEGER): ARRAYED_LIST [STRING]
+			-- Tokenized list of all components of `target' separated by
+			-- `fld_sep'.  If `fld_sep' does not occur in `target' Result
+			-- will contain one element whose contents equal `target'.
+			-- If `limit' is >= 0 tokenizing will stop as soon as `limit`
+			-- tokens are produced.  For example, if `target' is
+			-- "one,two,three,four,five,six" `fld_sep' is ',', and `limit' is
+			-- 4, Result will be: <<one, two, three, four>>.  If `limit'
+			-- is 0, Result will be <<>> (empty).  If `limit' is < 0, it
+			-- will be ignored - all tokens will be extracted.
+		require
+			s_not_void: fld_sep /= Void
+			s_not_empty: not fld_sep.is_empty
+			target_not_void: target /= Void
+		local
+			i, last_index, s_count, token_count: INTEGER
+		do
+			create Result.make (0)
+			token_count := 0; last_index := 0
+			if not target.is_empty then
+				last_index := target.substring_index (fld_sep, 1)
+			end
+			if last_index = 0 and limit /= 0 then
+				Result.extend (target)
+			else
+				from
+					check last_index > 0 end
+					s_count := fld_sep.count
+					if limit >= 0 and token_count < limit then
+						Result.extend (target.substring (1, last_index - 1))
+						i := last_index + s_count
+						token_count := token_count + 1
+					end
+				until
+					last_index = 0 or token_count = limit
+				loop
+					if i > target.count then
+						last_index := 0
+						-- `fld_sep' occurred at the end of target, resulting
+						-- in an empty field
+						Result.extend ("")
+					else
+						last_index := target.substring_index (fld_sep, i)
+						if last_index > 0 then
+							Result.extend (target.substring (i, last_index - 1))
+							i := last_index + s_count
+						else
+							Result.extend (target.substring (i, target.count))
+						end
+					end
+					token_count := token_count + 1
 				end
 			end
 		ensure
