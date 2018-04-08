@@ -10,6 +10,9 @@ note
 deferred class INPUT_MEDIUM inherit
 
 	INPUT_RECORD_SEQUENCE
+		redefine
+			open_for_reading
+		end
 
 	IO_MEDIUM
 		export
@@ -59,6 +62,11 @@ feature -- Status report
 	after_last_record: BOOLEAN
 
 	last_error_fatal: BOOLEAN
+
+	open_for_reading: BOOLEAN
+		do
+			Result := is_open_read
+		end
 
 feature -- Cursor movement
 

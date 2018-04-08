@@ -16,16 +16,22 @@ feature -- Access
 
 	field_index: INTEGER
 			-- Index of the current field - starts at 1.
+		require
+			readable: open_for_reading
 		deferred
 		end
 
 	record_index: INTEGER
 			-- Index of the current record - starts at 1.
+		require
+			readable: open_for_reading
 		deferred
 		end
 
 	field_count: INTEGER
 			-- Number of fields per record
+		require
+			readable: open_for_reading
 		deferred
 		end
 
@@ -41,10 +47,18 @@ feature -- Status report
 		deferred
 		end
 
+	open_for_reading: BOOLEAN
+			-- Is Current in a readable state?
+		do
+			Result := True
+		end
+
 feature -- Cursor movement
 
 	start
 			-- Place cursor on the first record.
+		require
+			readable: open_for_reading
 		deferred
 		ensure
 			indices_at_1: readable implies
@@ -54,6 +68,7 @@ feature -- Cursor movement
 	advance_to_next_record
 			-- Advance the cursor to the next record.
 		require
+			readable: open_for_reading
 			not_after: not after_last_record
 		deferred
 		ensure
@@ -64,6 +79,7 @@ feature -- Cursor movement
 	advance_to_next_field
 			-- Advance the cursor to the next field.
 		require
+			readable: open_for_reading
 			not_after: not after_last_record
 			field_index_valid: field_index <= field_count
 		deferred
@@ -76,6 +92,7 @@ feature -- Cursor movement
 			-- Discard the current record - place cursor on the next
 			-- record.
 		require
+			readable: open_for_reading
 			not_after: not after_last_record
 		deferred
 		ensure

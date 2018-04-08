@@ -5,3 +5,7 @@ generators_persist*
 *.orig
 tags
 Makefile
+*.bak
+*try[0-9]
+*.old
+*bck
