@@ -61,6 +61,12 @@ feature -- Access
 		deferred
 		end
 
+    record_error_limit: INTEGER
+            -- Maximum bad errors above which scanning will be aborted -
+            -- -1 => no limit
+        deferred
+        end
+
 feature -- Status report
 
 	strict_error_checking: BOOLEAN
@@ -143,6 +149,8 @@ feature -- Basic operations
 	execute
 			-- Scan input and create tuples from it.  If `start_input',
 			-- call 'input.start' before scanning.
+        local
+            record_errors: INTEGER
 		do
 			if error_list = Void then
 				create error_list.make
@@ -168,10 +176,16 @@ feature -- Basic operations
 					-- (If not `start_input', assume that the field count
 					-- for the current tradable was already checked the
 					-- first time it was read [when `start_input' was true].)
-					last_error_fatal := True
-					error_in_current_tuple := True
 					error_list.extend (Wrong_field_count_message (
 						input.field_count, value_setters.count))
+                    error_in_current_tuple := True
+                    record_errors := record_errors + 1 
+                    if
+                        record_error_limit >= 0 and
+                        record_errors > record_error_limit
+                    then
+                        last_error_fatal := True
+                    end
 				end
 			invariant
 				-- product_count = number_of_records_in (
@@ -181,7 +195,11 @@ feature -- Basic operations
 			loop
 				make_tuple
 				if error_in_current_tuple then
+                    record_errors := record_errors + 1 
 					handle_last_error
+                    if record_errors > record_error_limit then
+                        last_error_fatal := True
+                    end
 				end
 				if not last_error_fatal then
 					advance_to_next_record
