@@ -157,7 +157,7 @@ feature {NONE} -- Hook routine implementations
             -- Log `msg' on the server side.
             -- (default: send to stderr - redefine if needed)
         do
-            if msg[msg.count] ~ "%N" then
+            if msg[msg.count].out ~ "%N" then
                 io.error.print(msg)
             else
                 -- No newline at end, so add it.

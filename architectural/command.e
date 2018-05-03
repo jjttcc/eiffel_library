@@ -125,6 +125,15 @@ feature -- Element change
 			name_set: name_implementation.is_equal (arg) and name /= Void
 		end
 
+    append_to_name (suffix, separator: STRING)
+        do
+            if name_implementation = Void then
+                name_implementation := suffix.twin
+            else
+                name_implementation.append (separator + suffix)
+            end
+        end
+
 feature -- Basic operations
 
 	execute (arg: ANY)
