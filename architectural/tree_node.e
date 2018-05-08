@@ -180,28 +180,6 @@ feature -- Element change
         deferred
         end
 
-feature -- Basic operations
-
---!!!!NOTE: This can probably be removed, as it duplicates:
---!!! descendants.do_all:
-    hidemeapply_to_all_descendants (proc: PROCEDURE [ANY, TUPLE [ANY]])
-            -- Apply `proc' to Current and all members of `descendants'.
-        local
-            descndnts: like descendants
-        do
-            descndnts := descendants
-            descndnts.extend (Current)
-            from
-                descndnts.start
-            until
-                descndnts.off
-            loop
-io.error.print("apply... calling 'proc' on '" + descndnts.item.name + "%N")
-                proc.call (descndnts.item)
-                descndnts.forth
-            end
-        end
-
 feature {NONE} -- Implementation - Hook routines
 
     copy_of_children: like children
