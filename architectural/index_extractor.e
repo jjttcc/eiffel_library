@@ -38,14 +38,20 @@ feature -- Initialization
 			not_initialized: not initialized
 		end
 
-	set_indexable (arg: INDEXED)
-			-- Set `indexable' to `arg'.
+	set_indexable (ind: INDEXED)
+			-- Set `indexable' to `ind'.
 		require
-			arg_not_void: arg /= Void
+			arg_not_void: ind /= Void
+		local
+			indcmd: COMMAND
 		do
-			indexable := arg
+			indexable := ind
+			indcmd ?= indexable
+			if indcmd /= Void then
+				indcmd.initialize_from_parent(Current)
+			end
 		ensure
-			indexable_set: indexable = arg and indexable /= Void
+			indexable_set: indexable = ind and indexable /= Void
 		end
 
 	initialize (arg: ANY)

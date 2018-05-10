@@ -116,7 +116,45 @@ feature -- Access
             exists: Result /= Void
         end
 
+    parent: TREE_NODE
+            -- The TREE_NODE that "contains" Current - If no
+            -- object contains Current, Result = Current.
+        do
+            if parent_implementation = Void then
+                Result := Current
+            else
+                Result := parent_implementation
+            end
+        end
+
+    ancestors: LINKED_LIST [TREE_NODE]
+            -- Current's ancestors, in order: i.e., parent,
+            -- parent's parent, etc (excluding Current).
+        local
+            prnt: TREE_NODE
+            list: LINKED_LIST [TREE_NODE]
+        do
+            prnt := parent
+            create Result.make
+            if prnt /= Current then
+                Result.extend(parent)
+                Result.start
+                Result.merge_right(prnt.ancestors)
+            end
+        ensure
+            existence: Result /= Void
+            empty_iff_own_parent: Result.empty = parent_is_self
+        end
+
 feature -- Status report
+
+    parent_is_self: BOOLEAN
+            -- Is "self" (Current) its own parent?
+        do
+            Result := parent = Current
+        ensure
+            definition: Result = (parent = Current)
+        end
 
     status: STRING
             -- Status of Current (not its desdendants) - for debugging
@@ -172,12 +210,22 @@ feature -- Status report
 feature -- Element change
 
     append_to_name (suffix, separator: STRING)
-            -- If `name' is not void, append `separator' + `suffix' to
-            -- `name'.  If `name' is void, simply set name to (a copy
-            -- of) `suffix'.
+            -- Append `separator' + `suffix' to the object's "name".
         require
-            args_good: suffix /= Void and separator /= Void
+            suffix: suffix /= Void and not suffix.empty
+            separator_exists: separator /= Void
         deferred
+        end
+
+    initialize_from_parent (p: TREE_NODE)
+            -- Perform any needed initialization of Current using potential
+            -- parent `p' - for the most likely example, set a `parent'
+            -- attribute to `p'.
+        require
+            existence: p /= Void
+        do
+        ensure
+            parent_exists: parent /= Void
         end
 
 feature {NONE} -- Implementation - Hook routines
@@ -292,6 +340,12 @@ feature {TREE_NODE} -- Implementation
             end
         end
 
+feature {NONE} -- Implementation
+
+    parent_implementation: TREE_NODE
+        deferred
+        end
+
 feature {NONE} -- Hook routine implementations
 
     hash_code: INTEGER
@@ -310,5 +364,6 @@ invariant
     children_and_descendants_correspond: not descendants_locked implies
         children.is_empty = descendants.is_empty
     name_not_void: name /= Void
+    parent_exists: parent /= Void
 
 end

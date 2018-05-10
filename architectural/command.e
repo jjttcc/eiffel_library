@@ -99,6 +99,16 @@ feature -- Access
 			end
 		end
 
+	full_name: STRING
+		do
+			Result := name
+			if name_suffix /= Void then
+				Result := Result + name_suffix
+			end
+		end
+
+	name_suffix: STRING
+
 feature -- Status report
 
 	arg_mandatory: BOOLEAN
@@ -127,11 +137,9 @@ feature -- Element change
 
     append_to_name (suffix, separator: STRING)
         do
-            if name_implementation = Void then
-                name_implementation := suffix.twin
-            else
-                name_implementation.append (separator + suffix)
-            end
+io.error.print("append_to_name called with '" + suffix + "'" +
+" [" + generating_type+ "]%N")
+            name_suffix := separator.twin + suffix.twin
         end
 
 feature -- Basic operations

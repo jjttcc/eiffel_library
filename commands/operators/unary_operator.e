@@ -42,14 +42,16 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_operand (arg: like operand)
-			-- Set operand to `arg'.
+	set_operand (op: like operand)
+			-- Set operand to `op'.
 		require
-			arg /= Void
+			op /= Void
 		do
-			operand := arg
+			operand := op
+			operand.initialize_from_parent(Current)
 		ensure
-			operand_set: operand = arg and operand /= Void
+			operand_set: operand = op and operand /= Void
+			parent_set: operand.parent = Current
 		end
 
 feature -- Basic operations

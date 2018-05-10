@@ -10,7 +10,7 @@ deferred class RESULT_COMMAND [G] inherit
 
 	COMMAND
 		redefine
-			status_contents
+			status_contents, initialize_from_parent
 		end
 
 feature -- Access
@@ -18,11 +18,24 @@ feature -- Access
 	value: G
 			-- The result of execution
 
+feature -- Status setting
+
+	initialize_from_parent(p: TREE_NODE)
+		do
+			parent_implementation := p
+		ensure then
+			parent = p
+		end
+
 feature {NONE} -- Implementation - Hook routine implementations
 
 	status_contents: STRING
 		do
 			Result := "value: " + value.out
 		end
+
+feature {NONE} -- Implementation
+
+	parent_implementation: TREE_NODE
 
 end -- class RESULT_COMMAND

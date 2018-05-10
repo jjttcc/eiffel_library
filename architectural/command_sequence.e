@@ -10,7 +10,7 @@ class COMMAND_SEQUENCE inherit
 
 	COMMAND
 		redefine
-			children, initialize
+			children, initialize, initialize_from_parent
 		end
 
 create
@@ -44,6 +44,15 @@ feature -- Status report
 	arg_mandatory: BOOLEAN
 		do
 			Result := children.there_exists (agent {COMMAND}.arg_mandatory)
+		end
+
+feature -- Status setting
+
+	initialize_from_parent(p: TREE_NODE)
+		do
+			parent_implementation := p
+		ensure then
+			parent = p
 		end
 
 feature -- Element change
@@ -86,5 +95,9 @@ feature -- Basic operations
 		do
 			children.do_all (agent {COMMAND}.execute (arg))
 		end
+
+feature {NONE} -- Implementation
+
+	parent_implementation: TREE_NODE
 
 end

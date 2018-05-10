@@ -118,6 +118,11 @@ feature {NONE} -- Implementation
             Result := 1
         end
 
+	parent_implementation: TREE_NODE
+		do
+			Result := Current
+		end
+
 invariant
 
     Maximum_execution_tries >= 0 and

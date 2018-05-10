@@ -28,11 +28,12 @@ feature -- Initialization
 		require
 			not_void: op1 /= Void and op2 /= Void
 		do
-		    operand1 := op1
-		    operand2 := op2
+		    set_operand1(op1)
+		    set_operand2(op2)
 		ensure
 			are_set: operand1 = op1 and operand2 = op2
 			not_void: operand1 /= Void and operand2 /= Void
+			parent_set: operand1.parent = Current and operand2.parent = Current
 		end
 
 	initialize (arg: ANY)
@@ -66,24 +67,28 @@ feature -- Status report
 
 feature -- Element change
 
-	set_operand1 (arg: RESULT_COMMAND [H])
-			-- Set `operand1' to `arg'.
+	set_operand1 (op: RESULT_COMMAND [H])
+			-- Set `operand1' to `op'.
 		require
-			arg_not_void: arg /= Void
+			op_not_void: op /= Void
 		do
-			operand1 := arg
+			operand1 := op
+			operand1.initialize_from_parent(Current)
 		ensure
-			operand1_set: operand1 = arg and operand1 /= Void
+			operand1_set: operand1 = op and operand1 /= Void
+			parent_set: operand1.parent = Current
 		end
 
-	set_operand2 (arg: RESULT_COMMAND [H])
-			-- Set `operand2' to `arg'.
+	set_operand2 (op: RESULT_COMMAND [H])
+			-- Set `operand2' to `op'.
 		require
-			arg_not_void: arg /= Void
+			op_not_void: op /= Void
 		do
-			operand2 := arg
+			operand2 := op
+			operand2.initialize_from_parent(Current)
 		ensure
-			operand2_set: operand2 = arg and operand2 /= Void
+			operand2_set: operand2 = op and operand2 /= Void
+			parent_set: operand2.parent = Current
 		end
 
 feature -- Basic operations
