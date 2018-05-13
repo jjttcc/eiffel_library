@@ -60,6 +60,11 @@ feature -- Access
             exists: Result /= Void
         end
 
+    node_type: STRING
+        do
+            Result := generating_type.out
+        end
+
     all_components: CHAIN [ANY]
             -- All "important" components of Current (including
             -- `descendants' and Current itself), where "important" is
@@ -116,44 +121,101 @@ feature -- Access
             exists: Result /= Void
         end
 
-    parent: TREE_NODE
-            -- The TREE_NODE that "contains" Current - If no
-            -- object contains Current, Result = Current.
+    parents: LIST [TREE_NODE]
+            -- The TREE_NODE(s) (if any) that "contain" Current - If no
+            -- object contains Current: Result.empty
         do
-            if parent_implementation = Void then
-                Result := Current
-            else
-                Result := parent_implementation
+            if parents_implementation = Void then
+                create {LINKED_LIST [TREE_NODE]} parents_implementation.make
             end
+            Result := parents_implementation
+        ensure
+            existence: Result /= Void
         end
 
-    ancestors: LINKED_LIST [TREE_NODE]
+    ancestors: TWO_WAY_TREE [TREE_NODE]
             -- Current's ancestors, in order: i.e., parent,
-            -- parent's parent, etc (excluding Current).
+            -- parent's parent, etc (including Current).
         local
-            prnt: TREE_NODE
-            list: LINKED_LIST [TREE_NODE]
+            prnts: LIST [TREE_NODE]
         do
-            prnt := parent
-            create Result.make
-            if prnt /= Current then
-                Result.extend(parent)
-                Result.start
-                Result.merge_right(prnt.ancestors)
+            prnts := parents
+            create Result.make(Current)
+            if not prnts.empty then
+                from
+                    prnts.start
+                until
+                    prnts.exhausted
+                loop
+                    Result.child_finish
+                    Result.put_child_right(prnts.item.ancestors)
+                    prnts.forth
+                end
             end
         ensure
             existence: Result /= Void
-            empty_iff_own_parent: Result.empty = parent_is_self
+            empty_iff_no_parents: Result.empty = not has_parents
+            parents_count_or_more: Result.count >= parents.count
+        end
+
+--!!!!!!:
+    old_remove___ancestors: TWO_WAY_LIST [TREE_NODE]
+            -- Current's ancestors, in order: i.e., parent,
+            -- parent's parent, etc (excluding Current).
+        local
+            prnts: LIST [TREE_NODE]
+        do
+            prnts := parents
+            create Result.make
+            if not prnts.empty then
+                Result.fill(prnts)
+                from
+                    prnts.start
+                until
+                    prnts.exhausted
+                loop
+                    Result.finish   -- Set to 'last' for merge-right.
+                    Result.merge_right(prnts.item.ancestors)
+                    prnts.forth
+                end
+            end
+        ensure
+            existence: Result /= Void
+            empty_iff_no_parents: Result.empty = not has_parents
+            parents_count_or_more: Result.count >= parents.count
+        end
+
+    verbose_name: STRING
+        local
+            pnts: LIST [TREE_NODE]
+            who: STRING
+        do
+            Result := default_basename
+            if not Result.empty then
+                Result := Result + ": "
+            end
+            pnts := parents
+            from
+                pnts.start
+            until
+                pnts.exhausted
+            loop
+                who := pnts.item.who_am_i__parent(Current)
+                if not who.empty then
+                    Result := Result + "; " + who
+                end
+                pnts.forth
+            end
         end
 
 feature -- Status report
 
-    parent_is_self: BOOLEAN
-            -- Is "self" (Current) its own parent?
+    has_parents: BOOLEAN
+            -- Does Current have any parents?
         do
-            Result := parent = Current
+            Result := not parents.empty
         ensure
-            definition: Result = (parent = Current)
+            definition: Result = not parents.empty
         end
 
     status: STRING
@@ -176,6 +238,13 @@ feature -- Status report
             -- according to the current tree hierarchy
         do
             Result := report (0, agent {TREE_NODE}.name)
+        end
+
+--!!!!!This seems to be not needed:
+    is_parameterizable: BOOLEAN
+            -- Is this node parameterizable?
+        do
+            Result := False
         end
 
     tree_contains_cycle (visited: HASH_TABLE [BOOLEAN, STRING]): BOOLEAN
@@ -224,8 +293,7 @@ feature -- Element change
         require
             existence: p /= Void
         do
-        ensure
-            parent_exists: parent /= Void
+            -- Default to <null> action - redefine in descendant if needed.
         end
 
 feature {NONE} -- Implementation - Hook routines
@@ -340,10 +408,86 @@ feature {TREE_NODE} -- Implementation
             end
         end
 
+    who_am_i__parent (child: TREE_NODE): STRING
+            -- Answer to `child' asking Current (as its parent): Who am I
+            -- with respect to you, my parent, as well as to all of your
+            -- (the parent's) ancestors?  Empty string if Current
+            -- does not consider `child' to be its child.
+--!!!!!<markedit>!!!Consider returning LIST[STRING] - one element per ancestor
+        require
+            existence: child /= Void
+        do
+            Result := ""
+Result := "[tn/" + generating_type.out + "] "
+        ensure
+            answer: Result /= Void
+        end
+
 feature {NONE} -- Implementation
 
-    parent_implementation: TREE_NODE
-        deferred
+    recursive_who_am_i: STRING
+            -- "who-am-i" report for Current with respect to its parents.
+        local
+            prnts: LIST [TREE_NODE]
+            s: STRING
+        do
+            Result := ""
+            from
+                prnts := parents
+                prnts.start
+            until
+                prnts.exhausted
+            loop
+                s := prnts.item.who_am_i__parent(Current)
+                if not s.empty then
+                    Result := s + "; " + Result
+--Result := Result + "; " + s
+                end
+                prnts.forth
+            end
+        end
+
+    parents_implementation: LIST [TREE_NODE]
+
+--!!!!!Remove!!!:
+    who_am_i_to_ancestors (child: TREE_NODE): STRING
+            -- Who is `child' from Current's ancestors' perspective?
+        require
+            existence: child /= Void
+        local
+            my_parents: LIST [TREE_NODE]
+        do
+            Result := ""
+            my_parents := parents
+            if not my_parents.empty then
+                from
+                    my_parents.start
+                until
+                    my_parents.exhausted
+                loop
+                    Result := Result + "; " +
+                        my_parents.item.who_am_i__parent(Current)
+                    my_parents.forth
+                end
+            end
+        ensure
+            existence: Result /= Void
+        end
+
+    who_am_i_intro: STRING
+            -- Intro for who_am_i__parent - prevent a little code duplication
+        local
+            s: STRING
+        do
+            s := name
+            if not s.empty then s := s + ":" end
+			Result := "(for <" + s + node_type
+            if parents.count = 0 then
+                Result := Result + " [root]"
+            end
+            Result := Result + ">:) "
+        ensure
+            existence: Result /= Void
         end
 
 feature {NONE} -- Hook routine implementations
@@ -351,6 +495,13 @@ feature {NONE} -- Hook routine implementations
     hash_code: INTEGER
         do
             Result := name.hash_code
+        end
+
+    default_basename: STRING
+            -- The default "base" component to use, to build upon, for
+            -- `verbose_name' - redefine as needed.
+        do
+            Result := name
         end
 
 feature {NONE} -- Implementation - constants
@@ -364,6 +515,6 @@ invariant
     children_and_descendants_correspond: not descendants_locked implies
         children.is_empty = descendants.is_empty
     name_not_void: name /= Void
-    parent_exists: parent /= Void
+    parents_exist: parents /= Void
 
 end

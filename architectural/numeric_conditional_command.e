@@ -13,7 +13,7 @@ class NUMERIC_CONDITIONAL_COMMAND inherit
 
 	RESULT_COMMAND [DOUBLE]
 		redefine
-			initialize, children
+			initialize, children, who_am_i__parent, command_type
 		end
 
 creation
@@ -65,6 +65,8 @@ feature -- Access
 			Result.extend (true_cmd)
 			Result.extend (false_cmd)
 		end
+
+	command_type: STRING = "numeric conditional operator"
 
 feature -- Status report
 
@@ -122,6 +124,50 @@ feature -- Basic operations
 				value := false_cmd.value
 			end
 		end
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        local
+            object_comparison: BOOLEAN
+			intro, s: STRING
+            prnts: LIST [TREE_NODE]
+        do
+            Result := ""
+			intro := "for <" + name + ":" + command_type +
+				"[" + hash_code.out + "]>: "
+Result := "[ncc/" + hash_code.out + "] "
+if false then
+			if child = boolean_operator then
+				Result := intro + "boolean operator used to compare two values"
+			elseif child = true_cmd then
+				Result := intro + "operator that extracts the value to use " +
+					"if the boolean operator evaluates as True"
+			elseif child = false_cmd then
+				Result := intro + "operator that extracts the value to use " +
+				"if the boolean operator evaluates as False"
+			end
+			if not Result.empty then
+                -- Append "who-am-i" report for Current with respect to its
+                -- parents.
+                from
+                    prnts := parents
+                    prnts.start
+                until
+                    prnts.exhausted
+                loop
+                    s := prnts.item.who_am_i__parent(Current)
+                    if not s.empty then
+                        Result := Result + "; " + s
+                    end
+                    prnts.forth
+                end
+            else
+                -- Since Result is empty, assume Current is not its parent
+                -- and leave it empty.
+            end
+ end
+        end
 
 invariant
 

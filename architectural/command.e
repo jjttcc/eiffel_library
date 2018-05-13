@@ -9,6 +9,8 @@ note
 deferred class COMMAND inherit
 
 	TREE_NODE
+		rename
+			node_type as command_type
 		redefine
 			name, alternate_status_tag, status_contents
 		end
