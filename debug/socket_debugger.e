@@ -164,10 +164,6 @@ feature -- Status report
 			if nw_stream_socket /= Void then
 				Result := Result + nss_report (nw_stream_socket)
 			end
---!!!!:
-if not debug_socket.readable then
-	print ("socket not readable - stopping point" + "%N")
-end
 		end
 
 feature {NONE} -- Implementation

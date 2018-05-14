@@ -7,13 +7,12 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 	note1: "This version reads one line/record at a time and 'split's it into %
 		%its component fields."
+	note2: "This file should be used exclusively for file-based input for %
+		%the Windows version because a bug (apparently in ISE's library) %
+		%causes OPTIMIZED_INPUT_FILE to not work correctly on Windows."
+	reminder: "record_separator may no longer be needed for %
+		%line-at-a-time processing"
 
---!!!!Note: This file should be used exclusively for file-based input for the
---Windows version because a bug (apparently in ISE's library) causes
---OPTIMIZED_INPUT_FILE to not work correctly on Windows.
-
---!!!REminders: record_separator is may no longer be needed
---for line-at-a-time ...
 class INPUT_FILE inherit
 
 	PLAIN_TEXT_FILE

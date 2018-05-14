@@ -27,21 +27,20 @@ create {NETWORK_STREAM_SOCKET}
 
 feature
 
---!!!!?:
-make_client_by_port (port_num: INTEGER; host: STRING)
-    do
-        Precursor (port_num, host)
-record_separator := "%N"
-field_separator := "%T"
-    end
+    make_client_by_port (port_num: INTEGER; host: STRING)
+        do
+            Precursor (port_num, host)
+            record_separator := "%N"
+            field_separator := "%T"
+        end
 
 feature -- Access
 
     last_input_string: STRING
             -- The buffered input resulting from the last call to
-            -- `pre_process_input' - NOTE: For performance reasons, [this
-            -- object is used internally???!!] and a clone is not created in
-            -- the call to `pre_process_input'.  Thereore, care must be
+            -- `pre_process_input' - NOTE: For performance reasons, this
+            -- object is used internally and a clone is not created in
+            -- the call to `pre_process_input'.  Therefore, care must be
             -- taken to ensure that no unwanted side effects occur as a
             -- result of sharing this object.
 
@@ -141,8 +140,6 @@ feature {NONE} -- Implementation
     pending_input: STRING
             -- All input currently 'pending' from the server
         do
---!!!Note: reading one line at a time may not be the most efficient wat
---to input all pending data.
             from
                 create Result.make (16384)
                 read_line
@@ -169,6 +166,6 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Hook routine implementations
 
-    split_current_record_on_start: BOOLEAN = False -- !!!!!Check this!!!
+    split_current_record_on_start: BOOLEAN = False
 
 end

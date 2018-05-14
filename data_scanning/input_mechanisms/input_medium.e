@@ -5,8 +5,9 @@ note
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
+	reminder: "record_separator is no longer needed for line-at-a-time %
+		%processing"
 
---!!!REminders: record_separator is no longer needed for line-at-a-time ...
 deferred class INPUT_MEDIUM inherit
 
 	INPUT_RECORD_SEQUENCE
@@ -104,7 +105,6 @@ feature -- Cursor movement
 
 	discard_current_record
 		do
-print ("discard current record called" + "%N")
 --!!!Kept as a separate routine from `advance_to_next_record',
 -- for now, for testing/debugging.
 			advance_to_next_record
@@ -249,7 +249,6 @@ feature {NONE} -- Implementation
 
 	record_index_implementation: INTEGER
 
---!!!Perhaps this should be called split_next_record?
 	split_current_record
 			-- Scan the current line (data record) and split the result into
 			-- `current_record'.
@@ -262,14 +261,12 @@ feature {NONE} -- Implementation
 			else
 				error_occurred := True
 				error_string := medium_not_readable_msg
-print ("OH-OH!!!: " + error_string + "%N")
 			end
 		ensure
 			current_record_exists: not error_occurred implies
 				current_record /= Void
 		end
 
---!!!This feature needs to be moved to a utility class:
 	is_tab_space_or_newline (c: CHARACTER): BOOLEAN
 			-- Is `c' a tab, space, or newline character?
 		do

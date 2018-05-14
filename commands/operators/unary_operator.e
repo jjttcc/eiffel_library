@@ -14,7 +14,7 @@ class UNARY_OPERATOR [G, H] inherit
 
     RESULT_COMMAND [G]
         redefine
-            initialize, children, who_am_i__parent
+            initialize, children
         end
 
 feature -- Initialization
@@ -61,22 +61,6 @@ feature -- Basic operations
         do
             operand.execute (arg)
             operate (operand.value)
-        end
-
-feature {TREE_NODE} -- Implementation
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        do
-            Result := ""
-			if child = operand then
-				Result := who_am_i_intro + " operand"
-			end
-            if not Result.empty then
-                Result := Result + recursive_who_am_i
-            else
-                -- Since Result is empty, assume Current is not its parent
-                -- and leave it empty.
-            end
         end
 
 feature {NONE} -- Hook routines

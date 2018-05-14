@@ -158,56 +158,6 @@ feature -- Access
             parents_count_or_more: Result.count >= parents.count
         end
 
---!!!!!!:
-    old_remove___ancestors: TWO_WAY_LIST [TREE_NODE]
-            -- Current's ancestors, in order: i.e., parent,
-            -- parent's parent, etc (excluding Current).
-        local
-            prnts: LIST [TREE_NODE]
-        do
-            prnts := parents
-            create Result.make
-            if not prnts.empty then
-                Result.fill(prnts)
-                from
-                    prnts.start
-                until
-                    prnts.exhausted
-                loop
-                    Result.finish   -- Set to 'last' for merge-right.
-                    Result.merge_right(prnts.item.ancestors)
-                    prnts.forth
-                end
-            end
-        ensure
-            existence: Result /= Void
-            empty_iff_no_parents: Result.empty = not has_parents
-            parents_count_or_more: Result.count >= parents.count
-        end
-
-    verbose_name: STRING
-        local
-            pnts: LIST [TREE_NODE]
-            who: STRING
-        do
-            Result := default_basename
-            if not Result.empty then
-                Result := Result + ": "
-            end
-            pnts := parents
-            from
-                pnts.start
-            until
-                pnts.exhausted
-            loop
-                who := pnts.item.who_am_i__parent(Current)
-                if not who.empty then
-                    Result := Result + "; " + who
-                end
-                pnts.forth
-            end
-        end
-
 feature -- Status report
 
     has_parents: BOOLEAN
@@ -240,13 +190,6 @@ feature -- Status report
             Result := report (0, agent {TREE_NODE}.name)
         end
 
---!!!!!This seems to be not needed:
-    is_parameterizable: BOOLEAN
-            -- Is this node parameterizable?
-        do
-            Result := False
-        end
-
     tree_contains_cycle (visited: HASH_TABLE [BOOLEAN, STRING]): BOOLEAN
             -- Does the tree with Current as the root contain a cycle?
         require
@@ -277,14 +220,6 @@ feature -- Status report
         end
 
 feature -- Element change
-
-    append_to_name (suffix, separator: STRING)
-            -- Append `separator' + `suffix' to the object's "name".
-        require
-            suffix: suffix /= Void and not suffix.empty
-            separator_exists: separator /= Void
-        deferred
-        end
 
     initialize_from_parent (p: TREE_NODE)
             -- Perform any needed initialization of Current using potential
@@ -408,100 +343,15 @@ feature {TREE_NODE} -- Implementation
             end
         end
 
-    who_am_i__parent (child: TREE_NODE): STRING
-            -- Answer to `child' asking Current (as its parent): Who am I
-            -- with respect to you, my parent, as well as to all of your
-            -- (the parent's) ancestors?  Empty string if Current
-            -- does not consider `child' to be its child.
---!!!!!<markedit>!!!Consider returning LIST[STRING] - one element per ancestor
-        require
-            existence: child /= Void
-        do
-            Result := ""
-Result := "[tn/" + generating_type.out + "] "
-        ensure
-            answer: Result /= Void
-        end
-
 feature {NONE} -- Implementation
 
-    recursive_who_am_i: STRING
-            -- "who-am-i" report for Current with respect to its parents.
-        local
-            prnts: LIST [TREE_NODE]
-            s: STRING
-        do
-            Result := ""
-            from
-                prnts := parents
-                prnts.start
-            until
-                prnts.exhausted
-            loop
-                s := prnts.item.who_am_i__parent(Current)
-                if not s.empty then
-                    Result := s + "; " + Result
---Result := Result + "; " + s
-                end
-                prnts.forth
-            end
-        end
-
     parents_implementation: LIST [TREE_NODE]
-
---!!!!!Remove!!!:
-    who_am_i_to_ancestors (child: TREE_NODE): STRING
-            -- Who is `child' from Current's ancestors' perspective?
-        require
-            existence: child /= Void
-        local
-            my_parents: LIST [TREE_NODE]
-        do
-            Result := ""
-            my_parents := parents
-            if not my_parents.empty then
-                from
-                    my_parents.start
-                until
-                    my_parents.exhausted
-                loop
-                    Result := Result + "; " +
-                        my_parents.item.who_am_i__parent(Current)
-                    my_parents.forth
-                end
-            end
-        ensure
-            existence: Result /= Void
-        end
-
-    who_am_i_intro: STRING
-            -- Intro for who_am_i__parent - prevent a little code duplication
-        local
-            s: STRING
-        do
-            s := name
-            if not s.empty then s := s + ":" end
-			Result := "(for <" + s + node_type
-            if parents.count = 0 then
-                Result := Result + " [root]"
-            end
-            Result := Result + ">:) "
-        ensure
-            existence: Result /= Void
-        end
 
 feature {NONE} -- Hook routine implementations
 
     hash_code: INTEGER
         do
             Result := name.hash_code
-        end
-
-    default_basename: STRING
-            -- The default "base" component to use, to build upon, for
-            -- `verbose_name' - redefine as needed.
-        do
-            Result := name
         end
 
 feature {NONE} -- Implementation - constants

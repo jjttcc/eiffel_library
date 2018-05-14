@@ -14,7 +14,7 @@ deferred class BINARY_OPERATOR [G, H] inherit
 
     RESULT_COMMAND [G]
         redefine
-            initialize, children, who_am_i__parent
+            initialize, children
         end
 
     EXCEPTIONS
@@ -119,24 +119,6 @@ feature -- Basic operations
             -- type is DIVISION.
             exception_occurred := True
             retry
-        end
-
-feature {TREE_NODE}
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        do
-            Result := ""
-			if child = operand1 then
-				Result := who_am_i_intro + " 1st operand"
-			elseif child = operand2 then
-				Result := who_am_i_intro + " 2nd operand"
-			end
-            if not Result.empty then
-                Result := Result + recursive_who_am_i
-            else
-                -- Since Result is empty, assume Current is not its parent
-                -- and leave it empty.
-            end
         end
 
 feature {NONE} -- Hook routines

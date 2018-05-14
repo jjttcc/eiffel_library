@@ -11,7 +11,6 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
---!!!Is record_separator needed any more?
 class INPUT_SOCKET inherit
 
     NETWORK_STREAM_SOCKET
@@ -66,12 +65,7 @@ feature -- Status report
 feature -- Input
 
     read_line, readline
-local
-sdb: SOCKET_DEBUGGER
         do
-create sdb.make_with_socket (Current)
---!!!!:
---print ("socket report before reading line:%N" + sdb.report (Void) + "%N")
             create last_string.make (512);
             read_character;
             from
@@ -81,8 +75,6 @@ create sdb.make_with_socket (Current)
                 last_string.extend (last_character);
                 read_character
             end
---!!!!:
---print ("socket report after reading line:%N" + sdb.report (Void) + "%N")
         end;
 
 feature {NONE} -- Hook routine implementations

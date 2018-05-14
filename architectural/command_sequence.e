@@ -11,7 +11,7 @@ class COMMAND_SEQUENCE inherit
 
     COMMAND
         redefine
-            children, initialize, initialize_from_parent, who_am_i__parent
+            children, initialize, initialize_from_parent
         end
 
 create
@@ -98,55 +98,6 @@ feature -- Basic operations
     execute (arg: ANY)
         do
             children.do_all (agent {COMMAND}.execute (arg))
-        end
-
-feature {TREE_NODE} -- Implementation
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        local
-            object_comparison: BOOLEAN
-            ch_cmd: COMMAND
-			s: STRING
-            prnts: LIST [TREE_NODE]
-        do
-            object_comparison := False
-            Result := ""
-            if children.object_comparison then
-                object_comparison := True
-                children.compare_references
-            end
-            ch_cmd ?= child
-            children.search(ch_cmd)
-            if not children.exhausted then
-                -- Acknowledge: Current is child's parent
-                Result := "for <" + name + ">: child at position " +
-                    children.index.out
-Result := "[cmdseq/" + hash_code.out + "] "
-if false then
-                if ch_cmd = main_operator then
-                    Result := Result + ", main operator"
-                end
-                -- Append "who-am-i" report for Current with respect to its
-                -- parents.
-                from
-                    prnts := parents
-                    prnts.start
-                until
-                    prnts.exhausted
-                loop
-                    s := prnts.item.who_am_i__parent(Current)
-                    if not s.empty then
-                        Result := Result + "; " + s
-                    end
-                    prnts.forth
-                end
- end
-            end
-            if object_comparison then
-                children.compare_objects
-            end
-        ensure then
-            -- empty_iff_not_child: children.has(child) = not Result.empty
         end
 
 end

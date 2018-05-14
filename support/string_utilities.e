@@ -179,7 +179,6 @@ feature -- Element change
 				end
 			end
 			if last_index > 0 then
--- !!!!check if this change is correct.
 				target.keep_tail (target.count - last_index)
 			end
 		ensure
@@ -192,7 +191,6 @@ feature -- Element change
 			target_not_void: target /= Void
 			has_c: target.has (c)
 		do
--- !!!!check if this change is correct.
 			target.keep_head (target.index_of (c, 1) - 1)
 		ensure
 			no_c: not target.has (c)
