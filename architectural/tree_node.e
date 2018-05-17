@@ -190,6 +190,22 @@ feature -- Status report
             Result := report (0, agent {TREE_NODE}.name)
         end
 
+    is_parent (p: TREE_NODE): BOOLEAN
+            -- Is `p' a parent of Current?
+        local
+            compare_objects: BOOLEAN
+        do
+            Result := False
+            if parents_implementation /= Void then
+                compare_objects := parents_implementation.object_comparison
+                parents_implementation.compare_references
+                Result := parents_implementation.has(p)
+                if compare_objects then
+                    parents_implementation.compare_objects
+                end
+            end
+        end
+
     tree_contains_cycle (visited: HASH_TABLE [BOOLEAN, STRING]): BOOLEAN
             -- Does the tree with Current as the root contain a cycle?
         require
@@ -223,8 +239,8 @@ feature -- Element change
 
     initialize_from_parent (p: TREE_NODE)
             -- Perform any needed initialization of Current using potential
-            -- parent `p' - for the most likely example, set a `parent'
-            -- attribute to `p'.
+            -- parent `p' - for the most likely example, add `p' to
+            -- `parents'.
         require
             existence: p /= Void
         do
